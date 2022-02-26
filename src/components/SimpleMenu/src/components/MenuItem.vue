@@ -68,6 +68,7 @@
         if (disabled) {
           return;
         }
+        console.log('props.name', props.name);
 
         rootMenuEmitter.emit('on-menu-item-select', props.name);
         if (unref(getCollapse)) {

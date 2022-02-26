@@ -1,7 +1,7 @@
 <template>
   <div :class="getWrapClass">
     <ElTabs
-      type="editable-card"
+      type="card"
       size="small"
       :animated="false"
       :hideAdd="true"

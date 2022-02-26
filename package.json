@@ -25,6 +25,7 @@
     "pinia": "^2.0.9",
     "qs": "^6.10.2",
     "resize-observer-polyfill": "^1.5.1",
+    "sortablejs": "^1.14.0",
     "vite-plugin-style-import": "^1.4.1",
     "vite-plugin-theme": "^0.8.1",
     "vite-plugin-vue-setup-extend": "^0.3.0",

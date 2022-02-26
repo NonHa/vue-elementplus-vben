@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-01-21 17:15:56
- * @LastEditTime: 2022-01-28 11:16:02
+ * @LastEditTime: 2022-02-25 16:49:42
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \ym-Vue3\src\store\modules\permission.ts
@@ -13,6 +13,11 @@ import { store } from '/@/store/index';
 import { asyncRoutes } from '/@/router/routes';
 import { filter } from '/@/utils/helper/treeHelper';
 import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
+import { flatMultiLevelRoutes } from '/@/router/helper/routeHelper';
+import { transformRouteToMenu } from '/@/router/helper/menuHelper';
+
+import { useUserStore } from './user';
+import { PageEnum } from '/@/enums/pageEnum';
 
 interface PermissionState {
   // Permission code list
@@ -76,6 +81,7 @@ export const usePermissionStore = defineStore({
     },
     async buildRoutesAction(): Promise<AppRouteRecordRaw[]> {
       let routes: AppRouteRecordRaw[] = [];
+      const userStore = useUserStore();
 
       // const routeRemoveIgnoreFilter = (route: AppRouteRecordRaw) => {
       //   const { meta } = route;
@@ -85,11 +91,47 @@ export const usePermissionStore = defineStore({
       const routeFilter = (route: AppRouteRecordRaw) => {
         return route !== null;
       };
+      /**
+       * @description 根据设置的首页path，修正routes中的affix标记（固定首页）
+       * */
+      const patchHomeAffix = (routes: AppRouteRecordRaw[]) => {
+        if (!routes || routes.length === 0) return;
+        let homePath: string = userStore.getUserInfo.homePath || PageEnum.BASE_HOME;
+        function patcher(routes: AppRouteRecordRaw[], parentPath = '') {
+          if (parentPath) parentPath = parentPath + '/';
+          routes.forEach((route: AppRouteRecordRaw) => {
+            const { path, children, redirect } = route;
+            const currentPath = path.startsWith('/') ? path : parentPath + path;
+            if (currentPath === homePath) {
+              if (redirect) {
+                homePath = route.redirect! as string;
+              } else {
+                route.meta = Object.assign({}, route.meta, { affix: true });
+                throw new Error('end');
+              }
+            }
+            children && children.length > 0 && patcher(children, currentPath);
+          });
+        }
+        try {
+          patcher(routes);
+        } catch (e) {
+          // 已处理完毕跳出循环
+        }
+        return;
+      };
+
       routes = filter(asyncRoutes, routeFilter);
+      routes = routes.filter(routeFilter);
+      // Convert multi-level routing to level 2 routing
 
       routes.push(ERROR_LOG_ROUTE);
       routes.push(PAGE_NOT_FOUND_ROUTE);
-      this.setFrontMenuList(routes);
+      const menuList = transformRouteToMenu(routes, true);
+      routes = flatMultiLevelRoutes(menuList);
+      this.setFrontMenuList(menuList);
+      patchHomeAffix(routes);
+      console.log('asyncRoutes', routes);
 
       return routes;
     },

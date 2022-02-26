@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2022-02-22 09:39:56
- * @LastEditTime: 2022-02-22 17:20:22
+ * @LastEditTime: 2022-02-25 10:36:30
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \ym-Vue3\src\layouts\default\header\index.vue
@@ -16,6 +16,7 @@
         :theme="getHeaderTheme"
         :sider="false"
       ></LayoutTrigger>
+      <LayoutBreadcrumb v-if="getShowContent && getShowBread" :theme="getHeaderTheme" />
     </div>
   </ElHeader>
 </template>
@@ -40,7 +41,7 @@
   import { SettingButtonPositionEnum } from '/@/enums/appEnum';
   // import { AppLocalePicker } from '/@/components/Application';
 
-  // import { UserDropDown, LayoutBreadcrumb, FullScreen, Notify, ErrorAction } from './components';
+  import { LayoutBreadcrumb } from './components';
   import { useAppInject } from '/@/hooks/web/useAppInject';
   import { useDesign } from '/@/hooks/web/useDesign';
 
@@ -53,7 +54,7 @@
       // Header: Layout.Header,
       AppLogo,
       LayoutTrigger,
-      // LayoutBreadcrumb,
+      LayoutBreadcrumb,
       LayoutMenu,
       // UserDropDown,
       // AppLocalePicker,
