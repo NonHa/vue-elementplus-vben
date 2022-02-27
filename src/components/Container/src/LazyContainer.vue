@@ -12,14 +12,14 @@
     </div>
     <div key="skeleton" v-else>
       <slot name="skeleton" v-if="$slots.skeleton"></slot>
-      <Elskeleton v-else />
+      <ElSkeleton v-else />
     </div>
   </transition-group>
 </template>
 <script lang="ts">
   import type { PropType } from 'vue';
   import { defineComponent, reactive, onMounted, ref, toRef, toRefs } from 'vue';
-
+  import { ElSkeleton } from 'element-plus';
   import { useTimeoutFn } from '/@/hooks/core/useTimeout';
   import { useIntersectionObserver } from '/@/hooks/event/useIntersectionObserver';
 
@@ -68,6 +68,7 @@
   export default defineComponent({
     name: 'LazyContainer',
     inheritAttrs: false,
+    components: { ElSkeleton },
     props,
     emits: ['init'],
     setup(props, { emit }) {

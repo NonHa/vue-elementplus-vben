@@ -11,18 +11,45 @@ import vue from '@vitejs/plugin-vue';
 import { configSvgIconsPlugin } from './svgSprite';
 // https://icon-sets.iconify.design/
 import purgeIcons from 'vite-plugin-purge-icons';
-import { autoImportElementPlus } from './autoImportElementPlus';
+// import { autoImportElementPlus } from './autoImportElementPlus';
 import { configThemePlugin } from './theme';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
+import OptimizationPersist from 'vite-plugin-optimize-persist';
+import PkgConfig from 'vite-plugin-package-config';
+import ElementPlus from 'unplugin-element-plus/vite';
 
+import styleImport from 'vite-plugin-style-import';
+import Components from 'unplugin-vue-components/vite';
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 export function createVitePlugin(viteEnv: ViteEnv, isBuild: boolean) {
   const {} = viteEnv;
 
-  const vitePlugins: (Plugin | Plugin[])[] = [vue(), vueJsx(), vueSetupExtend()];
+  const vitePlugins: (Plugin | Plugin[])[] = [
+    vue(),
+    vueJsx(),
+    vueSetupExtend(),
+    PkgConfig(),
+    OptimizationPersist(),
+    // ElementPlus(),
+    Components({
+      resolvers: [ElementPlusResolver()],
+    }),
+    styleImport({
+      libs: [
+        {
+          libraryName: 'element-plus',
+          esModule: true,
+          resolveStyle: (name) => {
+            return `element-plus/theme-chalk/${name}.css`;
+          },
+        },
+      ],
+    }),
+  ];
   vitePlugins.push(configSvgIconsPlugin(isBuild));
   vitePlugins.push(purgeIcons());
-  vitePlugins.push(autoImportElementPlus());
+  // vitePlugins.push(autoImportElementPlus());
   vitePlugins.push(configThemePlugin(isBuild));
 
   return vitePlugins;

@@ -80,6 +80,7 @@
   import Icon from '/@/components/Icon';
   import { isBoolean, isObject } from '/@/utils/is';
   import mitt from '/@/utils/mitt';
+  import { ElPopover } from 'element-plus';
 
   const DELAY = 200;
   export default defineComponent({
@@ -87,6 +88,7 @@
     components: {
       Icon,
       CollapseTransition,
+      ElPopover,
     },
     props: {
       name: {

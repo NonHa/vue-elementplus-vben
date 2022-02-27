@@ -20,6 +20,7 @@
   import Aside from './aside/index.vue';
   // import Header from './header/index.vue';
   import LayoutMultipleHeader from './header/MultipleHeader.vue';
+  import { ElContainer } from 'element-plus';
 </script>
 
 <style lang="less" scoped>

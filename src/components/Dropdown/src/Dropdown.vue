@@ -49,6 +49,7 @@
   import { Icon } from '/@/components/Icon';
   import { omit } from 'lodash-es';
   import { isFunction } from '/@/utils/is';
+  import { ElDropdown, ElMenu, ElMenuItem, ElPopconfirm } from 'element-plus';
 
   const props = defineProps({
     popconfirm: Boolean,

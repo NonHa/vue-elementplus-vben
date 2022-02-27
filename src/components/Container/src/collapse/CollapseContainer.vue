@@ -38,6 +38,7 @@
   // hook
   import { useTimeoutFn } from '/@/hooks/core/useTimeout';
   import { useDesign } from '/@/hooks/web/useDesign';
+  import { ElSkeleton } from 'element-plus';
 
   const props = defineProps({
     title: { type: String, default: '' },

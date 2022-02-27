@@ -48,6 +48,7 @@
   import { listenerRouteChange } from '/@/logics/mitt/routeChange';
 
   import { useRouter } from 'vue-router';
+  import { ElTabs, ElTabPane } from 'element-plus';
 
   export default defineComponent({
     name: 'MultipleTabs',
@@ -56,6 +57,8 @@
       FoldButton,
 
       TabContent,
+      ElTabs,
+      ElTabPane,
     },
     setup() {
       const affixTextList = initAffixTabs();

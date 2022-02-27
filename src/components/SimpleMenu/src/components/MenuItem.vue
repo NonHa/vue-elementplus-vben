@@ -22,11 +22,12 @@
   import { useDesign } from '/@/hooks/web/useDesign';
   import { propTypes } from '/@/utils/propTypes';
   import { useMenuItem } from './useMenu';
+  import { ElTooltip } from 'element-plus';
 
   import { useSimpleRootMenuContext } from './useSimpleMenuContext';
   export default defineComponent({
     name: 'MenuItem',
-    components: {},
+    components: { ElTooltip },
     props: {
       name: {
         type: [String, Number] as PropType<string | number>,

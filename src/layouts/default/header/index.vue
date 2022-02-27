@@ -30,7 +30,7 @@
   import { AppLogo } from '/@/components/Application';
   import LayoutMenu from '../menu/index.vue';
   import LayoutTrigger from '../trigger/index.vue';
-
+  import { ElHeader } from 'element-plus';
   // import { AppSearch } from '/@/components/Application';
 
   import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting';
@@ -56,6 +56,7 @@
       LayoutTrigger,
       LayoutBreadcrumb,
       LayoutMenu,
+      ElHeader,
       // UserDropDown,
       // AppLocalePicker,
       // FullScreen,

@@ -6,13 +6,13 @@
           <template #default>
             <ElDropdown>
               <span class="ElDropdown-link">
-                Dropdown List<el-icon class="el-icon--right"><ArrowDown /></el-icon>
+                Dropdown List<ElIcon class="el-icon--right"><ArrowDown /></ElIcon>
               </span>
               <template #dropdown>
-                <ElDropdown-menu>
-                  <ElDropdown-item>Action 1</ElDropdown-item>
-                  <ElDropdown-item> Action2 </ElDropdown-item>
-                </ElDropdown-menu>
+                <ElDropdownMenu>
+                  <ElDropdownItem>Action 1</ElDropdownItem>
+                  <ElDropdownItem> Action2 </ElDropdownItem>
+                </ElDropdownMenu>
               </template>
             </ElDropdown>
           </template>
@@ -52,10 +52,27 @@
 
   import { REDIRECT_NAME } from '/@/router/constant';
   import { getAllParentPath } from '/@/router/helper/menuHelper';
+  import {
+    ElBreadcrumb,
+    ElBreadcrumbItem,
+    ElDropdown,
+    ElDropdownMenu,
+    ElDropdownItem,
+    ElIcon,
+  } from 'element-plus';
   import { ArrowDown } from '@element-plus/icons-vue';
   export default defineComponent({
     name: 'LayoutBreadcrumb',
-    components: { Icon, ArrowDown },
+    components: {
+      Icon,
+      ArrowDown,
+      ElBreadcrumb,
+      ElBreadcrumbItem,
+      ElDropdown,
+      ElDropdownMenu,
+      ElDropdownItem,
+      ElIcon,
+    },
     props: {
       theme: propTypes.oneOf(['dark', 'light']),
     },

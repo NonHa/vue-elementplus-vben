@@ -25,6 +25,7 @@ async function bootstrap() {
   initAppConfigStore();
 
   setupRouter(app);
+  // app.use(ElementPlus)
   app.mount('#app');
 }
 bootstrap();

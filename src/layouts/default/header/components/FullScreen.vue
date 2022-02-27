@@ -9,12 +9,12 @@
 <script lang="ts">
   import { defineComponent, computed, unref } from 'vue';
   import { useFullscreen } from '@vueuse/core';
-
+  import { ElTooltip } from 'element-plus';
   import { Expand, Fold } from '@element-plus/icons-vue';
 
   export default defineComponent({
     name: 'FullScreen',
-    components: { Fold, Expand },
+    components: { Fold, Expand, ElTooltip },
 
     setup() {
       const { toggle, isFullscreen } = useFullscreen();

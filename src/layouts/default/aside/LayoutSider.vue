@@ -25,6 +25,7 @@
   import LayoutTrigger from '/@/layouts/default/trigger/index.vue';
 
   import { MenuModeEnum, MenuSplitTyeEnum } from '/@/enums/menuEnum';
+  import { ElAside } from 'element-plus';
 
   import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
   import { useTrigger, useDragLine, useSiderEvent } from './useLayoutSider';
@@ -34,7 +35,7 @@
   import DragBar from './DragBar.vue';
   export default defineComponent({
     name: 'LayoutSideBar',
-    components: { LayoutMenu, DragBar, LayoutTrigger },
+    components: { LayoutMenu, DragBar, LayoutTrigger, ElAside },
     setup() {
       const dragBarRef = ref<ElRef>(null);
       const sideRef = ref<ElRef>(null);
