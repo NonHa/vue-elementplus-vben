@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2022-01-21 17:15:56
- * @LastEditTime: 2022-02-25 16:49:42
+ * @LastEditTime: 2022-02-27 15:35:34
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \ym-Vue3\src\store\modules\permission.ts
@@ -128,10 +128,9 @@ export const usePermissionStore = defineStore({
       routes.push(ERROR_LOG_ROUTE);
       routes.push(PAGE_NOT_FOUND_ROUTE);
       const menuList = transformRouteToMenu(routes, true);
-      routes = flatMultiLevelRoutes(menuList);
+      // routes = flatMultiLevelRoutes(menuList);
       this.setFrontMenuList(menuList);
       patchHomeAffix(routes);
-      console.log('asyncRoutes', routes);
 
       return routes;
     },

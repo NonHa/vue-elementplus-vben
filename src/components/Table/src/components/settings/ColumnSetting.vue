@@ -1,60 +1,55 @@
 <template>
-  <Tooltip placement="top">
+  <ElTooltip placement="top">
     <template #title>
-      <span>{{ t('component.table.settingColumn') }}</span>
+      <span>{{ 'component.table.settingColumn' }}</span>
     </template>
-    <Popover
-      placement="bottomLeft"
+    <ElPopover
       trigger="click"
       @visibleChange="handleVisibleChange"
-      :overlayClassName="`${prefixCls}__cloumn-list`"
+      :popper-class="`${prefixCls}__cloumn-list`"
       :getPopupContainer="getPopupContainer"
     >
       <template #title>
         <div :class="`${prefixCls}__popover-title`">
-          <Checkbox
+          <ElCheckbox
             :indeterminate="indeterminate"
             v-model:checked="checkAll"
             @change="onCheckAllChange"
           >
-            {{ t('component.table.settingColumnShow') }}
-          </Checkbox>
+            {{ 'component.table.settingColumnShow' }}
+          </ElCheckbox>
 
-          <Checkbox v-model:checked="checkIndex" @change="handleIndexCheckChange">
-            {{ t('component.table.settingIndexColumnShow') }}
-          </Checkbox>
+          <ElCheckbox v-model:checked="checkIndex" @change="handleIndexCheckChange">
+            {{ 'component.table.settingIndexColumnShow' }}
+          </ElCheckbox>
 
-          <Checkbox
+          <ElCheckbox
             v-model:checked="checkSelect"
             @change="handleSelectCheckChange"
             :disabled="!defaultRowSelection"
           >
-            {{ t('component.table.settingSelectColumnShow') }}
-          </Checkbox>
+            {{ 'component.table.settingSelectColumnShow' }}
+          </ElCheckbox>
 
           <a-button size="small" type="link" @click="reset">
-            {{ t('common.resetText') }}
+            {{ 'common.resetText' }}
           </a-button>
         </div>
       </template>
 
       <template #content>
         <ScrollContainer>
-          <CheckboxGroup v-model:value="checkedList" @change="onChange" ref="columnListRef">
+          <ElCheckboxGroup v-model:value="checkedList" @change="onChange" ref="columnListRef">
             <template v-for="item in plainOptions" :key="item.value">
               <div :class="`${prefixCls}__check-item`" v-if="!('ifShow' in item && !item.ifShow)">
-                <DragOutlined class="table-column-drag-icon" />
-                <Checkbox :value="item.value">
+                <DArrowRight class="table-column-drag-icon" />
+                <ElCheckbox :value="item.value">
                   {{ item.label }}
-                </Checkbox>
+                </ElCheckbox>
 
-                <Tooltip
-                  placement="bottomLeft"
-                  :mouseLeaveDelay="0.4"
-                  :getPopupContainer="getPopupContainer"
-                >
+                <ElTooltip :mouseLeaveDelay="0.4" :getPopupContainer="getPopupContainer">
                   <template #title>
-                    {{ t('component.table.settingFixedLeft') }}
+                    {{ 'component.table.settingFixedLeft' }}
                   </template>
                   <Icon
                     icon="line-md:arrow-align-left"
@@ -67,15 +62,11 @@
                     ]"
                     @click="handleColumnFixed(item, 'left')"
                   />
-                </Tooltip>
-                <Divider type="vertical" />
-                <Tooltip
-                  placement="bottomLeft"
-                  :mouseLeaveDelay="0.4"
-                  :getPopupContainer="getPopupContainer"
-                >
+                </ElTooltip>
+                <ElDivider type="vertical" />
+                <ElTooltip :mouseLeaveDelay="0.4" :getPopupContainer="getPopupContainer">
                   <template #title>
-                    {{ t('component.table.settingFixedRight') }}
+                    {{ 'component.table.settingFixedRight' }}
                   </template>
                   <Icon
                     icon="line-md:arrow-align-left"
@@ -88,15 +79,15 @@
                     ]"
                     @click="handleColumnFixed(item, 'right')"
                   />
-                </Tooltip>
+                </ElTooltip>
               </div>
             </template>
-          </CheckboxGroup>
+          </ElCheckboxGroup>
         </ScrollContainer>
       </template>
-      <SettingOutlined />
-    </Popover>
-  </Tooltip>
+      <Setting />
+    </ElPopover>
+  </ElTooltip>
 </template>
 <script lang="ts">
   import type { BasicColumn, ColumnChangeParam } from '../../types/table';
@@ -110,11 +101,11 @@
     unref,
     computed,
   } from 'vue';
-  import { Tooltip, Popover, Checkbox, Divider } from 'ant-design-vue';
-  import { SettingOutlined, DragOutlined } from '@ant-design/icons-vue';
+  import { ElTooltip, ElPopover, ElCheckbox, ElDivider, ElCheckboxGroup } from 'element-plus';
+  import { Setting, DArrowRight } from '@element-plus/icons-vue';
   import { Icon } from '/@/components/Icon';
   import { ScrollContainer } from '/@/components/Container';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  // import { useI18n } from "/@/hooks/web/useI18n";
   import { useTableContext } from '../../hooks/useTableContext';
   import { useDesign } from '/@/hooks/web/useDesign';
   // import { useSortable } from '/@/hooks/web/useSortable';
@@ -140,20 +131,20 @@
   export default defineComponent({
     name: 'ColumnSetting',
     components: {
-      SettingOutlined,
-      Popover,
-      Tooltip,
-      Checkbox,
-      CheckboxGroup: Checkbox.Group,
-      DragOutlined,
+      Setting,
+      ElPopover,
+      ElTooltip,
+      ElCheckbox,
+      ElCheckboxGroup,
+      DArrowRight,
       ScrollContainer,
-      Divider,
+      ElDivider,
       Icon,
     },
     emits: ['columns-change'],
 
     setup(_, { emit, attrs }) {
-      const { t } = useI18n();
+      // const { t } = useI18n();
       const table = useTableContext();
 
       const defaultRowSelection = omit(table.getRowSelection(), 'selectedRowKeys');
@@ -360,7 +351,7 @@
           const visible =
             columns.findIndex(
               (c: BasicColumn | string) =>
-                c === col.value || (typeof c !== 'string' && c.dataIndex === col.value),
+                c === col.value || (typeof c !== 'string' && c.dataIndex === col.value)
             ) !== -1;
           return { dataIndex: col.value, fixed: col.fixed, visible };
         });
@@ -375,7 +366,7 @@
       }
 
       return {
-        t,
+        // t,
         ...toRefs(state),
         indeterminate,
         onCheckAllChange,
