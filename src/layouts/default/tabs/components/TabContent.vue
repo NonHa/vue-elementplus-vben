@@ -37,6 +37,7 @@
 
       const getTitle = computed(() => {
         const { tabItem: { meta } = {} } = props;
+
         return meta?.title;
       });
 

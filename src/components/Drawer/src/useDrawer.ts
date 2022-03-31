@@ -77,6 +77,8 @@ export function useDrawer(): UseDrawerReturnType {
       getInstance()?.setDrawerProps({
         visible: visible,
       });
+      console.log(1111);
+
       if (!data) return;
 
       if (openOnSet) {

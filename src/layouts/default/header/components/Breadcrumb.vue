@@ -9,9 +9,17 @@
           <template #dropdown>
             <ElDropdownMenu>
               <ElDropdownItem v-for="v in routes[0].children">
-                <router-link :to="{ path: v.path }" @click="handleClick(route, paths, $event)">{{
-                  v.name
-                }}</router-link>
+                <RouterLink
+                  to=""
+                  @click="
+                    handleClick(
+                      v as any,
+                     v.path,
+                      $event
+                    )
+                  "
+                  >{{ v.name }}</RouterLink
+                >
               </ElDropdownItem>
             </ElDropdownMenu>
           </template>
@@ -44,6 +52,7 @@
 
   import { REDIRECT_NAME } from '/@/router/constant';
   import { getAllParentPath } from '/@/router/helper/menuHelper';
+  import { RouterLink } from 'vue-router';
 
   import {
     ElBreadcrumb,
@@ -65,6 +74,7 @@
       ElDropdownMenu,
       ElDropdownItem,
       ElIcon,
+      RouterLink,
     },
     props: {
       theme: propTypes.oneOf(['dark', 'light']),
@@ -138,8 +148,9 @@
         }).filter((item) => !item.meta?.hideBreadcrumb);
       }
 
-      function handleClick(route: RouteLocationMatched, paths: string[], e: Event) {
+      function handleClick(route: RouteLocationMatched, path: string, e: Event) {
         e?.preventDefault();
+
         const { children, redirect, meta } = route;
 
         if (children?.length && !redirect) {
@@ -154,14 +165,15 @@
           go(redirect);
         } else {
           let goPath = '';
-          if (paths.length === 1) {
-            goPath = paths[0];
-          } else {
-            const ps = paths.slice(1);
-            const lastPath = ps.pop() || '';
-            goPath = `${lastPath}`;
-          }
-          goPath = /^\//.test(goPath) ? goPath : `/${goPath}`;
+          // if (paths.length === 1) {
+          //   goPath = paths[0];
+          // } else {
+          //   const ps = paths.slice(1);
+          //   const lastPath = ps.pop() || '';
+          //   goPath = `${lastPath}`;
+          // }
+          goPath = /^\//.test(path) ? path : `/${path}`;
+
           go(goPath);
         }
       }

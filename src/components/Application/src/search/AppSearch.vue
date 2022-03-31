@@ -7,35 +7,32 @@
  * @FilePath: \ym-Vue3\src\components\Application\src\search\AppSearch.vue
 -->
 <script lang="tsx">
-import { defineComponent, ref, unref } from "vue";
-import { ElTooltip } from "element-plus";
-import { Search } from "@element-plus/icons-vue";
-import AppSearchModal from "./AppSearchModal.vue";
-// import { useI18n } from '/@/hooks/web/useI18n';
+  import { defineComponent, ref, unref } from 'vue';
+  import { ElTooltip } from 'element-plus';
+  import { Search } from '@element-plus/icons-vue';
+  import AppSearchModal from './AppSearchModal.vue';
+  // import { useI18n } from '/@/hooks/web/useI18n';
 
-export default defineComponent({
-  name: "AppSearch",
-  setup() {
-    const showModal = ref(false);
-    // const { t } = useI18n();
+  export default defineComponent({
+    name: 'AppSearch',
+    setup() {
+      const showModal = ref(false);
+      // const { t } = useI18n();
 
-    function changeModal(show: boolean) {
-      showModal.value = show;
-    }
+      function changeModal(show: boolean) {
+        showModal.value = show;
+      }
 
-    return () => {
-      return (
-        <div class="p-1" onClick={changeModal.bind(null, true)}>
-          <ElTooltip visible-arrow={false} content="搜索">
-            <Search />
-          </ElTooltip>
-          <AppSearchModal
-            onClose={changeModal.bind(null, false)}
-            visible={unref(showModal)}
-          />
-        </div>
-      );
-    };
-  },
-});
+      return () => {
+        return (
+          <div class="p-1" onClick={changeModal.bind(null, true)}>
+            <ElTooltip show-arrow={false} content="搜索">
+              <Search />
+            </ElTooltip>
+            <AppSearchModal onClose={changeModal.bind(null, false)} visible={unref(showModal)} />
+          </div>
+        );
+      };
+    },
+  });
 </script>

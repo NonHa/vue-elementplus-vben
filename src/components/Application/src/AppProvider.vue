@@ -48,6 +48,7 @@
 
       /**
        * Used to maintain the state before the window changes
+       * 在切换为mobile之前记住切换之前的menu状态
        */
       function handleRestoreState() {
         if (unref(isMobile)) {

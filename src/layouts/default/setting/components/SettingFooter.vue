@@ -8,100 +8,115 @@
 -->
 <template>
   <div :class="prefixCls">
-    <a-button type="primary" block @click="handleCopy">
-      <Coin class="mr-2" />
-      {{ "layout.setting.copyBtn" }}
-    </a-button>
+    <ElButton type="primary" size="small" :icon="CopyDocument" @click="handleCopy">
+      {{ 'layout.setting.copyBtn' }}
+    </ElButton>
 
-    <a-button color="warning" block @click="handleResetSetting" class="my-3">
-      <Reading class="mr-2" />
-      {{ "common.resetText" }}
-    </a-button>
+    <ElButton
+      type="warning"
+      size="small"
+      :icon="RefreshLeft"
+      @click="handleResetSetting"
+      class="my-3"
+    >
+      {{ 'common.resetText' }}
+    </ElButton>
 
-    <a-button color="error" block @click="handleClearAndRedo">
-      <Reading class="mr-2" />
-      {{ "layout.setting.clearBtn" }}
-    </a-button>
+    <ElButton type="danger" size="small" :icon="RefreshLeft" @click="handleClearAndRedo">
+      {{ 'layout.setting.clearBtn' }}
+    </ElButton>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent, unref } from "vue";
+<script lang="ts" setup>
+  import { defineComponent, unref } from 'vue';
 
-import { Coin, Reading } from "@element-plus/icons-vue";
+  import { CopyDocument, RefreshLeft } from '@element-plus/icons-vue';
+  import { ElButton } from 'element-plus';
+  import { useAppStore } from '/@/store/modules/app';
+  import { usePermissionStore } from '/@/store/modules/permission';
+  import { useMultipleTabStore } from '/@/store/modules/multipleTab';
+  import { useUserStore } from '/@/store/modules/user';
 
-import { useAppStore } from "/@/store/modules/app";
-import { usePermissionStore } from "/@/store/modules/permission";
-import { useMultipleTabStore } from "/@/store/modules/multipleTab";
-import { useUserStore } from "/@/store/modules/user";
+  import { useDesign } from '/@/hooks/web/useDesign';
+  // import { useI18n } from '/@/hooks/web/useI18n';
+  import { useMessage } from '/@/hooks/web/useMessage';
+  import { useCopyToClipboard } from '/@/hooks/web/useCopyToClipboard';
 
-import { useDesign } from "/@/hooks/web/useDesign";
-// import { useI18n } from '/@/hooks/web/useI18n';
-import { useMessage } from "/@/hooks/web/useMessage";
-import { useCopyToClipboard } from "/@/hooks/web/useCopyToClipboard";
+  import { updateColorWeak } from '/@/logics/theme/updateColorWeak';
+  import { updateGrayMode } from '/@/logics/theme/updateGrayMode';
+  import defaultSetting from '/@/settings/projectSetting';
 
-import { updateColorWeak } from "/@/logics/theme/updateColorWeak";
-import { updateGrayMode } from "/@/logics/theme/updateGrayMode";
-import defaultSetting from "/@/settings/projectSetting";
+  // export default defineComponent({
+  // name: 'SettingFooter',
+  // components: { Coin, Reading, ElButton, CopyDocument },
+  const permissionStore = usePermissionStore();
+  const { prefixCls } = useDesign('setting-footer');
+  // const { t } = useI18n();
+  const { createSuccessModal, createMessage } = useMessage();
+  const tabStore = useMultipleTabStore();
+  const userStore = useUserStore();
+  const appStore = useAppStore();
 
-export default defineComponent({
-  name: "SettingFooter",
-  components: { Coin, Reading },
-  setup() {
-    const permissionStore = usePermissionStore();
-    const { prefixCls } = useDesign("setting-footer");
-    // const { t } = useI18n();
-    const { createSuccessModal, createMessage } = useMessage();
-    const tabStore = useMultipleTabStore();
-    const userStore = useUserStore();
-    const appStore = useAppStore();
-
-    function handleCopy() {
-      const { isSuccessRef } = useCopyToClipboard(
-        JSON.stringify(unref(appStore.getProjectConfig), null, 2)
-      );
-      unref(isSuccessRef) &&
-        createSuccessModal({
-          title: "layout.setting.operatingTitle",
-          message: "layout.setting.operatingContent",
-        });
+  function handleCopy() {
+    const { isSuccessRef } = useCopyToClipboard(
+      JSON.stringify(unref(appStore.getProjectConfig), null, 2)
+    );
+    unref(isSuccessRef) &&
+      createSuccessModal({
+        title: 'layout.setting.operatingTitle',
+        message: 'layout.setting.operatingContent',
+      });
+  }
+  function handleResetSetting() {
+    try {
+      appStore.setProjectConfig(defaultSetting);
+      const { colorWeak, grayMode } = defaultSetting;
+      // updateTheme(themeColor);
+      updateColorWeak(colorWeak);
+      updateGrayMode(grayMode);
+      createMessage.success('layout.setting.resetSuccess');
+    } catch (error: any) {
+      createMessage.error(error);
     }
-    function handleResetSetting() {
-      try {
-        appStore.setProjectConfig(defaultSetting);
-        const { colorWeak, grayMode } = defaultSetting;
-        // updateTheme(themeColor);
-        updateColorWeak(colorWeak);
-        updateGrayMode(grayMode);
-        createMessage.success("layout.setting.resetSuccess");
-      } catch (error: any) {
-        createMessage.error(error);
-      }
-    }
+  }
 
-    function handleClearAndRedo() {
-      localStorage.clear();
-      appStore.resetAllState();
-      permissionStore.resetState();
-      tabStore.resetState();
-      userStore.resetState();
-      location.reload();
-    }
-    return {
-      prefixCls,
-      // t,
-      handleCopy,
-      handleResetSetting,
-      handleClearAndRedo,
-    };
-  },
-});
+  function handleClearAndRedo() {
+    localStorage.clear();
+    appStore.resetAllState();
+    permissionStore.resetState();
+    tabStore.resetState();
+    userStore.resetState();
+    location.reload();
+  }
+  // return {
+  //   prefixCls,
+  //   // t,
+  //   handleCopy,
+  //   handleResetSetting,
+  //   handleClearAndRedo,
+  // };
+  // setup() {
+
+  // },
+  // });
 </script>
 <style lang="less" scoped>
-@prefix-cls: ~"@{namespace}-setting-footer";
+  @prefix-cls: ~'@{namespace}-setting-footer';
 
-.@{prefix-cls} {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+  .@{prefix-cls} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .el-button {
+      width: 100%;
+      margin-top: 5px;
+    }
+    :deep(.el-icon) {
+      margin-right: 10px;
+      svg {
+        color: #fff !important;
+        margin-left: 5px;
+      }
+    }
+  }
 </style>

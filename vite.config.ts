@@ -15,6 +15,7 @@ import { createVitePlugin } from './build/vite/plugin';
 import { wrapperEnv } from './build/utils';
 import { OUTPUT_DIR } from './build/constant';
 import { generateModifyVars } from './build/generate/generateModifyVars';
+import { createProxy } from './build/vite/proxy';
 
 function pathResolve(dir: string) {
   return resolve(process.cwd(), '.', dir);
@@ -61,7 +62,7 @@ export default ({ mode, command }: ConfigEnv): UserConfig => {
       target: 'es2015',
       cssTarget: 'chrome86',
       outDir: OUTPUT_DIR,
-     
+
       // terserOptions: {
       //   compress: {
       //     keep_infinity: true,
@@ -79,7 +80,7 @@ export default ({ mode, command }: ConfigEnv): UserConfig => {
       host: true,
       port: VITE_PORT,
       // Load proxy configuration from .env
-      // proxy: createProxy(VITE_PROXY),
+      proxy: createProxy(VITE_PROXY),
     },
     define: {
       // setting vue-i18-next

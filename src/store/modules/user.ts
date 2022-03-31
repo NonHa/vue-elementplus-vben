@@ -90,7 +90,9 @@ export const useUserStore = defineStore({
       try {
         const { goHome = true, mode, ...loginParams } = params;
         const data = await loginApi(loginParams, mode);
-        const { token } = data;
+        // console.log('data', data?.data.result);
+
+        const { token } = data.data.result;
 
         // save token
         this.setToken(token);

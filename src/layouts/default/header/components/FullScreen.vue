@@ -7,35 +7,37 @@
  * @FilePath: \ym-Vue3\src\layouts\default\header\components\FullScreen.vue
 -->
 <template>
-  <ElTooltip :content="getTitle" placement="bottom">
-    <span @click="toggle">
-      <ELFullScreen v-if="!isFullscreen" />
-      <Icon v-else icon="fluent:full-screen-minimize-16-filled" />
-    </span>
-  </ElTooltip>
+  <div>
+    <ElTooltip :content="getTitle" placement="bottom">
+      <span @click="toggle">
+        <ELFullScreen v-if="!isFullscreen" />
+        <Icon v-else icon="fluent:full-screen-minimize-16-filled" />
+      </span>
+    </ElTooltip>
+  </div>
 </template>
 <script lang="ts">
-import { defineComponent, computed, unref } from "vue";
-import { useFullscreen } from "@vueuse/core";
-import { ElTooltip } from "element-plus";
-import { FullScreen } from "@element-plus/icons-vue";
-import Icon from "/@/components/Icon";
-export default defineComponent({
-  name: "FullScreen",
-  components: { ElTooltip, ELFullScreen: FullScreen, Icon },
+  import { defineComponent, computed, unref } from 'vue';
+  import { useFullscreen } from '@vueuse/core';
+  import { ElTooltip } from 'element-plus';
+  import { FullScreen } from '@element-plus/icons-vue';
+  import Icon from '/@/components/Icon';
+  export default defineComponent({
+    name: 'FullScreen',
+    components: { ElTooltip, ELFullScreen: FullScreen, Icon },
 
-  setup() {
-    const { toggle, isFullscreen } = useFullscreen();
+    setup() {
+      const { toggle, isFullscreen } = useFullscreen();
 
-    const getTitle = computed(() => {
-      return unref(isFullscreen) ? "234" : "234";
-    });
+      const getTitle = computed(() => {
+        return unref(isFullscreen) ? '234' : '234';
+      });
 
-    return {
-      getTitle,
-      isFullscreen,
-      toggle,
-    };
-  },
-});
+      return {
+        getTitle,
+        isFullscreen,
+        toggle,
+      };
+    },
+  });
 </script>

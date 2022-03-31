@@ -8,8 +8,7 @@
     v-show="showClassSideBarRef"
     ref="sideRef"
     :class="getSiderClass"
-    :width="getCollapsed ? '48' : `${getMenuWidth}`"
-    :style="getHiddenDomStyle"
+    :width="asideWidth + 'px'"
   >
     <template #trigger v-if="getShowTrigger">
       <LayoutTrigger />
@@ -73,7 +72,9 @@
       const showClassSideBarRef = computed(() => {
         return unref(getSplit) ? !unref(getMenuHidden) : true;
       });
-
+      const asideWidth = computed(() => {
+        return getCollapsed.value ? getCollapsedWidth.value : getMenuWidth.value;
+      });
       const getSiderClass = computed(() => {
         return [
           prefixCls,
@@ -85,7 +86,6 @@
       });
 
       const getHiddenDomStyle = computed((): CSSProperties => {
-        console.log('getRealWidth', getRealWidth.value);
         const width = `${unref(getRealWidth)}px`;
         return {
           width: width,
@@ -121,6 +121,7 @@
         getSplitType,
         getShowTrigger,
         toggleCollapsed,
+        asideWidth,
       };
     },
   });

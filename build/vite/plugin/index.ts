@@ -17,13 +17,14 @@ import vueJsx from '@vitejs/plugin-vue-jsx';
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
 import OptimizationPersist from 'vite-plugin-optimize-persist';
 import PkgConfig from 'vite-plugin-package-config';
-import ElementPlus from 'unplugin-element-plus/vite';
+// import ElementPlus from 'unplugin-element-plus/vite';
 
 import styleImport from 'vite-plugin-style-import';
 import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+import { configMockPlugin } from './mock';
 export function createVitePlugin(viteEnv: ViteEnv, isBuild: boolean) {
-  const {} = viteEnv;
+  const { VITE_USE_MOCK } = viteEnv;
 
   const vitePlugins: (Plugin | Plugin[])[] = [
     vue(),
@@ -51,6 +52,7 @@ export function createVitePlugin(viteEnv: ViteEnv, isBuild: boolean) {
   vitePlugins.push(purgeIcons());
   // vitePlugins.push(autoImportElementPlus());
   vitePlugins.push(configThemePlugin(isBuild));
+  VITE_USE_MOCK && vitePlugins.push(configMockPlugin(isBuild));
 
   return vitePlugins;
 }

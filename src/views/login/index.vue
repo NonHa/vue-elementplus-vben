@@ -8,18 +8,19 @@
 -->
 <template>
   <el-form
-    ref="loginForm_input"
+    ref="formRef"
     :model="loginForm"
     class="login-form"
     autocomplete="on"
     label-position="left"
     size="small"
+    :rules="getFormRules"
   >
     <div class="title-container">
       <h3 class="title">伊百丽经营管理系统</h3>
     </div>
     <el-form-item prop="userName">
-      <el-input ref="userName_input" v-model="loginForm.userName" placeholder="请输入用户名" />
+      <el-input ref="userName_input" v-model="loginForm.account" placeholder="请输入用户名" />
     </el-form-item>
 
     <el-form-item prop="password">
@@ -57,17 +58,63 @@
         自动登录
       </label>
     </el-form-item>
-    <el-button class="login-btn" size="medium" type="primary">登录</el-button>
+    <el-button :loading="loading" class="login-btn" size="small" type="primary" @click="handleLogin"
+      >登录</el-button
+    >
   </el-form>
 </template>
 
 <script lang="ts" setup>
-  import { reactive } from 'vue';
-  import { useDesign } from '/@/hooks/web/useDesign';
+  import { reactive, ref, unref } from 'vue';
+  import { useUserStore } from '/@/store/modules/user';
+  // import { useDesign } from '/@/hooks/web/useDesign';
+  import { useFormRules, useFormValid } from './useLogin';
+  import { useMessage } from '/@/hooks/web/useMessage';
 
   const loginForm = reactive({
     password: '',
-    userName: '',
+    account: '',
   });
+  let loading = ref(false);
+  const formRef = ref();
+
+  const { getFormRules } = useFormRules();
+  const { validForm } = useFormValid(formRef);
+
+  const { notification, createErrorModal } = useMessage();
+
+  const userStore = useUserStore();
+  async function handleLogin() {
+    // if (!data) return;
+    let loginFormFun = async () => {
+      try {
+        loading.value = true;
+        const userInfo = await userStore.login({
+          password: loginForm.password,
+          username: loginForm.account,
+          mode: 'none', //不要默认的错误提示
+        });
+        console.log('userInfo', userInfo);
+
+        if (userInfo) {
+          notification.success({
+            title: 'sys.login.loginSuccessTitle',
+            message: `${'sys.login.loginSuccessDesc'}: ${userInfo.realName}`,
+            // duration: 3,
+          });
+        }
+      } catch (error) {
+        createErrorModal({
+          title: 'sys.api.errorTip',
+          message: (error as unknown as Error).message || 'sys.api.networkExceptionMsg',
+          // getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
+        });
+      } finally {
+        loading.value = false;
+      }
+    };
+    await validForm(loginFormFun);
+    // console.log('data', data);
+  }
 </script>
 <style scoped lang="less"></style>

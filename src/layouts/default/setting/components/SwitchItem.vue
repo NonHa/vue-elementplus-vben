@@ -10,7 +10,7 @@
   <div :class="prefixCls">
     <span> {{ title }}</span>
     <ElSwitch
-      v-bind="getBindValue"
+      v-model="check"
       @change="handleChange"
       :disabled="disabled"
       checkedChildren="on"
@@ -19,56 +19,63 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, PropType, computed } from "vue";
+  import { defineComponent, PropType, computed, ref } from 'vue';
 
-import { ElSwitch } from "element-plus";
-import { useDesign } from "/@/hooks/web/useDesign";
-// import { useI18n } from '/@/hooks/web/useI18n';
-import { baseHandler } from "../handler";
-import { HandlerEnum } from "../enum";
+  import { ElSwitch } from 'element-plus';
+  import { useDesign } from '/@/hooks/web/useDesign';
+  // import { useI18n } from '/@/hooks/web/useI18n';
+  import { baseHandler } from '../handler';
+  import { HandlerEnum } from '../enum';
 
-export default defineComponent({
-  name: "SwitchItem",
-  components: { ElSwitch },
-  props: {
-    event: {
-      type: Number as PropType<HandlerEnum>,
+  export default defineComponent({
+    name: 'SwitchItem',
+    components: { ElSwitch },
+    props: {
+      event: {
+        type: Number as PropType<HandlerEnum>,
+      },
+      disabled: {
+        type: Boolean,
+      },
+      title: {
+        type: String,
+      },
+      def: {
+        type: Boolean,
+      },
     },
-    disabled: {
-      type: Boolean,
-    },
-    title: {
-      type: String,
-    },
-    def: {
-      type: Boolean,
-    },
-  },
-  setup(props) {
-    const { prefixCls } = useDesign("setting-switch-item");
-    // const { t } = useI18n();
+    setup(props) {
+      const { prefixCls } = useDesign('setting-switch-item');
+      // const { t } = useI18n();
 
-    const getBindValue = computed(() => {
-      return props.def ? { checked: props.def } : {};
-    });
-    function handleChange(e) {
-      props.event && baseHandler(props.event, e);
-    }
-    return {
-      prefixCls,
-      // t,
-      handleChange,
-      getBindValue,
-    };
-  },
-});
+      const check = ref(props.def);
+      // const getBindValue = computed(() => {
+      //   return || false;
+      // });
+      function handleChange(e) {
+        console.log('e', e);
+
+        props.event && baseHandler(props.event, e);
+      }
+      return {
+        prefixCls,
+        // t,
+        handleChange,
+
+        check,
+      };
+    },
+  });
 </script>
 <style lang="less" scoped>
-@prefix-cls: ~"@{namespace}-setting-switch-item";
+  @prefix-cls: ~'@{namespace}-setting-switch-item';
 
-.@{prefix-cls} {
-  display: flex;
-  justify-content: space-between;
-  margin: 16px 0;
-}
+  .@{prefix-cls} {
+    display: flex;
+    justify-content: space-between;
+    margin: 16px 0;
+    align-items: center;
+    box-sizing: border-box;
+    line-height: 0;
+  }
 </style>

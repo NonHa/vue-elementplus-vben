@@ -11,10 +11,10 @@ import 'virtual:svg-icons-register';
 import '/@/design/index.less';
 // import ElementPlus from 'element-plus';
 // import 'element-plus/dist/index.css';
-import { setupRouterGuard } from '/@/router/guard';
 
 import App from './App.vue';
 import { createApp } from 'vue';
+import { setupRouterGuard } from '/@/router/guard';
 import { initAppConfigStore } from '/@/logics/initAppConfig';
 import { setupRouter, router } from '/@/router';
 import { setupStore } from '/@/store/index';

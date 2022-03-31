@@ -15,7 +15,7 @@ import { createParamMenuGuard } from './paramMenuGuard';
 
 // Don't change the order of creation
 export function setupRouterGuard(router: Router) {
-  // createPageGuard(router);
+  createPageGuard(router);
   // createPageLoadingGuard(router);
   // createHttpGuard(router);
   // createScrollGuard(router);

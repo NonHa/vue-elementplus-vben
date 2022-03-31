@@ -8,7 +8,7 @@
  */
 import { ThemeEnum } from '../enums/appEnum';
 
-export const prefixCls = 'IsBlle';
+export const prefixCls = 'IsBelle';
 
 export const darkMode = ThemeEnum.LIGHT;
 

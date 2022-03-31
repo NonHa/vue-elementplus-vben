@@ -12,6 +12,8 @@ export function initAffixTabs(): string[] {
 
   const tabStore = useMultipleTabStore();
   const router = useRouter();
+  console.log();
+
   /**
    * @description: Filter all fixed routes
    */
@@ -57,7 +59,7 @@ export function useTabsDrag(affixTextList: string[]) {
   nextTick(() => {
     if (!multiTabsSetting.canDrag) return;
     const el = document.querySelectorAll(
-      `.${prefixCls} .ant-tabs-nav-wrap > div`,
+      `.${prefixCls} .ant-tabs-nav-wrap > div`
     )?.[0] as HTMLElement;
     const { initSortable } = useSortable(el, {
       filter: (e: ChangeEvent) => {

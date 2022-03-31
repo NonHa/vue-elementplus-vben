@@ -37,7 +37,6 @@ interface Options {
 
 export function createAsyncComponent(loader: Fn, options: Options = {}) {
   const { delay = 100, timeout = 30000, loading = false, retry = true, hideTime = 500 } = options;
-  console.log('hideTime', hideTime);
 
   return defineAsyncComponent({
     loader,

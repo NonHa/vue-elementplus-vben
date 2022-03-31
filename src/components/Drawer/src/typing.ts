@@ -70,10 +70,11 @@ export interface DrawerFooterProps {
   footerHeight: string | number;
 }
 export interface DrawerProps extends DrawerFooterProps {
+  visible: boolean;
   isDetail?: boolean;
   loading?: boolean;
   showDetailBack?: boolean;
-  visible?: boolean;
+  ['model-value']?: boolean;
   /**
    * Built-in ScrollContainer component configuration
    * @type ScrollContainerOptions
@@ -107,7 +108,7 @@ export interface DrawerProps extends DrawerFooterProps {
    * @default true
    * @type boolean
    */
-  mask?: boolean;
+  modal?: boolean;
 
   /**
    * Clicking on the mask (area outside the Drawer) to close the Drawer or not.
@@ -121,7 +122,7 @@ export interface DrawerProps extends DrawerFooterProps {
    * @default {}
    * @type object
    */
-  maskStyle?: CSSProperties;
+  modalClass?: CSSProperties;
 
   /**
    * The title for Drawer.
@@ -133,7 +134,7 @@ export interface DrawerProps extends DrawerFooterProps {
    * @type string
    */
   wrapClassName?: string;
-  class?: string;
+  customClass?: string;
   /**
    * Style of wrapper element which **contains mask** compare to `drawerStyle`
    * @type object
@@ -178,7 +179,7 @@ export interface DrawerProps extends DrawerFooterProps {
    * @default 'right'
    * @type string
    */
-  placement?: 'top' | 'right' | 'bottom' | 'left';
+  direction?: 'rtl' | 'ltr' | 'ttb' | 'btt';
   afterVisibleChange?: (visible?: boolean) => void;
   keyboard?: boolean;
   /**

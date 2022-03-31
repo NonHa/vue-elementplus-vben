@@ -55,7 +55,10 @@
     border-radius: 30px;
     justify-content: space-between;
     align-items: center;
-
+    box-sizing: border-box;
+    svg {
+      padding: 0;
+    }
     &-inner {
       position: absolute;
       z-index: 1;

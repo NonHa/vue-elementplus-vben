@@ -13,12 +13,30 @@ import type { AxiosTransform, CreateAxiosOptions } from './axiosTransform';
 import { VAxios } from './Axios';
 import type { GlobConfig } from '/#/config';
 import { useGlobSetting } from '/@/hooks/setting';
+import { getToken } from '/@/utils/auth';
 
 import { RequestEnum, ResultEnum, ContentTypeEnum } from '/@/enums/httpEnum';
 import { deepMerge } from '/@/utils/index';
 
 const globSetting = useGlobSetting();
 const urlPrefix = globSetting.urlPrefix;
+
+const transform: AxiosTransform = {
+  /**
+   * @description: 请求拦截器处理
+   */
+  requestInterceptors: (config, options) => {
+    // 请求之前处理config
+    const token = getToken();
+    if (token && (config as Recordable)?.requestOptions?.withToken !== false) {
+      // jwt token
+      (config as Recordable).headers.Authorization = options.authenticationScheme
+        ? `${options.authenticationScheme} ${token}`
+        : token;
+    }
+    return config;
+  },
+};
 function createAxios(opt?: Partial<CreateAxiosOptions>) {
   return new VAxios(
     deepMerge(
@@ -35,7 +53,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
         // 如果是form-data格式
         // headers: { 'Content-Type': ContentTypeEnum.FORM_URLENCODED },
         // 数据处理方式
-        transform: clone({}),
+        transform: clone(transform),
         // 配置项，下面的选项都可以在独立的接口请求中覆盖
         requestOptions: {
           // 默认将prefix 添加到url

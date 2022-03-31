@@ -55,16 +55,16 @@
   });
 </script>
 <style lang="less" scoped>
-  // @prefix-cls: ~'@{namespace}-svg-icon';
+  @prefix-cls: ~'@{namespace}-svg-icon';
 
-  // .@{prefix-cls} {
-  //   display: inline-block;
-  //   overflow: hidden;
-  //   vertical-align: -0.15em;
-  //   fill: currentColor;
-  // }
+  .@{prefix-cls} {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: -0.15em;
+    fill: currentColor;
+  }
 
-  // .svg-icon-spin {
-  //   animation: loadingCircle 1s infinite linear;
-  // }
+  .svg-icon-spin {
+    animation: loadingCircle 1s infinite linear;
+  }
 </style>

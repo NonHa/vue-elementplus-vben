@@ -9,7 +9,7 @@
 <template>
   <ElDrawer
     v-if="getIsMobile"
-    :model-value="getIsMobile"
+    :model-value="!getCollapsed"
     direction="ltr"
     :modal-class="prefixCls"
     :show-close="false"
