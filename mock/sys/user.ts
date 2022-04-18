@@ -50,14 +50,16 @@ export default [
     timeout: 200,
     method: 'post',
     response: (request) => {
-      let { query } = request;
-      const { username, password } = query;
+      let { body } = request;
+      const { username, password } = body;
 
       const checkUser = createFakeUserList().find(
         (item) => item.username === username && password === item.password
       );
       if (!checkUser) {
-        return resultError(`Incorrect account or password！ `);
+        return resultError(
+          `Incorrect account or password！ ${username}--${password}---${request.body}`
+        );
       }
       const { userId, username: _username, token, realName, desc, roles } = checkUser;
       return resultSuccess({

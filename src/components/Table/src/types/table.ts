@@ -1,20 +1,21 @@
 import type { VNodeChild } from 'vue';
 import type { PaginationProps } from './pagination';
 import type { FormProps } from '/@/components/Form';
-import type { TableRowSelection as ITableRowSelection } from 'ant-design-vue/lib/table/interface';
-import type { ColumnProps } from 'ant-design-vue/lib/table';
-
+// import type { TableRowSelection as ITableRowSelection } from 'element-plus/lib/components/table';
+import type { TableColumnCtx } from 'element-plus/lib/components/table/src/table-column/defaults';
+// ColumnProps
 import { ComponentType } from './componentType';
 import { VueNode } from '/@/utils/propTypes';
 import { RoleEnum } from '/@/enums/roleEnum';
 
+type ColumnProps = Partial<TableColumnCtx<any>>;
 export declare type SortOrder = 'ascend' | 'descend';
 
 export interface TableCurrentDataSource<T = Recordable> {
   currentDataSource: T[];
 }
 
-export interface TableRowSelection<T = any> extends ITableRowSelection {
+export interface TableRowSelection<T = any> {
   /**
    * Callback executed when selected rows change
    * @type Function
@@ -207,10 +208,10 @@ export interface BasicTableProps<T = any> {
   // 是否显示边框
   bordered?: boolean;
   // 分页配置
-  pagination?: PaginationProps | boolean;
+  pagination?: PaginationProps;
   // loading加载
   loading?: boolean;
-
+  slots: any;
   /**
    * The column contains children to display
    * @default 'children'

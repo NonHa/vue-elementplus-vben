@@ -18,15 +18,17 @@ import { setupRouterGuard } from '/@/router/guard';
 import { initAppConfigStore } from '/@/logics/initAppConfig';
 import { setupRouter, router } from '/@/router';
 import { setupStore } from '/@/store/index';
+import { registerGlobComp } from '/@/components/registerGlobComp';
 
 async function bootstrap() {
   const app = createApp(App);
 
   setupStore(app);
-
+  registerGlobComp(app);
   initAppConfigStore();
-  setupRouterGuard(router);
   setupRouter(app);
+  setupRouterGuard(router);
+
   // app.use(ElementPlus)
   app.mount('#app');
 }

@@ -24,7 +24,7 @@ const dashboard: AppRouteModule = {
     {
       path: 'analysis',
       name: 'Analysis',
-      component: () => import('/@/views/login/index.vue'),
+      component: () => import('/@/views/dashboard/index.vue'),
       meta: {
         // affix: true,
         title: 'Dashboard1',

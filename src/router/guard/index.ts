@@ -23,7 +23,7 @@ export function setupRouterGuard(router: Router) {
   // createProgressGuard(router);
   createPermissionGuard(router);
   // createParamMenuGuard(router); // must after createPermissionGuard (menu has been built.)
-  // createStateGuard(router);
+  createStateGuard(router);
 }
 
 /**

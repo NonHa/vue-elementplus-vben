@@ -13,22 +13,33 @@
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
     </BasicForm>
-
-    <Table
+    <UseTableHeader :propsRef="getBindValues" :slots="$slots"></UseTableHeader>
+    <ElTable
       ref="tableElRef"
       v-bind="getBindValues"
+      fit
+      border
+      height="300"
       :rowClassName="getRowClassName"
       v-show="getEmptyDataIsShowTable"
-      @change="handleTableChange"
     >
-      <template #[item]="data" v-for="item in Object.keys($slots)" :key="item">
+      <!-- <template #[item]="data" v-for="item in Object.keys($slots)" :key="item">
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
 
-      <template #[`header-${column.dataIndex}`] v-for="column in columns" :key="column.dataIndex">
+      <template #[`header-${column.index}`] v-for="(column, index) in columns" :key="index">
         <HeaderCell :column="column" />
-      </template>
-    </Table>
+      </template> -->
+      <TableColumn :columns="columns"></TableColumn>
+    </ElTable>
+
+    <Pagination
+      v-if="pagiantion"
+      v-bind="getPaginationInfo"
+      v-model:page="pagiantion.current"
+      v-model:limit="pagiantion.pageSize"
+      @pagination-change="handleTableChange"
+    ></Pagination>
   </div>
 </template>
 <script lang="ts">
@@ -40,10 +51,11 @@
   } from './types/table';
 
   import { defineComponent, ref, computed, unref, toRaw, inject, watchEffect } from 'vue';
-  import { Table } from 'ant-design-vue';
+  import { ElTable } from 'element-plus';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { PageWrapperFixedHeightKey } from '/@/components/Page';
   import HeaderCell from './components/HeaderCell.vue';
+  import TableColumn from './components/TableColumn.vue';
   import { InnerHandlers } from './types/table';
 
   import { usePagination } from './hooks/usePagination';
@@ -63,14 +75,17 @@
 
   import { omit } from 'lodash-es';
   import { basicProps } from './props';
-  import { isFunction } from '/@/utils/is';
+  // import { isFunction } from '/@/utils/is';
   import { warn } from '/@/utils/log';
-
+  import { Pagination } from '/@/components/Pagination';
   export default defineComponent({
     components: {
-      Table,
+      ElTable,
       BasicForm,
       HeaderCell,
+      TableColumn,
+      Pagination,
+      UseTableHeader: useTableHeader,
     },
     props: basicProps,
     emits: [
@@ -100,6 +115,7 @@
 
       const { prefixCls } = useDesign('basic-table');
       const [registerForm, formActions] = useForm();
+      const pagiantion = props.pagination;
 
       const getProps = computed(() => {
         return { ...props, ...unref(innerPropsRef) } as BasicTableProps;
@@ -110,7 +126,7 @@
         unref(isFixedHeightPage) &&
           props.canResize &&
           warn(
-            "'canResize' of BasicTable may not work in PageWrapper with 'fixedHeight' (especially in hot updates)",
+            "'canResize' of BasicTable may not work in PageWrapper with 'fixedHeight' (especially in hot updates)"
           );
       });
 
@@ -121,7 +137,7 @@
         setPagination,
         setShowPagination,
         getShowPagination,
-      } = usePagination(getProps);
+      } = usePagination(getProps, pagiantion);
 
       const {
         getRowSelection,
@@ -157,16 +173,18 @@
           setPagination,
           getFieldsValue: formActions.getFieldsValue,
           clearSelectedRowKeys,
+          getPagination,
         },
-        emit,
+        emit
       );
 
-      function handleTableChange(...args) {
-        onTableChange.call(undefined, ...args);
-        emit('change', ...args);
-        // 解决通过useTable注册onChange时不起作用的问题
-        const { onChange } = unref(getProps);
-        onChange && isFunction(onChange) && onChange.call(undefined, ...args);
+      function handleTableChange(pagiantion) {
+        onTableChange(pagiantion, [], false);
+        // onTableChange.call(undefined, ...args);
+        // emit('change', ...args);
+        // // 解决通过useTable注册onChange时不起作用的问题
+        // const { onChange } = unref(getProps);
+        // onChange && isFunction(onChange) && onChange.call(undefined, ...args);
       }
 
       const {
@@ -183,7 +201,7 @@
         tableElRef,
         getColumnsRef,
         getRowSelectionRef,
-        getDataSourceRef,
+        getDataSourceRef
       );
 
       const { customRow } = useCustomRow(getProps, {
@@ -206,13 +224,13 @@
         },
       };
 
-      const { getHeaderProps } = useTableHeader(getProps, slots, handlers);
+      // const { getHeaderProps } = useTableHeader(getProps, slots, handlers);
 
       const { getFooterProps } = useTableFooter(
         getProps,
         getScrollRef,
         tableElRef,
-        getDataSourceRef,
+        getDataSourceRef
       );
 
       const { getFormProps, replaceFormSlotKey, getFormSlotKeys, handleSearchInfoChange } =
@@ -224,15 +242,15 @@
           ...attrs,
           customRow,
           ...unref(getProps),
-          ...unref(getHeaderProps),
+          // ...unref(getHeaderProps),
           scroll: unref(getScrollRef),
           loading: unref(getLoading),
           tableLayout: 'fixed',
           rowSelection: unref(getRowSelectionRef),
           rowKey: unref(getRowKey),
           columns: toRaw(unref(getViewColumns)),
-          pagination: toRaw(unref(getPaginationInfo)),
-          dataSource,
+
+          data: dataSource,
           footer: unref(getFooterProps),
           ...unref(getExpandOption),
         };
@@ -241,6 +259,8 @@
         }
 
         propsData = omit(propsData, ['class', 'onChange']);
+        // console.log('propsData', propsData);
+
         return propsData;
       });
 
@@ -325,6 +345,8 @@
         getFormSlotKeys,
         getWrapperClass,
         columns: getViewColumns,
+        getPaginationInfo,
+        pagiantion,
       };
     },
   });

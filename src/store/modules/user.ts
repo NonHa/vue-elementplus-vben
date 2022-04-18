@@ -15,7 +15,6 @@ import { RouteRecordRaw } from 'vue-router';
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { isArray } from '/@/utils/is';
 import { h } from 'vue';
-
 interface UserState {
   userInfo: Nullable<UserInfo>;
   token?: string;
@@ -92,7 +91,7 @@ export const useUserStore = defineStore({
         const data = await loginApi(loginParams, mode);
         // console.log('data', data?.data.result);
 
-        const { token } = data.data.result;
+        const { token } = data;
 
         // save token
         this.setToken(token);
@@ -111,6 +110,9 @@ export const useUserStore = defineStore({
         this.setSessionTimeout(false);
       } else {
         const permissionStore = usePermissionStore();
+
+        // console.log('menu', menu);
+
         if (!permissionStore.isDynamicAddedRoute) {
           const routes = await permissionStore.buildRoutesAction();
           routes.forEach((route) => {
@@ -161,11 +163,13 @@ export const useUserStore = defineStore({
       const { createWarningModal } = useMessage();
 
       createWarningModal({
-        callback: async () => {
-          await this.logout(true);
+        callback: async (action, instance) => {
+          if (action === 'confirm') {
+            await this.logout(true);
+          }
         },
-        title: '23',
-        message: '2323',
+        title: '提示',
+        message: '确定退出登录？',
       });
     },
   },

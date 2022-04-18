@@ -70,6 +70,7 @@ export function createPermissionGuard(router: Router) {
     }
 
     // Jump to the 404 page after processing the login
+
     if (
       from.path === LOGIN_PATH &&
       to.name === PAGE_NOT_FOUND_ROUTE.name &&
@@ -99,13 +100,11 @@ export function createPermissionGuard(router: Router) {
     routes.forEach((route) => {
       router.addRoute(route as unknown as RouteRecordRaw);
     });
-    console.log('routes======', routes);
 
     router.addRoute(PAGE_NOT_FOUND_ROUTE as unknown as RouteRecordRaw);
     // debugger;
     permissionStore.setDynamicAddedRoute(true);
-    next();
-    return;
+
     if (to.name === PAGE_NOT_FOUND_ROUTE.name) {
       // 动态添加路由后，此处应当重定向到fullPath，否则会加载404页面内容
       next({ path: to.fullPath, replace: true, query: to.query });

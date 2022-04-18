@@ -1,10 +1,11 @@
-import type { PaginationProps } from '../types/pagination';
+// import type { PaginationProps } from '../types/pagination';
 import type { BasicTableProps } from '../types/table';
 import { computed, unref, ref, ComputedRef, watch } from 'vue';
-import { LeftOutlined, RightOutlined } from '@ant-design/icons-vue';
+import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue';
 import { isBoolean } from '/@/utils/is';
 import { PAGE_SIZE, PAGE_SIZE_OPTIONS } from '../const';
-import { useI18n } from '/@/hooks/web/useI18n';
+// import { useI18n } from '/@/hooks/web/useI18n';
+import type { PaginationProps } from 'element-plus/lib/components/pagination/src/pagination';
 
 interface ItemRender {
   page: number;
@@ -14,21 +15,32 @@ interface ItemRender {
 
 function itemRender({ page, type, originalElement }: ItemRender) {
   if (type === 'prev') {
-    return page === 0 ? null : <LeftOutlined />;
+    return page === 0 ? null : <ArrowLeft />;
   } else if (type === 'next') {
-    return page === 1 ? null : <RightOutlined />;
+    return page === 1 ? null : <ArrowRight />;
   }
   return originalElement;
 }
 
-export function usePagination(refProps: ComputedRef<BasicTableProps>) {
-  const { t } = useI18n();
+export function usePagination(refProps: ComputedRef<BasicTableProps>, pagiantion = {}) {
+  // const { t } = useI18n();
 
-  const configRef = ref<PaginationProps>({});
+  const configRef = ref<Partial<PaginationProps>>({
+    pagerCount: 11,
+    layout: 'prev, pager, next,jumper,total,sizes',
+    pageSizes: PAGE_SIZE_OPTIONS,
+    popperClass: '',
+    // prevText: '',
+    // nextText: '',
+    small: true,
+    background: true,
+    disabled: false,
+    hideOnSinglePage: false,
+  });
   const show = ref(true);
 
   watch(
-    () => unref(refProps).pagination,
+    () => pagiantion,
     (pagination) => {
       if (!isBoolean(pagination) && pagination) {
         configRef.value = {
@@ -37,26 +49,30 @@ export function usePagination(refProps: ComputedRef<BasicTableProps>) {
         };
       }
     },
+    {
+      deep: true,
+    }
   );
 
-  const getPaginationInfo = computed((): PaginationProps | boolean => {
-    const { pagination } = unref(refProps);
+  const getPaginationInfo = computed((): Partial<PaginationProps> => {
+    // const { pagination } = unref(refProps);
 
-    if (!unref(show) || (isBoolean(pagination) && !pagination)) {
-      return false;
-    }
+    // if (!unref(show) || (isBoolean(pagination) && !pagination)) {
+    //   return false;
+    // }
 
     return {
-      current: 1,
+      currentPage: 1,
       pageSize: PAGE_SIZE,
-      size: 'small',
+      // size: 'small',
       defaultPageSize: PAGE_SIZE,
-      showTotal: (total) => t('component.table.total', { total }),
-      showSizeChanger: true,
-      pageSizeOptions: PAGE_SIZE_OPTIONS,
-      itemRender: itemRender,
-      showQuickJumper: true,
-      ...(isBoolean(pagination) ? {} : pagination),
+      // showTotal: (total) => 'component.table.total',
+      // showSizeChanger: true,
+      // pageSizeOptions: PAGE_SIZE_OPTIONS,
+      // itemRender: itemRender,
+      // showQuickJumper: true,
+      total: 100,
+      ...pagiantion,
       ...unref(configRef),
     };
   });

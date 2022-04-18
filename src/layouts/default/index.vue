@@ -7,12 +7,13 @@
  * @FilePath: \ym-Vue3\src\layouts\default\index.vue
 -->
 <template>
-  <ElContainer>
+  <ElContainer :class="prefixCls">
     <LayoutHeader v-if="getShowFullHeaderRef"></LayoutHeader>
     <ElContainer>
       <Aside v-if="getShowSidebar"></Aside>
-      <ElContainer>
+      <ElContainer :class="`${prefixCls}-main`">
         <LayoutMultipleHeader></LayoutMultipleHeader>
+        <LayoutContent />
       </ElContainer>
 
       <!-- <el-main>Main</el-main> -->
@@ -21,41 +22,53 @@
 </template>
 
 <script lang="ts" setup>
+  import { unref, computed } from 'vue';
   import Aside from './aside/index.vue';
   // import Header from './header/index.vue';
   import LayoutMultipleHeader from './header/MultipleHeader.vue';
-  import { ElContainer } from 'element-plus';
+  import LayoutContent from './content/index.vue';
+
+  import { ElContainer, ElMain } from 'element-plus';
   import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting';
   import LayoutHeader from './header/index.vue';
   import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
   // import { useAppInject } from '/@/hooks/web/useAppInject';
+  import { useDesign } from '/@/hooks/web/useDesign';
+  const { prefixCls } = useDesign('default-layout');
 
   const { getShowFullHeaderRef } = useHeaderSetting();
+  console.log('getShowFullHeaderRef', getShowFullHeaderRef.value);
+
   // const { getIsMobile } = useAppInject();
 
   const { getShowSidebar, getIsMixSidebar, getShowMenu } = useMenuSetting();
+
+  const layoutClass = computed(() => {
+    let cls: string[] = ['ant-layout'];
+    if (unref(getIsMixSidebar) || unref(getShowMenu)) {
+      cls.push('ant-layout-has-sider');
+    }
+    return cls;
+  });
 </script>
+<style lang="less">
+  @prefix-cls: ~'@{namespace}-default-layout';
 
-<style lang="less" scoped>
-  .el-header,
-  .el-footer {
-    background-color: #b3c0d1;
-    color: var(--el-text-color-primary);
-    text-align: center;
-    line-height: 60px;
-  }
+  .@{prefix-cls} {
+    display: flex;
+    width: 100%;
+    min-height: 100%;
+    background-color: @content-bg;
+    flex-direction: column;
 
-  .el-aside {
-    background-color: #d3dce6;
-    color: var(--el-text-color-primary);
-    text-align: center;
-    line-height: 200px;
-  }
+    > .ant-layout {
+      min-height: 100%;
+    }
 
-  .el-main {
-    background-color: #e9eef3;
-    color: var(--el-text-color-primary);
-    text-align: center;
-    line-height: 160px;
+    &-main {
+      width: 100%;
+      margin-left: 1px;
+      flex-direction: column;
+    }
   }
 </style>

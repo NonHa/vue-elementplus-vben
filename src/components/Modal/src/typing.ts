@@ -1,4 +1,4 @@
-import type { ButtonProps } from 'ant-design-vue/lib/button/buttonTypes';
+import type { ButtonProps } from 'element-plus';
 import type { CSSProperties, VNodeChild, ComputedRef } from 'vue';
 /**
  * @description: 弹窗对外暴露的方法

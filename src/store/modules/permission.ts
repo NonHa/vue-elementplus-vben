@@ -7,7 +7,7 @@
  * @FilePath: \ym-Vue3\src\store\modules\permission.ts
  */
 import type { AppRouteRecordRaw, Menu } from '/@/router/types';
-
+import { toRaw } from 'vue';
 import { defineStore } from 'pinia';
 import { store } from '/@/store/index';
 import { asyncRoutes } from '/@/router/routes';
@@ -15,10 +15,12 @@ import { filter } from '/@/utils/helper/treeHelper';
 import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { flatMultiLevelRoutes } from '/@/router/helper/routeHelper';
 import { transformRouteToMenu } from '/@/router/helper/menuHelper';
+import { getMenuListResultModel, RouteItem } from '/@/api/sys/model/menuModel';
 
 import { useUserStore } from './user';
 import { PageEnum } from '/@/enums/pageEnum';
 
+import { useAppStore } from '/@/store/modules/app';
 interface PermissionState {
   // Permission code list
   permCodeList: string[] | number[];
@@ -44,6 +46,9 @@ export const usePermissionStore = defineStore({
     frontMenuList: [],
   }),
   getters: {
+    getPermCodeList(): string[] | number[] {
+      return this.permCodeList;
+    },
     getBackMenuList(): Menu[] {
       return this.backMenuList;
     },
@@ -58,6 +63,9 @@ export const usePermissionStore = defineStore({
     },
   },
   actions: {
+    setPermCodeList(codeList: string[]) {
+      this.permCodeList = codeList;
+    },
     setBackMenuList(list: Menu[]) {
       this.backMenuList = list;
       list?.length > 0 && this.setLastBuildMenuTime();
@@ -88,8 +96,13 @@ export const usePermissionStore = defineStore({
       //   const { ignoreRoute } = meta || {};
       //   return !ignoreRoute;
       // };
+      const roleList = toRaw(userStore.getRoleList) || [];
+
       const routeFilter = (route: AppRouteRecordRaw) => {
-        return route !== null;
+        const { meta } = route;
+        const { roles } = meta || {};
+        if (!roles) return true;
+        return roleList.some((role) => roles.includes(role));
       };
       /**
        * @description 根据设置的首页path，修正routes中的affix标记（固定首页）
@@ -123,7 +136,35 @@ export const usePermissionStore = defineStore({
 
       routes = filter(asyncRoutes, routeFilter);
       routes = routes.filter(routeFilter);
+
       // Convert multi-level routing to level 2 routing
+      let { getMenuList } = useAppStore();
+      let menu = await getMenuList();
+
+      let menuNames: string[] = [];
+
+      const getMenuNames = function (menuItem: getMenuListResultModel) {
+        menuItem.forEach((v) => {
+          menuNames.push(v.name as string);
+          v.children && getMenuNames(v.children);
+        });
+      };
+      getMenuNames(menu);
+
+      // console.log('menu---', menu);
+      // let mapRoutes: AppRouteRecordRaw[] = [];
+      const filterRouteBymenu = function (routes: AppRouteRecordRaw[]) {
+        let routeItem: AppRouteRecordRaw[] = [];
+        routes.forEach((v) => {
+          if (v.children) {
+            v.children = filterRouteBymenu(v.children);
+          }
+          if (menuNames.includes(v.name)) routeItem.push(v);
+        });
+        return routeItem;
+      };
+      routes = filterRouteBymenu(routes);
+      // console.log('mapRoutes', routes);
 
       routes.push(ERROR_LOG_ROUTE);
       routes.push(PAGE_NOT_FOUND_ROUTE);
@@ -131,6 +172,8 @@ export const usePermissionStore = defineStore({
       // routes = flatMultiLevelRoutes(menuList);
       this.setFrontMenuList(menuList);
       patchHomeAffix(routes);
+      // console.log('routes---', routes);
+      // console.log('routes',routes);
 
       return routes;
     },

@@ -1,21 +1,26 @@
 <template>
-  <ElDropdown hide-on-click placement="bottom" :class="`${prefixCls}-dropdown-overlay`">
+  <ElDropdown
+    @command="handleMenuClick"
+    hide-on-click
+    placement="bottom"
+    :class="`${prefixCls}-dropdown-overlay`"
+  >
     <span :class="[prefixCls, `${prefixCls}--${theme}`]" class="flex">
       <img :class="`${prefixCls}__header`" :src="getUserInfo?.avatar" />
       <span :class="`${prefixCls}__info hidden md:block`">
         <span :class="`${prefixCls}__name  `" class="truncate">
-          {{ 3434 }}
+          {{ getUserInfo.realName }}
         </span>
       </span>
     </span>
 
     <template #dropdown>
-      <ElDropdownMenu @select="handleMenuClick">
+      <ElDropdownMenu>
         <DropMenuItem
+          v-if="getShowDoc"
           key="doc"
           text="dropdownItemDoc"
           icon="ion:document-text-outline"
-          v-if="getShowDoc"
         />
 
         <DropMenuItem
@@ -86,8 +91,8 @@
       function openDoc() {
         openWindow(DOC_URL);
       }
-      function handleMenuClick(e) {
-        switch (e.key) {
+      function handleMenuClick(key) {
+        switch (key) {
           case 'logout':
             handleLoginOut();
             break;
@@ -108,7 +113,6 @@
         register,
         getUseLockPage,
       };
-      return {};
     },
   });
 </script>

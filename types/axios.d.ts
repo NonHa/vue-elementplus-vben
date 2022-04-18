@@ -10,7 +10,7 @@ export type ErrorMessageMode = 'none' | 'modal' | 'message' | undefined;
 
 export interface RequestOptions {
   joinParamsToUrl?: boolean;
-  formaDate?: boolean;
+  formatDate?: boolean;
   isTransformResponse?: boolean;
   isReturnNativeResponse?: boolean;
   joinPrefix?: boolean;

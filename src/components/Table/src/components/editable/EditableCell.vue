@@ -8,10 +8,10 @@
       <div class="cell-content" :title="column.ellipsis ? getValues ?? '' : ''">
         {{ getValues || getValues === 0 ? getValues : '&nbsp;' }}
       </div>
-      <FormOutlined :class="`${prefixCls}__normal-icon`" v-if="!column.editRow" />
+      <FolderRemove :class="`${prefixCls}__normal-icon`" v-if="!column.editRow" />
     </div>
 
-    <a-spin v-if="isEdit" :spinning="spinning">
+    <div v-if="isEdit" :spinning="spinning">
       <div :class="`${prefixCls}__wrapper`" v-click-outside="onClickOutside">
         <CellComponent
           v-bind="getComponentProps"
@@ -27,11 +27,11 @@
           @pressEnter="handleEnter"
         />
         <div :class="`${prefixCls}__action`" v-if="!getRowEditable">
-          <CheckOutlined :class="[`${prefixCls}__icon`, 'mx-2']" @click="handleSubmitClick" />
-          <CloseOutlined :class="`${prefixCls}__icon `" @click="handleCancel" />
+          <Check :class="[`${prefixCls}__icon`, 'mx-2']" @click="handleSubmitClick" />
+          <Close :class="`${prefixCls}__icon `" @click="handleCancel" />
         </div>
       </div>
-    </a-spin>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -39,7 +39,7 @@
   import { computed, defineComponent, nextTick, ref, toRaw, unref, watchEffect } from 'vue';
   import type { BasicColumn } from '../../types/table';
   import type { EditRecordRow } from './index';
-  import { CheckOutlined, CloseOutlined, FormOutlined } from '@ant-design/icons-vue';
+  import { Check, Close, FolderRemove } from '@element-plus/icons-vue';
   import { CellComponent } from './CellComponent';
 
   import { useDesign } from '/@/hooks/web/useDesign';
@@ -52,11 +52,11 @@
   import { createPlaceholderMessage } from './helper';
   import { omit, pick, set } from 'lodash-es';
   import { treeToList } from '/@/utils/helper/treeHelper';
-  import { Spin } from 'ant-design-vue';
+  // import { ElSpin } from 'element-plus';
 
   export default defineComponent({
     name: 'EditableCell',
-    components: { FormOutlined, CloseOutlined, CheckOutlined, CellComponent, ASpin: Spin },
+    components: { FolderRemove, Close, Check, CellComponent },
     directives: {
       clickOutside,
     },
@@ -87,7 +87,7 @@
 
       const { prefixCls } = useDesign('editable-cell');
 
-      const getComponent = computed(() => props.column?.editComponent || 'Input');
+      const getComponent = computed(() => props.column?.editComponent || 'ElInput');
       const getRule = computed(() => props.column?.editRule);
 
       const getRuleVisible = computed(() => {
@@ -103,7 +103,7 @@
         const compProps = props.column?.editComponentProps ?? {};
         const component = unref(getComponent);
         const apiSelectProps: Recordable = {};
-        if (component === 'ApiSelect') {
+        if (component === 'ElApiSelect') {
           apiSelectProps.cache = true;
         }
 
@@ -192,7 +192,7 @@
           currentValueRef.value = e;
         } else if (e?.target && Reflect.has(e.target, 'value')) {
           currentValueRef.value = (e as ChangeEvent).target.value;
-        } else if (component === 'Checkbox') {
+        } else if (component === 'ElCheckbox') {
           currentValueRef.value = (e as ChangeEvent).target.checked;
         } else if (isString(e) || isBoolean(e) || isNumber(e)) {
           currentValueRef.value = e;
@@ -244,11 +244,11 @@
 
         const { column, index, record } = props;
         if (!record) return false;
-        const { key, dataIndex } = column;
+        const { label, columnKey } = column;
         const value = unref(currentValueRef);
-        if (!key && !dataIndex) return;
+        if (!label && !columnKey) return;
 
-        const dataKey = (dataIndex || key) as string;
+        const dataKey = (columnKey || label) as string;
 
         if (!record.editable) {
           const { getBindValues } = table;
@@ -258,14 +258,14 @@
           if (beforeEditSubmit && isFunction(beforeEditSubmit)) {
             spinning.value = true;
             const keys: string[] = columns
-              .map((_column) => _column.dataIndex)
+              .map((_column) => _column.columnKey)
               .filter((field) => !!field) as string[];
             let result: any = true;
             try {
               result = await beforeEditSubmit({
                 record: pick(record, keys),
                 index,
-                key: key as string,
+                key: label as string,
                 value,
               });
             } catch (e) {
@@ -281,7 +281,7 @@
 
         set(record, dataKey, value);
         //const record = await table.updateTableData(index, dataKey, value);
-        needEmit && table.emit?.('edit-end', { record, index, key, value });
+        needEmit && table.emit?.('edit-end', { record, index, label, value });
         isEdit.value = false;
       }
 
@@ -300,11 +300,11 @@
         isEdit.value = false;
         currentValueRef.value = defaultValueRef.value;
         const { column, index, record } = props;
-        const { key, dataIndex } = column;
+        const { label, columnKey } = column;
         table.emit?.('edit-cancel', {
           record,
           index,
-          key: dataIndex || key,
+          key: columnKey || label,
           value: unref(currentValueRef),
         });
       }
@@ -324,7 +324,7 @@
       function handleOptionsChange(options: LabelValueOptions) {
         const { replaceFields } = props.column?.editComponentProps ?? {};
         const component = unref(getComponent);
-        if (component === 'ApiTreeSelect') {
+        if (component === 'ElApiTreeSelect') {
           const { title = 'title', value = 'value', children = 'children' } = replaceFields || {};
           let listOptions: Recordable[] = treeToList(options, { children });
           listOptions = listOptions.map((item) => {
@@ -353,9 +353,9 @@
         initCbs('validCbs', handleSubmiRule);
         initCbs('cancelCbs', handleCancel);
 
-        if (props.column.dataIndex) {
+        if (props.column.columnKey) {
           if (!props.record.editValueRefs) props.record.editValueRefs = {};
-          props.record.editValueRefs[props.column.dataIndex] = currentValueRef;
+          props.record.editValueRefs[props.column.columnKey] = currentValueRef;
         }
         /* eslint-disable  */
         props.record.onCancelEdit = () => {

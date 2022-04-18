@@ -1,5 +1,5 @@
 <template>
-  <Table
+  <ElTable
     v-if="summaryFunc || summaryData"
     :showHeader="false"
     :bordered="false"
@@ -14,7 +14,7 @@
 <script lang="ts">
   import type { PropType } from 'vue';
   import { defineComponent, unref, computed, toRaw } from 'vue';
-  import { Table } from 'ant-design-vue';
+  import { ElTable } from 'element-plus';
   import { cloneDeep } from 'lodash-es';
   import { isFunction } from '/@/utils/is';
   import type { BasicColumn } from '../types/table';
@@ -26,7 +26,7 @@
   const SUMMARY_INDEX_KEY = '_index';
   export default defineComponent({
     name: 'BasicTableFooter',
-    components: { Table },
+    components: { ElTable },
     props: {
       summaryFunc: {
         type: Function as PropType<Fn>,
@@ -68,8 +68,8 @@
 
         if (index !== -1) {
           if (hasIndexSummary) {
-            columns[index].customRender = ({ record }) => record[SUMMARY_INDEX_KEY];
-            columns[index].ellipsis = false;
+            columns[index].formatter = ({ record }) => record[SUMMARY_INDEX_KEY];
+            // columns[index].ellipsis = false;
           } else {
             Reflect.deleteProperty(columns[index], 'customRender');
           }
@@ -79,11 +79,11 @@
           const isFixed = columns.some((col) => col.fixed === 'left');
           columns.unshift({
             width: 60,
-            title: 'selection',
-            key: 'selectionKey',
+            label: 'selection',
+            columnKey: 'selectionKey',
             align: 'center',
             ...(isFixed ? { fixed: 'left' } : {}),
-            customRender: ({ record }) => record[SUMMARY_ROW_KEY],
+            formatter: ({ record }) => record[SUMMARY_ROW_KEY],
           });
         }
         return columns;

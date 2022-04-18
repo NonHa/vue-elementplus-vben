@@ -5,24 +5,25 @@
     v-if="imgList && imgList.length"
     :style="getWrapStyle"
   >
-    <Badge :count="!showBadge || imgList.length == 1 ? 0 : imgList.length" v-if="simpleShow">
+    <ElBadge :count="!showBadge || imgList.length == 1 ? 0 : imgList.length" v-if="simpleShow">
       <div class="img-div">
-        <PreviewGroup>
-          <template v-for="(img, index) in imgList" :key="img">
-            <Image
-              :width="size"
-              :style="{
-                display: index === 0 ? '' : 'none !important',
-              }"
-              :src="srcPrefix + img"
-            />
-          </template>
-        </PreviewGroup>
+        <template v-for="(img, index) in imgList" :key="img">
+          <ElImage
+            :width="size"
+            :style="{
+              display: index === 0 ? '' : 'none !important',
+            }"
+            :src="srcPrefix + img"
+          />
+        </template>
+        <!-- <PreviewGroup>
+         
+        </PreviewGroup> -->
       </div>
-    </Badge>
+    </ElBadge>
     <PreviewGroup v-else>
       <template v-for="(img, index) in imgList" :key="img">
-        <Image
+        <ElImage
           :width="size"
           :style="{ marginLeft: index === 0 ? 0 : margin }"
           :src="srcPrefix + img"
@@ -35,12 +36,12 @@
   import type { CSSProperties } from 'vue';
   import { defineComponent, computed } from 'vue';
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { Image, Badge } from 'ant-design-vue';
+  import { ElImage, ElBadge } from 'element-plus';
   import { propTypes } from '/@/utils/propTypes';
 
   export default defineComponent({
     name: 'TableImage',
-    components: { Image, PreviewGroup: Image.PreviewGroup, Badge },
+    components: { ElImage, ElBadge },
     props: {
       imgList: propTypes.arrayOf(propTypes.string),
       size: propTypes.number.def(40),

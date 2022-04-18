@@ -14,7 +14,14 @@ import type { FormProps } from '/@/components/Form';
 import { DEFAULT_FILTER_FN, DEFAULT_SORT_FN, FETCH_SETTING, DEFAULT_SIZE } from './const';
 import { propTypes } from '/@/utils/propTypes';
 
+type Query = {
+  pageNum: number;
+  pageSize: number;
+};
 export const basicProps = {
+  tableSearchQuery: {
+    type: Object as PropType<Query>,
+  },
   clickToRowSelect: { type: Boolean, default: true },
   isTreeTable: Boolean,
   tableSetting: propTypes.shape<TableSetting>({}),
@@ -122,8 +129,8 @@ export const basicProps = {
   },
   bordered: propTypes.bool,
   pagination: {
-    type: [Object, Boolean] as PropType<PaginationProps | boolean>,
-    default: null,
+    type: Object as PropType<PaginationProps>,
+    // default: {},
   },
   loading: propTypes.bool,
   rowClassName: {

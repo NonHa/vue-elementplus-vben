@@ -234,7 +234,52 @@ const linkRoute = {
     },
   ],
 };
-
+const mainRoute = {
+  path: '/main-out',
+  name: 'MainOut1',
+  component: 'LAYOUT',
+  meta: {
+    icon: 'ion:tv-outline',
+    title: 'routes.demo.iframe.frame',
+  },
+  children: [
+    {
+      path: 'doc',
+      name: 'MainOut2',
+      meta: {
+        title: 'routes.demo.iframe.doc',
+        frameSrc: 'https://vvbin.cn/doc-next/',
+      },
+    },
+    {
+      path: 'https://vvbin.cn/doc-next/',
+      name: 'MainOut3',
+      component: 'LAYOUT',
+      meta: {
+        title: 'routes.demo.iframe.docExternal',
+      },
+    },
+  ],
+};
+const demoRoute = {
+  path: '/demo',
+  name: 'Demo',
+  component: 'LAYOUT',
+  meta: {
+    icon: 'ion:tv-outline',
+    title: 'routes.demo.iframe.frame',
+  },
+  children: [
+    {
+      path: 'table',
+      name: 'Table',
+      meta: {
+        title: 'routes.demo.iframe.doc',
+        frameSrc: 'https://vvbin.cn/doc-next/',
+      },
+    },
+  ],
+};
 export default [
   {
     url: '/basic-api/getMenuList',
@@ -254,7 +299,7 @@ export default [
       switch (id) {
         case '1':
           dashboardRoute.redirect = dashboardRoute.path + '/' + dashboardRoute.children[0].path;
-          menu = [dashboardRoute, authRoute, levelRoute, sysRoute, linkRoute];
+          menu = [dashboardRoute, authRoute, levelRoute, sysRoute, linkRoute, mainRoute, demoRoute];
           break;
         case '2':
           dashboardRoute.redirect = dashboardRoute.path + '/' + dashboardRoute.children[1].path;

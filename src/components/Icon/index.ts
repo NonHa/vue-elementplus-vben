@@ -8,7 +8,8 @@
  */
 import Icon from './src/Icon.vue';
 import SvgIcon from './src/SvgIcons.vue';
+import IconPicker from './src/IconPicker.vue';
 
-export { SvgIcon, Icon };
+export { SvgIcon, IconPicker, Icon };
 
 export default Icon;

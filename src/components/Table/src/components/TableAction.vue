@@ -1,17 +1,17 @@
 <template>
   <div :class="[prefixCls, getAlign]" @click="onCellClick">
     <template v-for="(action, index) in getActions" :key="`${index}-${action.label}`">
-      <Tooltip v-if="action.tooltip" v-bind="getTooltip(action.tooltip)">
+      <ElTooltip v-if="action.tooltip" v-bind="getTooltip(action.tooltip)">
         <PopConfirmButton v-bind="action">
           <Icon :icon="action.icon" :class="{ 'mr-1': !!action.label }" v-if="action.icon" />
           <template v-if="action.label">{{ action.label }}</template>
         </PopConfirmButton>
-      </Tooltip>
+      </ElTooltip>
       <PopConfirmButton v-else v-bind="action">
         <Icon :icon="action.icon" :class="{ 'mr-1': !!action.label }" v-if="action.icon" />
         <template v-if="action.label">{{ action.label }}</template>
       </PopConfirmButton>
-      <Divider
+      <ElDivider
         type="vertical"
         class="action-divider"
         v-if="divider && index < getActions.length - 1"
@@ -24,16 +24,16 @@
       v-if="dropDownActions && getDropdownList.length > 0"
     >
       <slot name="more"></slot>
-      <a-button type="link" size="small" v-if="!$slots.more">
-        <MoreOutlined class="icon-more" />
-      </a-button>
+      <el-button type="link" size="small" v-if="!$slots.more">
+        <More class="icon-more" />
+      </el-button>
     </Dropdown>
   </div>
 </template>
 <script lang="ts">
   import { defineComponent, PropType, computed, toRaw, unref } from 'vue';
-  import { MoreOutlined } from '@ant-design/icons-vue';
-  import { Divider, Tooltip, TooltipProps } from 'ant-design-vue';
+  import { More } from '@element-plus/icons-vue';
+  import { ElDivider, ElTooltip, ElTooltipContentProps } from 'element-plus';
   import Icon from '/@/components/Icon/index';
   import { ActionItem, TableActionType } from '/@/components/Table';
   import { PopConfirmButton } from '/@/components/Button';
@@ -47,7 +47,7 @@
 
   export default defineComponent({
     name: 'TableAction',
-    components: { Icon, PopConfirmButton, Divider, Dropdown, MoreOutlined, Tooltip },
+    components: { Icon, PopConfirmButton, ElDivider, Dropdown, More, ElTooltip },
     props: {
       actions: {
         type: Array as PropType<ActionItem[]>,
@@ -126,10 +126,10 @@
         return actionColumn?.align ?? 'left';
       });
 
-      function getTooltip(data: string | TooltipProps): TooltipProps {
+      function getTooltip(data: string | ElTooltipContentProps) {
         return {
           getPopupContainer: () => unref((table as any)?.wrapRef.value) ?? document.body,
-          placement: 'bottom',
+          // placement: 'bottom',
           ...(isString(data) ? { title: data } : data),
         };
       }

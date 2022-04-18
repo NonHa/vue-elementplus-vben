@@ -7,7 +7,7 @@
  * @FilePath: \ym-Vue3\src\layouts\default\header\components\user-dropdown\DropMenuItem.vue
 -->
 <template>
-  <ElDropdownItem :divided="divided" :key="itemKey">
+  <ElDropdownItem :divided="divided" :command="itemKey">
     <span class="flex items-center">
       <Icon :icon="icon" class="mr-1" />
       <span>{{ text }}</span>
@@ -33,7 +33,7 @@
     },
     setup(props) {
       const instance = getCurrentInstance();
-      const itemKey = computed(() => props.key || instance?.vnode?.props?.key);
+      const itemKey = computed(() => (props.key || instance?.vnode?.props?.key) as string);
       return { itemKey };
     },
   });

@@ -2,15 +2,15 @@
   <span>
     <slot></slot>
     {{ title }}
-    <FormOutlined />
+    <FolderRemove />
   </span>
 </template>
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import { FormOutlined } from '@ant-design/icons-vue';
+  import { FolderRemove } from '@element-plus/icons-vue';
   export default defineComponent({
     name: 'EditTableHeaderIcon',
-    components: { FormOutlined },
+    components: { FolderRemove },
     props: { title: { type: String, default: '' } },
   });
 </script>

@@ -87,7 +87,7 @@
       const go = useGo();
 
       watchEffect(async () => {
-        console.log('currentRoute', currentRoute.value);
+        // console.log('currentRoute', currentRoute.value);
 
         if (currentRoute.value.name === REDIRECT_NAME) return;
         const menus = await getMenus();
@@ -115,7 +115,7 @@
           } as unknown as RouteLocationMatched);
         }
         routes.value = breadcrumbList;
-        console.log('routes', routes.value);
+        // console.log('routes', routes.value);
       });
 
       function getMatched(menus: Menu[], parent: string[]) {
