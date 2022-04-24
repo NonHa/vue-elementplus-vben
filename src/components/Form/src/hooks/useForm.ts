@@ -1,12 +1,15 @@
 import type { FormProps, FormActionType, UseFormReturnType, FormSchema } from '../types/form';
-import type { NamePath } from 'ant-design-vue/lib/form/interface';
+// import type { NamePath } from 'element-plus/lib/components/form/src/form-item';
+import type { FormItemProp } from 'element-plus/lib/components/form/src/form-item';
+
 import type { DynamicProps } from '/#/utils';
 import { ref, onUnmounted, unref, nextTick, watch } from 'vue';
 import { isProdMode } from '/@/utils/env';
 import { error } from '/@/utils/log';
 import { getDynamicProps } from '/@/utils';
+import type { ValidateFieldsError } from 'async-validator';
 
-export declare type ValidateFields = (nameList?: NamePath[]) => Promise<Recordable>;
+// export declare type ValidateFields = (nameList?: NamePath[]) => Promise<Recordable>;
 
 type Props = Partial<DynamicProps<FormProps>>;
 
@@ -18,7 +21,7 @@ export function useForm(props?: Props): UseFormReturnType {
     const form = unref(formRef);
     if (!form) {
       error(
-        'The form instance has not been obtained, please make sure that the form has been rendered when performing the form operation!',
+        'The form instance has not been obtained, please make sure that the form has been rendered when performing the form operation!'
       );
     }
     await nextTick();
@@ -44,14 +47,14 @@ export function useForm(props?: Props): UseFormReturnType {
       {
         immediate: true,
         deep: true,
-      },
+      }
     );
   }
 
   const methods: FormActionType = {
-    scrollToField: async (name: NamePath, options?: ScrollOptions | undefined) => {
+    scrollToField: async (name: FormItemProp) => {
       const form = await getForm();
-      form.scrollToField(name, options);
+      form.scrollToField(name);
     },
     setProps: async (formProps: Partial<FormProps>) => {
       const form = await getForm();
@@ -96,7 +99,7 @@ export function useForm(props?: Props): UseFormReturnType {
     appendSchemaByField: async (
       schema: FormSchema,
       prefixField: string | undefined,
-      first: boolean,
+      first: boolean
     ) => {
       const form = await getForm();
       form.appendSchemaByField(schema, prefixField, first);
@@ -107,14 +110,19 @@ export function useForm(props?: Props): UseFormReturnType {
       return form.submit();
     },
 
-    validate: async (nameList?: NamePath[]): Promise<Recordable> => {
+    validate: async (
+      callback?: (isValid: boolean, invalidFields?: ValidateFieldsError) => void
+    ): Promise<void> => {
       const form = await getForm();
-      return form.validate(nameList);
+      return form.validate(callback);
     },
 
-    validateFields: async (nameList?: NamePath[]): Promise<Recordable> => {
+    validateField: async (
+      props?: FormItemProp[],
+      callback?: (isValid: boolean, invalidFields?: ValidateFieldsError) => void
+    ): Promise<void> => {
       const form = await getForm();
-      return form.validateFields(nameList);
+      return form.validateField(props, callback);
     },
   };
 

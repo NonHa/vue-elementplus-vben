@@ -8,6 +8,7 @@ import type {
   TableCustomRecord,
   TableRowSelection,
   SizeType,
+  ColumnSelectInit,
 } from './types/table';
 import type { FormProps } from '/@/components/Form';
 
@@ -18,6 +19,7 @@ type Query = {
   pageNum: number;
   pageSize: number;
 };
+
 export const basicProps = {
   tableSearchQuery: {
     type: Object as PropType<Query>,
@@ -94,6 +96,7 @@ export const basicProps = {
     type: [Array] as PropType<BasicColumn[]>,
     default: () => [],
   },
+  columnSelectInit: Object as PropType<ColumnSelectInit>,
   showIndexColumn: { type: Boolean, default: true },
   indexColumnProps: {
     type: Object as PropType<BasicColumn>,
@@ -108,8 +111,8 @@ export const basicProps = {
   clearSelectOnPageChange: propTypes.bool,
   resizeHeightOffset: propTypes.number.def(0),
   rowSelection: {
-    type: Object as PropType<TableRowSelection | null>,
-    default: null,
+    type: Boolean,
+    default: false,
   },
   title: {
     type: [String, Function] as PropType<string | ((data: Recordable) => string)>,

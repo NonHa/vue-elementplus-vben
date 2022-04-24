@@ -58,31 +58,32 @@ export default function ({
         debounceUpdateAdvanced();
       }
     },
-    { immediate: true },
+    { immediate: true }
   );
 
   function getAdvanced(itemCol: Partial<ColEx>, itemColSum = 0, isLastAction = false) {
     const width = unref(realWidthRef);
 
     const mdWidth =
-      parseInt(itemCol.md as string) ||
-      parseInt(itemCol.xs as string) ||
-      parseInt(itemCol.sm as string) ||
+      parseInt(itemCol.md as number) ||
+      parseInt(itemCol.xs as number) ||
+      parseInt(itemCol.sm as number) ||
       (itemCol.span as number) ||
       BASIC_COL_LEN;
 
-    const lgWidth = parseInt(itemCol.lg as string) || mdWidth;
-    const xlWidth = parseInt(itemCol.xl as string) || lgWidth;
-    const xxlWidth = parseInt(itemCol.xxl as string) || xlWidth;
+    const lgWidth = parseInt(itemCol.lg as number) || mdWidth;
+    const xlWidth = parseInt(itemCol.xl as number) || lgWidth;
+    // const xxlWidth = parseInt(itemCol.xxl as string) || xlWidth;
     if (width <= screenEnum.LG) {
       itemColSum += mdWidth;
     } else if (width < screenEnum.XL) {
       itemColSum += lgWidth;
-    } else if (width < screenEnum.XXL) {
-      itemColSum += xlWidth;
     } else {
-      itemColSum += xxlWidth;
+      itemColSum += xlWidth;
     }
+    //  else {
+    //   itemColSum += xxlWidth;
+    // }
 
     if (isLastAction) {
       advanceState.hideAdvanceBtn = false;
@@ -139,10 +140,11 @@ export default function ({
       if (isShow && (colProps || baseColProps)) {
         const { itemColSum: sum, isAdvanced } = getAdvanced(
           { ...baseColProps, ...colProps },
-          itemColSum,
+          itemColSum
         );
 
         itemColSum = sum || 0;
+
         if (isAdvanced) {
           realItemColSum = itemColSum;
         }

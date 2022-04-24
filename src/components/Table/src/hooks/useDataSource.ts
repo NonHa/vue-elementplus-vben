@@ -25,6 +25,7 @@ interface ActionType {
   clearSelectedRowKeys: () => void;
   tableData: Ref<Recordable[]>;
   getPagination: () => Partial<PaginationProps>;
+  toggleTableSelect: (keys: any[]) => void;
 }
 
 interface SearchState {
@@ -41,6 +42,7 @@ export function useDataSource(
     clearSelectedRowKeys,
     tableData,
     getPagination,
+    toggleTableSelect,
   }: ActionType,
   emit: EmitType
 ) {
@@ -138,6 +140,7 @@ export function useDataSource(
         }
       }
     }
+
     return unref(dataSourceRef);
   });
 
@@ -313,6 +316,7 @@ export function useDataSource(
       if (afterFetch && isFunction(afterFetch)) {
         resultItems = (await afterFetch(resultItems)) || resultItems;
       }
+
       dataSourceRef.value = resultItems;
       // console.log('dataSourceRef-----', dataSourceRef);
 

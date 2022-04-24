@@ -4,13 +4,13 @@
       <ElFormItem>
         <slot name="resetBefore"></slot>
         <Button
-          type="primary"
           class="mr-2"
           v-bind="getResetBtnOptions"
           @click="resetAction"
           v-if="showResetButton"
         >
-          {{ getResetBtnOptions.text }}
+          <!-- {{ getResetBtnOptions.text }} -->
+          重置
         </Button>
         <slot name="submitBefore"></slot>
 
@@ -21,17 +21,19 @@
           @click="submitAction"
           v-if="showSubmitButton"
         >
-          {{ getSubmitBtnOptions.text }}
+          <!-- {{ getSubmitBtnOptions.text }} -->
+          查询
         </Button>
 
         <slot name="advanceBefore"></slot>
         <Button
-          type="primary"
+          type="text"
           size="small"
           @click="toggleAdvanced"
           v-if="showAdvancedButton && !hideAdvanceBtn"
         >
-          {{ isAdvanced ? 'component.form.putAway' : 'component.form.unfold' }}
+          <!-- {{ isAdvanced ? 'component.form.putAway' : 'component.form.unfold' }} -->
+          {{ isAdvanced ? '收起' : '展开' }}
           <BasicArrow class="ml-1" :expand="!isAdvanced" up />
         </Button>
         <slot name="advanceAfter"></slot>
@@ -133,3 +135,9 @@
     },
   });
 </script>
+
+<style lang="less" scoped>
+  /deep/.el-form-item__content {
+    display: block;
+  }
+</style>

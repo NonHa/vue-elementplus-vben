@@ -9,50 +9,72 @@ export function useRowSelection(
   propsRef: ComputedRef<BasicTableProps>,
   tableData: Ref<Recordable[]>,
   emit: EmitType,
+  tableElRef
 ) {
   const selectedRowKeysRef = ref<string[]>([]);
   const selectedRowRef = ref<Recordable[]>([]);
+  const showSelect = ref<boolean>(false);
 
   const getRowSelectionRef = computed((): TableRowSelection | null => {
-    const { rowSelection } = unref(propsRef);
-    if (!rowSelection) {
+    const { columnSelectInit } = unref(propsRef);
+    if (!columnSelectInit) {
       return null;
     }
 
     return {
-      selectedRowKeys: unref(selectedRowKeysRef),
       onChange: (selectedRowKeys: string[]) => {
         setSelectedRowKeys(selectedRowKeys);
       },
-      ...omit(rowSelection, ['onChange']),
+      onSelect: (selection, row) => {
+        tableSelect(selection, row);
+      },
+      onSelectAll: (selection) => {},
+      ...omit(columnSelectInit, ['onChange']),
     };
   });
-
   watch(
-    () => unref(propsRef).rowSelection?.selectedRowKeys,
-    (v: string[]) => {
-      setSelectedRowKeys(v);
-    },
+    () => unref(propsRef),
+    (v) => {
+      if (!!v.columnSelectInit) {
+        showSelect.value = true;
+        // v.columnSelectInit.initSelectRows && toggleTableSelect(v.columnSelectInit.initSelectRows);
+      } else {
+        showSelect.value = false;
+      }
+    }
   );
+  // watch(
+  //   () => unref(propsRef).columnSelectInit?.selectedRowKeys,
+  //   (v: string[]) => {
+  //     setSelectedRowKeys(v);
+  //   }
+  // );
 
-  watch(
-    () => unref(selectedRowKeysRef),
-    () => {
-      nextTick(() => {
-        const { rowSelection } = unref(propsRef);
-        if (rowSelection) {
-          const { onChange } = rowSelection;
-          if (onChange && isFunction(onChange)) onChange(getSelectRowKeys(), getSelectRows());
-        }
-        emit('selection-change', {
-          keys: getSelectRowKeys(),
-          rows: getSelectRows(),
-        });
+  // watch(
+  //   () => unref(selectedRowKeysRef),
+  //   () => {
+  //     nextTick(() => {
+  //       const { columnSelectInit } = unref(propsRef);
+  //       if (columnSelectInit) {
+  //         const { onChange } = columnSelectInit;
+  //         if (onChange && isFunction(onChange)) onChange(getSelectRowKeys(), getSelectRows());
+  //       }
+  //       emit('selection-change', {
+  //         keys: getSelectRowKeys(),
+  //         rows: getSelectRows(),
+  //       });
+  //     });
+  //   },
+  //   { deep: true }
+  // );
+  const toggleTableSelect = function (keys: any[]) {
+    nextTick(() => {
+      unref(keys).forEach((v) => {
+        // console.log('v', v);
+        tableElRef.value!.toggleRowSelection(v, true);
       });
-    },
-    { deep: true },
-  );
-
+    });
+  };
   const getAutoCreateKey = computed(() => {
     return unref(propsRef).autoCreateKey && !unref(propsRef).rowKey;
   });
@@ -69,7 +91,7 @@ export function useRowSelection(
       (item) => rowKeys.includes(item[unref(getRowKey) as string]),
       {
         children: propsRef.value.childrenColumnName ?? 'children',
-      },
+      }
     );
     const trueSelectedRows: any[] = [];
     rowKeys.forEach((key: string) => {
@@ -108,7 +130,15 @@ export function useRowSelection(
   function getRowSelection() {
     return unref(getRowSelectionRef)!;
   }
-
+  function setSelectAllRow() {
+    // nextTick(() => {
+    // });
+    // tableElRef.value.toggleRowSelection(tableData.value[0], undefined);
+  }
+  function tableSelect(selection, row) {
+    selectedRowRef.value = selection;
+    setSelectedRowKeys(['id']);
+  }
   return {
     getRowSelection,
     getRowSelectionRef,
@@ -118,5 +148,8 @@ export function useRowSelection(
     clearSelectedRowKeys,
     deleteSelectRowByKey,
     setSelectedRows,
+    setSelectAllRow,
+    showSelect,
+    toggleTableSelect,
   };
 }

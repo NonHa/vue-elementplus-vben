@@ -6,13 +6,13 @@ import EditableCell from './EditableCell.vue';
 import { isArray } from '/@/utils/is';
 
 interface Params {
-  text: string;
+  cellValue: string;
   record: Recordable;
   index: number;
 }
 
 export function renderEditCell(column: BasicColumn) {
-  return ({ text: value, record, index }: Params) => {
+  return ({ cellValue: value, record, index }: Params) => {
     record.onValid = async () => {
       if (isArray(record?.validCbs)) {
         const validFns = (record?.validCbs || []).map((fn) => fn());

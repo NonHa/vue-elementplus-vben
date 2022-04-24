@@ -29,11 +29,11 @@ export async function useAutoFocus({
 
     const firstItem = schemas[0];
     // Only open when the first form item is input type
-    if (!firstItem.component.includes('Input')) {
+    if (!firstItem.component.includes('ElInput')) {
       return;
     }
 
-    const inputEl = el.querySelector('.ant-row:first-child input') as Nullable<HTMLInputElement>;
+    const inputEl = el.querySelector('.el-row:first-child input') as Nullable<HTMLInputElement>;
     if (!inputEl) return;
     inputEl?.focus();
   });

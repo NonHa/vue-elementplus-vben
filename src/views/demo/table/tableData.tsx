@@ -1,4 +1,4 @@
-import { FormProps, FormSchema } from '/@/components/Table';
+import { FormProps, FormSchema } from '/@/components/Form/src/types/form';
 import { BasicColumn } from '/@/components/Table/src/types/table';
 
 export function getBasicColumns(): BasicColumn[] {
@@ -170,13 +170,13 @@ export function getMergeHeaderColumns(): BasicColumn[] {
       label: 'ID',
       prop: 'id',
       width: 300,
-      customRender: renderContent,
+      formatter: renderContent,
     },
     {
       label: '姓名',
       prop: 'name',
       width: 300,
-      customRender: renderContent,
+      formatter: renderContent,
     },
     {
       label: '地址',
@@ -184,7 +184,7 @@ export function getMergeHeaderColumns(): BasicColumn[] {
       colSpan: 2,
       width: 120,
       sortable: true,
-      customRender: ({ text, index }: { text: any; index: number }) => {
+      formatter: ({ text, index }: { text: any; index: number }) => {
         const obj: any = {
           children: text,
           attrs: {},
@@ -206,19 +206,19 @@ export function getMergeHeaderColumns(): BasicColumn[] {
         { text: 'Male', value: 'male', children: [] },
         { text: 'Female', value: 'female', children: [] },
       ],
-      customRender: renderContent,
+      formatter: renderContent,
     },
     {
       label: '开始时间',
       prop: 'beginTime',
       width: 200,
-      customRender: renderContent,
+      formatter: renderContent,
     },
     {
       label: '结束时间',
       prop: 'endTime',
       width: 200,
-      customRender: renderContent,
+      formatter: renderContent,
     },
   ];
 }
@@ -230,8 +230,8 @@ export const getAdvanceSchema = (itemNumber = 6): FormSchema[] => {
       label: `字段${index}`,
       component: 'ElInput',
       colProps: {
-        xl: 12,
-        xxl: 8,
+        xl: 8,
+        lg: 12,
       },
     });
   }
@@ -248,8 +248,8 @@ export function getFormConfig(): Partial<FormProps> {
         component: 'ElSelect',
         slot: 'custom',
         colProps: {
-          xl: 12,
-          xxl: 8,
+          lg: 12,
+          xl: 8,
         },
       },
     ],

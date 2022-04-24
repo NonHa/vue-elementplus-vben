@@ -10,7 +10,11 @@ import { RoleEnum } from '/@/enums/roleEnum';
 
 type ColumnProps = Partial<TableColumnCtx<any>>;
 export declare type SortOrder = 'ascend' | 'descend';
-
+export type ColumnSelectInit = {
+  selectable: (row: any, index: any) => Boolean;
+  // initSelectRows: (key: string | number) => void;
+  initSelectRows: any;
+};
 export interface TableCurrentDataSource<T = Recordable> {
   currentDataSource: T[];
 }
@@ -26,13 +30,13 @@ export interface TableRowSelection<T = any> {
    * Callback executed when select/deselect one row
    * @type Function
    */
-  onSelect?: (record: T, selected: boolean, selectedRows: Object[], nativeEvent: Event) => any;
+  onSelect?: (selection: T[], row) => any;
 
   /**
    * Callback executed when select/deselect all rows
    * @type Function
    */
-  onSelectAll?: (selected: boolean, selectedRows: T[], changeRows: T[]) => any;
+  onSelectAll?: (selection: T[]) => any;
 
   /**
    * Callback executed when row selection is inverted
@@ -42,8 +46,8 @@ export interface TableRowSelection<T = any> {
 }
 
 export interface TableCustomRecord<T> {
-  record?: T;
-  index?: number;
+  row?: T;
+  rowIndex?: number;
 }
 
 export interface ExpandedRowRenderRecord<T> extends TableCustomRecord<T> {
@@ -183,6 +187,8 @@ export interface BasicTableProps<T = any> {
   formConfig?: Partial<FormProps>;
   // 列配置
   columns: BasicColumn[];
+  columnSelectInit: ColumnSelectInit;
+
   // 是否显示序号列
   showIndexColumn?: boolean;
   // 序号列配置

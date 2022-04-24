@@ -30,6 +30,13 @@
       <template #[`header-${column.index}`] v-for="(column, index) in columns" :key="index">
         <HeaderCell :column="column" />
       </template> -->
+
+      <ElTableColumn
+        v-if="showSelect"
+        type="selection"
+        :selectable="getBindValues.selectableFun"
+        width="55"
+      />
       <TableColumn :columns="columns"></TableColumn>
     </ElTable>
 
@@ -50,8 +57,20 @@
     ColumnChangeParam,
   } from './types/table';
 
-  import { defineComponent, ref, computed, unref, toRaw, inject, watchEffect } from 'vue';
-  import { ElTable } from 'element-plus';
+  import {
+    defineComponent,
+    ref,
+    computed,
+    unref,
+    toRaw,
+    inject,
+    watchEffect,
+    onMounted,
+    nextTick,
+    toRef,
+    reactive,
+  } from 'vue';
+  import { ElTable, ElTableColumn } from 'element-plus';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { PageWrapperFixedHeightKey } from '/@/components/Page';
   import HeaderCell from './components/HeaderCell.vue';
@@ -85,6 +104,7 @@
       HeaderCell,
       TableColumn,
       Pagination,
+      ElTableColumn,
       UseTableHeader: useTableHeader,
     },
     props: basicProps,
@@ -107,7 +127,7 @@
       'columns-change',
     ],
     setup(props, { attrs, emit, slots, expose }) {
-      const tableElRef = ref(null);
+      const tableElRef = ref();
       const tableData = ref<Recordable[]>([]);
 
       const wrapRef = ref(null);
@@ -140,6 +160,7 @@
       } = usePagination(getProps, pagiantion);
 
       const {
+        showSelect,
         getRowSelection,
         getRowSelectionRef,
         getSelectRows,
@@ -147,7 +168,8 @@
         getSelectRowKeys,
         deleteSelectRowByKey,
         setSelectedRowKeys,
-      } = useRowSelection(getProps, tableData, emit);
+        toggleTableSelect,
+      } = useRowSelection(getProps, tableData, emit, tableElRef);
 
       const {
         handleTableChange: onTableChange,
@@ -174,12 +196,13 @@
           getFieldsValue: formActions.getFieldsValue,
           clearSelectedRowKeys,
           getPagination,
+          toggleTableSelect,
         },
         emit
       );
 
       function handleTableChange(pagiantion) {
-        onTableChange(pagiantion, [], false);
+        onTableChange(pagiantion);
         // onTableChange.call(undefined, ...args);
         // emit('change', ...args);
         // // 解决通过useTable注册onChange时不起作用的问题
@@ -246,7 +269,7 @@
           scroll: unref(getScrollRef),
           loading: unref(getLoading),
           tableLayout: 'fixed',
-          rowSelection: unref(getRowSelectionRef),
+          ...unref(getRowSelectionRef),
           rowKey: unref(getRowKey),
           columns: toRaw(unref(getViewColumns)),
 
@@ -259,7 +282,6 @@
         }
 
         propsData = omit(propsData, ['class', 'onChange']);
-        // console.log('propsData', propsData);
 
         return propsData;
       });
@@ -327,6 +349,9 @@
       expose(tableAction);
 
       emit('register', tableAction, formActions);
+      onMounted(() => {
+        console.log('tableElRef.value', unref(tableElRef));
+      });
 
       return {
         tableElRef,
@@ -347,6 +372,7 @@
         columns: getViewColumns,
         getPaginationInfo,
         pagiantion,
+        showSelect,
       };
     },
   });

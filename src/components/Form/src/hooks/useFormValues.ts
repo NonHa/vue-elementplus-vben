@@ -81,6 +81,7 @@ export function useFormValues({
         formModel[item.field] = defaultValue;
       }
     });
+
     defaultValueRef.value = obj;
   }
 

@@ -118,6 +118,7 @@
         const schemas: FormSchema[] = unref(schemaRef) || (unref(getProps).schemas as any);
         for (const schema of schemas) {
           const { defaultValue, component } = schema;
+
           // handle date type
           if (defaultValue && dateItemType.includes(component)) {
             if (!Array.isArray(defaultValue)) {
@@ -132,12 +133,11 @@
           }
         }
         if (unref(getProps).showAdvancedButton) {
-          return schemas.filter((schema) => schema.component !== 'Divider') as FormSchema[];
+          return schemas.filter((schema) => schema.component !== 'ElDivider') as FormSchema[];
         } else {
           return schemas as FormSchema[];
         }
       });
-      console.log('getSchema', getSchema);
 
       const { handleToggleAdvanced } = useAdvanced({
         advanceState,
@@ -167,7 +167,7 @@
         setFieldsValue,
         clearValidate,
         validate,
-        validateFields,
+        validateField,
         getFieldsValue,
         updateSchema,
         resetSchema,
@@ -243,7 +243,7 @@
         formModel[key] = value;
         const { validateTrigger } = unref(getBindValue);
         if (!validateTrigger || validateTrigger === 'change') {
-          validateFields([key]).catch((_) => {});
+          validateField([key]).catch((_) => {});
         }
       }
 
@@ -268,7 +268,7 @@
         removeSchemaByFiled,
         appendSchemaByField,
         clearValidate,
-        validateFields,
+        validateField,
         validate,
         submit: handleSubmit,
         scrollToField: scrollToField,

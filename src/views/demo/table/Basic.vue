@@ -14,6 +14,10 @@
       :tableSearchQuery="{ pageNum: 1, pageSize: 50 }"
       :api="api"
       useSearchForm
+      :columnSelectInit="{
+        selectable: selectableFun,
+        initSelectRows: [1, 2, 3],
+      }"
       @columns-change="handleColumnChange"
       @register="registerTable"
     >
@@ -85,7 +89,10 @@
       function getFormValues() {
         console.log(getForm().getFieldsValue());
       }
-
+      function selectableFun(row, index) {
+        return true;
+      }
+      function initSelectRows(key) {}
       return {
         columns: getBasicColumns(),
         data: getBasicData(),
@@ -102,6 +109,8 @@
         api,
         registerTable,
         getFormValues,
+        selectableFun,
+        initSelectRows,
       };
     },
   });

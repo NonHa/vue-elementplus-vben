@@ -37,6 +37,7 @@ export function useTable(tableProps?: Props): [
 
     tableRef.value = instance;
     formRef.value = formInstance;
+
     tableProps && instance.setProps(getDynamicProps(tableProps));
     loadedRef.value = true;
 

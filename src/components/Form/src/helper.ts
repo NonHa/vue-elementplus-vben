@@ -1,4 +1,4 @@
-import type { FormRules } from 'element-plus/es/tokens/form';
+import type { FormItemRule } from 'element-plus/es/tokens/form';
 import type { ComponentType } from './types/index';
 // import { useI18n } from '/@/hooks/web/useI18n';
 import { dateUtil } from '/@/utils/dateUtil';
@@ -10,18 +10,18 @@ import { isNumber, isObject } from '/@/utils/is';
  * @description: 生成placeholder
  */
 export function createPlaceholderMessage(component: ComponentType) {
-  if (component.includes('Input') || component.includes('Complete')) {
+  if (component.includes('ElInput') || component.includes('ElComplete')) {
     return 'common.inputText';
   }
-  if (component.includes('Picker')) {
+  if (component.includes('ElPicker')) {
     return 'common.chooseText';
   }
   if (
-    component.includes('Select') ||
-    component.includes('Cascader') ||
-    component.includes('Checkbox') ||
-    component.includes('Radio') ||
-    component.includes('Switch')
+    component.includes('ElSelect') ||
+    component.includes('ElCascader') ||
+    component.includes('ElCheckbox') ||
+    component.includes('ElRadio') ||
+    component.includes('ElSwitch')
   ) {
     // return `请选择${label}`;
     return 'common.chooseText';
@@ -29,22 +29,22 @@ export function createPlaceholderMessage(component: ComponentType) {
   return '';
 }
 
-const DATE_TYPE = ['DatePicker', 'MonthPicker', 'WeekPicker', 'TimePicker'];
+const DATE_TYPE = ['ElDatePicker', 'ElMonthPicker', 'ElWeekPicker', 'ElTimePicker'];
 
 function genType() {
-  return [...DATE_TYPE, 'RangePicker'];
+  return [...DATE_TYPE, 'ElRangePicker'];
 }
 
 export function setComponentRuleType(
-  rule: FormRules,
+  rule: FormItemRule,
   component: ComponentType,
   valueFormat: string
 ) {
-  if (['DatePicker', 'MonthPicker', 'WeekPicker', 'TimePicker'].includes(component)) {
+  if (['ElDatePicker', 'ElMonthPicker', 'ElWeekPicker', 'ElTimePicker'].includes(component)) {
     rule.type = valueFormat ? 'string' : 'object';
-  } else if (['RangePicker', 'Upload', 'CheckboxGroup', 'TimePicker'].includes(component)) {
+  } else if (['ElRangePicker', 'ElUpload', 'ElCheckboxGroup', 'ElTimePicker'].includes(component)) {
     rule.type = 'array';
-  } else if (['InputNumber'].includes(component)) {
+  } else if (['ElInputNumber'].includes(component)) {
     rule.type = 'number';
   }
 }
@@ -60,7 +60,7 @@ export function processDateValue(attr: Recordable, component: string) {
 
 export function handleInputNumberValue(component?: ComponentType, val?: any) {
   if (!component) return val;
-  if (['Input', 'InputPassword', 'InputSearch', 'InputTextArea'].includes(component)) {
+  if (['ElInput', 'ElInputPassword', 'ElInputSearch', 'ElInputTextArea'].includes(component)) {
     return val && isNumber(val) ? `${val}` : val;
   }
   return val;
@@ -71,4 +71,9 @@ export function handleInputNumberValue(component?: ComponentType, val?: any) {
  */
 export const dateItemType = genType();
 
-export const defaultValueComponents = ['Input', 'InputPassword', 'InputSearch', 'InputTextArea'];
+export const defaultValueComponents = [
+  'ElInput',
+  'ElInputPassword',
+  'ElInputSearch',
+  'ElInputTextArea',
+];

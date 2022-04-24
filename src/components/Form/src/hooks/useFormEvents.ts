@@ -1,6 +1,8 @@
 import type { ComputedRef, Ref } from 'vue';
 import type { FormProps, FormSchema, FormActionType } from '../types/form';
-import type { NamePath } from 'ant-design-vue/lib/form/interface';
+// import type { NamePath } from 'ant-design-vue/lib/form/interface';
+import type { FormItemProp } from 'element-plus/lib/components/form/src/form-item';
+
 import { unref, toRaw, nextTick } from 'vue';
 import { isArray, isFunction, isObject, isString } from '/@/utils/is';
 import { deepMerge } from '/@/utils';
@@ -8,6 +10,7 @@ import { dateItemType, handleInputNumberValue, defaultValueComponents } from '..
 import { dateUtil } from '/@/utils/dateUtil';
 import { cloneDeep, uniqBy } from 'lodash-es';
 import { error } from '/@/utils/log';
+import type { ValidateFieldsError } from 'async-validator';
 
 interface UseFormActionContext {
   emit: EmitType;
@@ -87,7 +90,7 @@ export function useFormEvents({
         validKeys.push(key);
       }
     });
-    validateFields(validKeys).catch((_) => {});
+    validateField(validKeys).catch((_) => {});
   }
   /**
    * @description: Delete based on field name
@@ -99,9 +102,9 @@ export function useFormEvents({
     }
 
     let fieldList: string[] = isString(fields) ? [fields] : fields;
-    if (isString(fields)) {
-      fieldList = [fields];
-    }
+    // if (isString(fields)) {
+    //   fieldList = [fields];
+    // }
     for (const field of fieldList) {
       _removeSchemaByFiled(field, schemaList);
     }
@@ -150,12 +153,12 @@ export function useFormEvents({
     }
 
     const hasField = updateData.every(
-      (item) => item.component === 'Divider' || (Reflect.has(item, 'field') && item.field),
+      (item) => item.component === 'ElDivider' || (Reflect.has(item, 'field') && item.field)
     );
 
     if (!hasField) {
       error(
-        'All children of the form Schema array that need to be updated must contain the `field` field',
+        'All children of the form Schema array that need to be updated must contain the `field` field'
       );
       return;
     }
@@ -172,12 +175,12 @@ export function useFormEvents({
     }
 
     const hasField = updateData.every(
-      (item) => item.component === 'Divider' || (Reflect.has(item, 'field') && item.field),
+      (item) => item.component === 'ElDivider' || (Reflect.has(item, 'field') && item.field)
     );
 
     if (!hasField) {
       error(
-        'All children of the form Schema array that need to be updated must contain the `field` field',
+        'All children of the form Schema array that need to be updated must contain the `field` field'
       );
       return;
     }
@@ -210,20 +213,24 @@ export function useFormEvents({
     });
   }
 
-  async function validateFields(nameList?: NamePath[] | undefined) {
-    return unref(formElRef)?.validateFields(nameList);
+  async function validateField(
+    props?: FormItemProp[],
+    callback?: (isValid: boolean, invalidFields?: ValidateFieldsError) => void
+  ): Promise<void> {
+    return await unref(formElRef)?.validateField(props, callback);
   }
-
-  async function validate(nameList?: NamePath[] | undefined) {
-    return await unref(formElRef)?.validate(nameList);
+  async function validate(
+    callback?: (isValid: boolean, invalidFields?: ValidateFieldsError) => void
+  ) {
+    return await unref(formElRef)?.validate(callback);
   }
 
   async function clearValidate(name?: string | string[]) {
     await unref(formElRef)?.clearValidate(name);
   }
 
-  async function scrollToField(name: NamePath, options?: ScrollOptions | undefined) {
-    await unref(formElRef)?.scrollToField(name, options);
+  async function scrollToField(name: FormItemProp) {
+    await unref(formElRef)?.scrollToField(name);
   }
 
   /**
@@ -240,6 +247,7 @@ export function useFormEvents({
     if (!formEl) return;
     try {
       const values = await validate();
+
       const res = handleFormValues(values);
       emit('submit', res);
     } catch (error: any) {
@@ -251,7 +259,7 @@ export function useFormEvents({
     handleSubmit,
     clearValidate,
     validate,
-    validateFields,
+    validateField,
     getFieldsValue,
     updateSchema,
     resetSchema,

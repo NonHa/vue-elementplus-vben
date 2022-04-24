@@ -152,15 +152,16 @@ export function useColumns(
       .map((column) => {
         const { slots, index, formatter, format, edit, editRow, flag } = column;
 
-        // if (!slots || !slots?.title) {
-        //   column.slots = { title: `header-${index}`, ...(slots || {}) };
-        //   column.customTitle = column.label;
-        //   Reflect.deleteProperty(column, 'label');
-        // }
+        if (!slots || !slots?.title) {
+          // column.slots = { title: `header-${index}`, ...(slots || {}) };
+          column.customTitle = column.label;
+          Reflect.deleteProperty(column, 'label');
+        }
         const isDefaultAction = [INDEX_COLUMN_FLAG, ACTION_COLUMN_FLAG].includes(flag!);
+        // 时间类型格式化 format = trure
         if (!formatter && format && !edit && !isDefaultAction) {
-          column.formatter = ({ text, record, index }) => {
-            return formatCell(text, format, record, index);
+          column.formatter = (row, column, cellValue, index) => {
+            return formatCell(cellValue, format, column, index);
           };
         }
 
