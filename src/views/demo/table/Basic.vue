@@ -18,6 +18,9 @@
         selectable: selectableFun,
         initSelectRows: [1, 2, 3],
       }"
+      :rowSelection="{
+        type: 'checkbox',
+      }"
       @columns-change="handleColumnChange"
       @register="registerTable"
     >
@@ -37,10 +40,10 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, ref, reactive, watch } from 'vue';
+  import { defineComponent, ref, reactive, watch, onMounted } from 'vue';
   import { BasicTable, ColumnChangeParam, useTable } from '/@/components/Table';
-  import { getBasicColumns, getBasicData, getFormConfig } from './tableData';
-  import { getMenuList } from '/@/api/sys/table';
+  import { getBasicColumns, getBasicData, getFormConfig, getTreeTableData } from './tableData';
+  import { getTreeList } from '/@/api/sys/table';
   export default defineComponent({
     components: { BasicTable },
     name: 'BasicTable',
@@ -53,7 +56,7 @@
         pageSize: 10,
         pageNum: 1,
       });
-      let api = getMenuList;
+      let api = getTreeList;
       function toggleCanResize() {
         canResize.value = !canResize.value;
       }
@@ -76,7 +79,6 @@
       }
       // const checkedKeys = ref<Array<string | number>>([]);
       const [registerTable, { getForm }] = useTable({
-        title: '开启搜索区域',
         api: api,
         columns: getBasicColumns(),
         useSearchForm: true,
@@ -84,8 +86,10 @@
         showTableSetting: true,
         tableSetting: { fullScreen: true },
         showIndexColumn: false,
-        rowKey: 'id',
+        rowKey: 'key',
+        isTreeTable: true,
       });
+
       function getFormValues() {
         console.log(getForm().getFieldsValue());
       }

@@ -116,8 +116,8 @@
       'row-click',
       'row-dbClick',
       'row-contextmenu',
-      'row-mouseenter',
-      'row-mouseleave',
+      'cell-mouse-enter',
+      'cell-mouse-leave',
       'edit-end',
       'edit-cancel',
       'edit-row-end',
@@ -151,13 +151,6 @@
       });
 
       const { getLoading, setLoading } = useLoading(getProps);
-      const {
-        getPaginationInfo,
-        getPagination,
-        setPagination,
-        setShowPagination,
-        getShowPagination,
-      } = usePagination(getProps, pagiantion);
 
       const {
         showSelect,
@@ -169,8 +162,16 @@
         deleteSelectRowByKey,
         setSelectedRowKeys,
         toggleTableSelect,
+        cancelSelectRow,
       } = useRowSelection(getProps, tableData, emit, tableElRef);
 
+      const {
+        getPaginationInfo,
+        getPagination,
+        setPagination,
+        setShowPagination,
+        getShowPagination,
+      } = usePagination(getProps, pagiantion);
       const {
         handleTableChange: onTableChange,
         getDataSourceRef,
@@ -227,12 +228,13 @@
         getDataSourceRef
       );
 
-      const { customRow } = useCustomRow(getProps, {
+      const customRow = useCustomRow(getProps, {
         setSelectedRowKeys,
         getSelectRowKeys,
         clearSelectedRowKeys,
         getAutoCreateKey,
         emit,
+        cancelSelectRow,
       });
 
       const { getRowClassName } = useTableStyle(getProps, prefixCls);
@@ -261,9 +263,10 @@
 
       const getBindValues = computed(() => {
         const dataSource = unref(getDataSourceRef);
+
         let propsData: Recordable = {
           ...attrs,
-          customRow,
+          ...customRow,
           ...unref(getProps),
           // ...unref(getHeaderProps),
           scroll: unref(getScrollRef),
@@ -272,9 +275,9 @@
           ...unref(getRowSelectionRef),
           rowKey: unref(getRowKey),
           columns: toRaw(unref(getViewColumns)),
-
+          dataSource: null,
           data: dataSource,
-          footer: unref(getFooterProps),
+          // footer: unref(getFooterProps),
           ...unref(getExpandOption),
         };
         if (slots.expandedRowRender) {
@@ -282,6 +285,10 @@
         }
 
         propsData = omit(propsData, ['class', 'onChange']);
+
+        if (showSelect) {
+          setSelectedRowKeys([...getSelectRowKeys()]);
+        }
 
         return propsData;
       });

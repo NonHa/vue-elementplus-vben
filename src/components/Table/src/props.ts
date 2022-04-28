@@ -111,13 +111,11 @@ export const basicProps = {
   clearSelectOnPageChange: propTypes.bool,
   resizeHeightOffset: propTypes.number.def(0),
   rowSelection: {
-    type: Boolean,
-    default: false,
-  },
-  title: {
-    type: [String, Function] as PropType<string | ((data: Recordable) => string)>,
+    type: Object as PropType<TableRowSelection | null>,
+
     default: null,
   },
+
   titleHelpMessage: {
     type: [String, Array] as PropType<string | string[]>,
   },

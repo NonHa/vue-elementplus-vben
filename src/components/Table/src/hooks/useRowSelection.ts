@@ -69,8 +69,9 @@ export function useRowSelection(
   // );
   const toggleTableSelect = function (keys: any[]) {
     nextTick(() => {
+      console.log('keys', keys);
+
       unref(keys).forEach((v) => {
-        // console.log('v', v);
         tableElRef.value!.toggleRowSelection(v, true);
       });
     });
@@ -86,18 +87,25 @@ export function useRowSelection(
 
   function setSelectedRowKeys(rowKeys: string[]) {
     selectedRowKeysRef.value = rowKeys;
+
     const allSelectedRows = findNodeAll(
-      toRaw(unref(tableData)).concat(toRaw(unref(selectedRowRef))),
+      toRaw(unref(tableData)),
       (item) => rowKeys.includes(item[unref(getRowKey) as string]),
       {
         children: propsRef.value.childrenColumnName ?? 'children',
       }
     );
+
     const trueSelectedRows: any[] = [];
     rowKeys.forEach((key: string) => {
       const found = allSelectedRows.find((item) => item[unref(getRowKey) as string] === key);
+      nextTick(() => {
+        tableElRef.value!.toggleRowSelection(found, true);
+      });
+
       found && trueSelectedRows.push(found);
     });
+
     selectedRowRef.value = trueSelectedRows;
   }
 
@@ -136,8 +144,17 @@ export function useRowSelection(
     // tableElRef.value.toggleRowSelection(tableData.value[0], undefined);
   }
   function tableSelect(selection, row) {
-    selectedRowRef.value = selection;
-    setSelectedRowKeys(['id']);
+    // selectedRowRef.value = selection;
+    let keys = selection.map((v) => v[unref(getRowKey) as string]);
+    setSelectedRowKeys(keys);
+  }
+  function cancelSelectRow(key, rowKey) {
+    const keyIndex = unref(selectedRowKeysRef).findIndex((item) => item === key);
+    unref(selectedRowKeysRef).splice(keyIndex, 1);
+    const rowIndex = unref(tableData).findIndex((v) => v[rowKey] === key);
+    tableElRef.value!.toggleRowSelection(unref(tableData)[rowIndex], false);
+    const rowRefIndex = unref(selectedRowRef).findIndex((v) => v[rowKey] === key);
+    unref(selectedRowRef).splice(rowRefIndex, 1);
   }
   return {
     getRowSelection,
@@ -151,5 +168,6 @@ export function useRowSelection(
     setSelectAllRow,
     showSelect,
     toggleTableSelect,
+    cancelSelectRow,
   };
 }

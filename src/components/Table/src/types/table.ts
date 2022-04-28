@@ -15,11 +15,26 @@ export type ColumnSelectInit = {
   // initSelectRows: (key: string | number) => void;
   initSelectRows: any;
 };
+export declare type RowSelectionType = 'checkbox' | 'radio';
+
 export interface TableCurrentDataSource<T = Recordable> {
   currentDataSource: T[];
 }
+export declare type DefaultRecordType = any;
 
-export interface TableRowSelection<T = any> {
+export interface TableRowSelection<T = DefaultRecordType> {
+  /** Keep the selection keys in list even the key not exist in `dataSource` anymore */
+  preserveSelectedRowKeys?: boolean;
+  type?: RowSelectionType;
+  onSelectMultiple?: (selected: boolean, selectedRows: T[], changeRows: T[]) => void;
+
+  onSelectNone?: () => void;
+
+  hideSelectAll?: boolean;
+  fixed?: boolean;
+  columnWidth?: string | number;
+  columnTitle?: string | VueNode;
+  checkStrictly?: boolean;
   /**
    * Callback executed when selected rows change
    * @type Function

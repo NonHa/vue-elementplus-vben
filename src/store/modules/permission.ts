@@ -138,8 +138,9 @@ export const usePermissionStore = defineStore({
       routes = routes.filter(routeFilter);
 
       // Convert multi-level routing to level 2 routing
-      let { getMenuList } = useAppStore();
-      let menu = await getMenuList();
+      let { getSideBarMenuList } = useAppStore();
+
+      let menu = getSideBarMenuList;
 
       let menuNames: string[] = [];
 

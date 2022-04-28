@@ -16,10 +16,11 @@
           appear
         >
           <div>
-            <keep-alive v-if="openCache" :include="getCaches">
+            <keep-alive>
               <component :is="Component" :key="route.fullPath" />
             </keep-alive>
-            <component v-else :is="Component" :key="route.fullPath" />
+
+            <!-- <component v-else :is="Component" :key="route.fullPath" /> -->
           </div>
         </transition>
       </template>
@@ -63,6 +64,7 @@
         }
         return tabStore.getCachedTabList;
       });
+      console.log('getCaches', getCaches);
 
       return {
         getTransitionName,

@@ -295,6 +295,7 @@ export function useDataSource(
       }
 
       const res = await api(params);
+
       rawDataSourceRef.value = res;
 
       const isArrayResult = Array.isArray(res);
@@ -357,11 +358,15 @@ export function useDataSource(
   }
 
   async function reload(opt?: FetchParams) {
+    console.log(234324);
+
     return await fetch(opt);
   }
 
   onMounted(() => {
     useTimeoutFn(() => {
+      console.log(99999);
+
       unref(propsRef).immediate && fetch();
     }, 16);
   });

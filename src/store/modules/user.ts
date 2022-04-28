@@ -2,6 +2,7 @@ import type { UserInfo } from '/#/store';
 import type { ErrorMessageMode } from '/#/axios';
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
+import { useAppStore } from '/@/store/modules/app';
 import { RoleEnum } from '/@/enums/roleEnum';
 import { PageEnum } from '/@/enums/pageEnum';
 import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
@@ -95,6 +96,8 @@ export const useUserStore = defineStore({
 
         // save token
         this.setToken(token);
+        let { getMenuList } = useAppStore();
+        await getMenuList();
         return this.afterLoginAction(goHome);
       } catch (error) {
         return Promise.reject(error);

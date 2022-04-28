@@ -89,6 +89,7 @@ export function getViewportOffset(element: Element): ViewportOffsetResult {
 
   const docScrollLeft = doc.scrollLeft;
   const docScrollTop = doc.scrollTop;
+  // clientLeft 左边框宽度
   const docClientLeft = doc.clientLeft;
   const docClientTop = doc.clientTop;
 
