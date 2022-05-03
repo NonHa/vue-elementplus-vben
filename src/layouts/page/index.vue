@@ -64,7 +64,6 @@
         }
         return tabStore.getCachedTabList;
       });
-      console.log('getCaches', getCaches);
 
       return {
         getTransitionName,

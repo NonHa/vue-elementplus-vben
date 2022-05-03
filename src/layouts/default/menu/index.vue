@@ -149,6 +149,7 @@
 
       function renderMenu() {
         const { menus, ...menuProps } = unref(getCommonProps);
+        console.log('menus', menus);
 
         if (!menus || !menus.length) return null;
         return !props.isHorizontal ? (

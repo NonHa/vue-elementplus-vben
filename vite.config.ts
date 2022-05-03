@@ -20,7 +20,6 @@ import { createProxy } from './build/vite/proxy';
 function pathResolve(dir: string) {
   return resolve(process.cwd(), '.', dir);
 }
-console.log(pathResolve('src') + '/');
 const { dependencies, devDependencies, name, version } = pkg;
 
 const __APP_INFO__ = {

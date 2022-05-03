@@ -44,6 +44,7 @@
   import { BasicTable, ColumnChangeParam, useTable } from '/@/components/Table';
   import { getBasicColumns, getBasicData, getFormConfig, getTreeTableData } from './tableData';
   import { getTreeList } from '/@/api/sys/table';
+  import { useRouter } from 'vue-router';
   export default defineComponent({
     components: { BasicTable },
     name: 'BasicTable',
@@ -73,6 +74,7 @@
       function toggleBorder() {
         border.value = !border.value;
       }
+      let { getRoutes } = useRouter();
 
       function handleColumnChange(data: ColumnChangeParam[]) {
         console.log('ColumnChanged', data);

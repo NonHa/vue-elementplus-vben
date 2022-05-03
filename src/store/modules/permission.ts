@@ -45,6 +45,7 @@ export const usePermissionStore = defineStore({
     // menu List
     frontMenuList: [],
   }),
+
   getters: {
     getPermCodeList(): string[] | number[] {
       return this.permCodeList;
@@ -175,6 +176,7 @@ export const usePermissionStore = defineStore({
       patchHomeAffix(routes);
       // console.log('routes---', routes);
       // console.log('routes',routes);
+      console.log('routes=============', routes);
 
       return routes;
     },

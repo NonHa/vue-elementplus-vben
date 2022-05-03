@@ -38,6 +38,9 @@ export const useUserStore = defineStore({
     // Last fetch time
     lastUpdateTime: 0,
   }),
+  persist: {
+    enabled: true,
+  },
   getters: {
     getUserInfo(): UserInfo {
       return this.userInfo || getAuthCache<UserInfo>(USER_INFO_KEY) || {};
@@ -109,6 +112,7 @@ export const useUserStore = defineStore({
       const userInfo = await this.getUserInfoAction();
 
       const sessionTimeout = this.sessionTimeout;
+
       if (sessionTimeout) {
         this.setSessionTimeout(false);
       } else {

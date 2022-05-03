@@ -23,6 +23,7 @@ import styleImport from 'vite-plugin-style-import';
 import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import { configMockPlugin } from './mock';
+import { EleThemeDarkPlugin } from './eleTheme';
 export function createVitePlugin(viteEnv: ViteEnv, isBuild: boolean) {
   const { VITE_USE_MOCK } = viteEnv;
 
@@ -52,6 +53,7 @@ export function createVitePlugin(viteEnv: ViteEnv, isBuild: boolean) {
   vitePlugins.push(purgeIcons());
   // vitePlugins.push(autoImportElementPlus());
   vitePlugins.push(configThemePlugin(isBuild));
+  // vitePlugins.push(EleThemeDarkPlugin());
   VITE_USE_MOCK && vitePlugins.push(configMockPlugin(isBuild));
 
   return vitePlugins;

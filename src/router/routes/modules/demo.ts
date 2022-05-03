@@ -30,6 +30,24 @@ const demo: AppRouteModule = {
         title: 'table',
       },
     },
+    {
+      path: 'print',
+      name: 'Print',
+      component: () => import('/@/views/demo/feat/print.vue'),
+      meta: {
+        // affix: true,
+        title: 'print',
+      },
+    },
+    {
+      path: 'context-menu',
+      name: 'ContextMenu',
+      component: () => import('/@/views/demo/context-menu/index.vue'),
+      meta: {
+        // affix: true,
+        title: 'ContextMenu',
+      },
+    },
     // {
     //   path: 'workbench',
     //   name: 'Dashboard2',

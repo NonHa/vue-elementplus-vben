@@ -43,7 +43,7 @@
   import { omit } from 'lodash-es';
   import { ElPageHeader } from 'element-plus';
   import { useContentHeight } from '/@/hooks/web/useContentHeight';
-  import { PageWrapperFixedHeightKey } from '..';
+  // import { PageWrapperFixedHeightKey } from '..';
 
   export default defineComponent({
     name: 'PageWrapper',
@@ -71,7 +71,7 @@
       const { prefixCls } = useDesign('page-wrapper');
 
       provide(
-        PageWrapperFixedHeightKey,
+        'PageWrapperFixedHeight',
         computed(() => props.fixedHeight)
       );
 
@@ -172,7 +172,7 @@
       margin: 16px;
     }
 
-    .ant-page-header {
+    .el-page-header {
       &:empty {
         padding: 0;
       }

@@ -278,6 +278,22 @@ const demoRoute = {
         frameSrc: 'https://vvbin.cn/doc-next/',
       },
     },
+    {
+      path: 'print',
+      name: 'Print',
+      meta: {
+        title: 'routes.demo.iframe.print',
+        frameSrc: 'https://vvbin.cn/doc-next/',
+      },
+    },
+    {
+      path: 'context-menu',
+      name: 'ContextMenu',
+      meta: {
+        title: 'routes.demo.iframe.ContextMenu',
+        frameSrc: 'https://vvbin.cn/doc-next/',
+      },
+    },
   ],
 };
 export default [

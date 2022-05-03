@@ -73,8 +73,6 @@
       const { getShowQuick, getShowRedo, getShowFold } = useMultipleTabSetting();
 
       const getTabsState = computed(() => {
-        console.log('tabStore.getTabList', tabStore.getTabList);
-
         return tabStore.getTabList.filter((item) => !item.meta?.hideTab);
       });
 
@@ -119,10 +117,9 @@
       });
 
       function handleChange(activeKey: any) {
-        // console.log('activeKey', activeKey);
-
         activeKeyRef.value = activeKey.props.name;
-        go(activeKey, false);
+
+        go(unref(activeKeyRef), false);
       }
 
       // Close the current tab

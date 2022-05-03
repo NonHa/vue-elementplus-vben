@@ -1,11 +1,6 @@
 <template>
   <div :class="prefixCls">
-    <CollapseHeader
-      v-bind="$props"
-      :prefixCls="prefixCls"
-      :show="show"
-      @expand="canExpan ? handleExpand : undefined"
-    >
+    <CollapseHeader v-bind="props" :prefixCls="prefixCls" :show="show" @expand="handleExpand">
       <template #title>
         <slot name="title"></slot>
       </template>
@@ -81,31 +76,31 @@
   }
 </script>
 <style lang="less">
-  // @prefix-cls: ~'@{namespace}-collapse-container';
+  @prefix-cls: ~'@{namespace}-collapse-container';
 
-  // .@{prefix-cls} {
-  //   // background-color: @component-background;
-  //   border-radius: 2px;
-  //   transition: all 0.3s ease-in-out;
+  .@{prefix-cls} {
+    // background-color: @component-background;
+    border-radius: 2px;
+    transition: all 0.3s ease-in-out;
 
-  //   &__header {
-  //     display: flex;
-  //     height: 32px;
-  //     justify-content: space-between;
-  //     align-items: center;
-  //     // border-bottom: 1px solid @border-color-light;
-  //   }
+    &__header {
+      display: flex;
+      height: 32px;
+      justify-content: space-between;
+      align-items: center;
+      // border-bottom: 1px solid @border-color-light;
+    }
 
-  //   &__footer {
-  //     // border-top: 1px solid @border-color-light;
-  //   }
+    &__footer {
+      // border-top: 1px solid @border-color-light;
+    }
 
-  //   &__action {
-  //     display: flex;
-  //     text-align: right;
-  //     flex: 1;
-  //     align-items: center;
-  //     justify-content: flex-end;
-  //   }
-  // }
+    &__action {
+      display: flex;
+      text-align: right;
+      flex: 1;
+      align-items: center;
+      justify-content: flex-end;
+    }
+  }
 </style>
