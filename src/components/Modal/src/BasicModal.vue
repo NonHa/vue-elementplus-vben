@@ -1,5 +1,5 @@
 <template>
-  <Modal v-bind="getBindValue" @cancel="handleCancel">
+  <Modal v-bind="getBindValue" @cancel="handleCancel" v-model:visible="visibleRef">
     <template #closeIcon v-if="!$slots.closeIcon">
       <ModalClose
         :canFullscreen="getProps.canFullscreen"
@@ -62,7 +62,7 @@
     getCurrentInstance,
     nextTick,
   } from 'vue';
-  import Modal from './components/Modal';
+  import Modal from './components/Modal.vue';
   import ModalWrapper from './components/ModalWrapper.vue';
   import ModalClose from './components/ModalClose.vue';
   import ModalFooter from './components/ModalFooter.vue';
@@ -171,7 +171,7 @@
         },
         {
           immediate: false,
-        },
+        }
       );
 
       // 取消事件

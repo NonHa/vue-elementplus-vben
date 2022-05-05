@@ -294,6 +294,30 @@ const demoRoute = {
         frameSrc: 'https://vvbin.cn/doc-next/',
       },
     },
+    {
+      path: 'watermark',
+      name: 'Watermark',
+      meta: {
+        title: 'routes.demo.iframe.ContextMenu',
+        frameSrc: 'https://vvbin.cn/doc-next/',
+      },
+    },
+    {
+      path: 'ripple',
+      name: 'Ripple',
+      meta: {
+        title: 'routes.demo.iframe.ContextMenu',
+        frameSrc: 'https://vvbin.cn/doc-next/',
+      },
+    },
+    {
+      path: 'cropper',
+      name: 'Cropper',
+      meta: {
+        title: 'routes.demo.iframe.ContextMenu',
+        frameSrc: 'https://vvbin.cn/doc-next/',
+      },
+    },
   ],
 };
 export default [

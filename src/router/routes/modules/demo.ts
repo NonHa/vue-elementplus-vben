@@ -48,6 +48,33 @@ const demo: AppRouteModule = {
         title: 'ContextMenu',
       },
     },
+    {
+      path: 'watermark',
+      name: 'Watermark',
+      component: () => import('/@/views/demo/watermark/index.vue'),
+      meta: {
+        // affix: true,
+        title: 'Watermark',
+      },
+    },
+    {
+      path: 'ripple',
+      name: 'Ripple',
+      component: () => import('/@/views/demo/ripple/index.vue'),
+      meta: {
+        // affix: true,
+        title: 'Ripple',
+      },
+    },
+    {
+      path: 'cropper',
+      name: 'Cropper',
+      component: () => import('/@/views/demo/cropper/index.vue'),
+      meta: {
+        // affix: true,
+        title: 'Cropper',
+      },
+    },
     // {
     //   path: 'workbench',
     //   name: 'Dashboard2',

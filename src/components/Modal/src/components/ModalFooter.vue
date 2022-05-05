@@ -7,37 +7,50 @@
  * @FilePath: \ym-Vue3\src\components\Modal\src\components\ModalFooter.vue
 -->
 <template>
-  <div>
+  <div :class="prefixCls">
     <slot name="insertFooter"></slot>
     <ElButton @click="handleCancel" v-if="showCancelBtn">
       {{ cancelText }}
     </ElButton>
     <slot name="centerFooter"></slot>
-    <ElButton :type="okType" @click="handleOk" :loading="confirmLoading" v-if="showOkBtn">
+    <!-- :type="okType" -->
+    <ElButton type="primary" @click="handleOk" :loading="confirmLoading" v-if="showOkBtn">
       {{ okText }}
     </ElButton>
     <slot name="appendFooter"></slot>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-import { ElButton } from "element-plus";
-import { basicProps } from "../props";
-export default defineComponent({
-  name: "BasicModalFooter",
-  props: basicProps,
-  components: { ElButton },
-  emits: ["ok", "cancel"],
-  setup(_, { emit }) {
-    function handleOk(e: Event) {
-      emit("ok", e);
-    }
+  import { defineComponent } from 'vue';
+  import { ElButton } from 'element-plus';
+  import { basicProps } from '../props';
+  import { useDesign } from '/@/hooks/web/useDesign';
 
-    function handleCancel(e: Event) {
-      emit("cancel", e);
-    }
+  export default defineComponent({
+    name: 'BasicModalFooter',
+    props: basicProps,
+    components: { ElButton },
+    emits: ['ok', 'cancel'],
+    setup(_, { emit }) {
+      const { prefixCls } = useDesign('cropper-footer');
 
-    return { handleOk, handleCancel };
-  },
-});
+      function handleOk(e: Event) {
+        emit('ok', e);
+      }
+
+      function handleCancel(e: Event) {
+        emit('cancel', e);
+      }
+
+      return { handleOk, handleCancel, prefixCls };
+    },
+  });
 </script>
+
+<style lang="less" scoped>
+  @prefix-cls: ~'@{namespace}-cropper-footer';
+  .@{prefix-cls} {
+    text-align: right;
+    padding: 14px;
+  }
+</style>

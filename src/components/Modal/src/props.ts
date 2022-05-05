@@ -67,10 +67,10 @@ export const basicProps = Object.assign({}, modalProps, {
 
   getContainer: Function as PropType<() => any>,
 
-  mask: { type: Boolean, default: true },
+  modal: { type: Boolean, default: true },
 
-  maskClosable: { type: Boolean, default: true },
-  keyboard: { type: Boolean, default: true },
+  closeOnClickModal: { type: Boolean, default: true },
+  closeOnPressEscape: { type: Boolean, default: true },
 
   maskStyle: Object as PropType<CSSProperties>,
 

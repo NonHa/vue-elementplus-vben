@@ -38,6 +38,7 @@ export const createContextMenu = function (options: CreateContextOptions) {
     }
 
     const vm = createVNode(contextMenuVue, propsData);
+    // 将创建的 VNode 挂载到 container
     render(vm, container);
 
     const handleClick = function () {
