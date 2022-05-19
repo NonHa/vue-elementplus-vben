@@ -23,21 +23,17 @@
       :rowClassName="getRowClassName"
       v-show="getEmptyDataIsShowTable"
     >
-      <!-- <template #[item]="data" v-for="item in Object.keys($slots)" :key="item">
-        <slot :name="item" v-bind="data || {}"></slot>
-      </template>
-
-      <template #[`header-${column.index}`] v-for="(column, index) in columns" :key="index">
-        <HeaderCell :column="column" />
-      </template> -->
-
       <ElTableColumn
         v-if="showSelect"
         type="selection"
         :selectable="getBindValues.selectableFun"
         width="55"
       />
-      <TableColumn :columns="columns"></TableColumn>
+      <TableColumn :columns="columns">
+        <template #[replaceColSlotKey(item)]="data" v-for="item in getColumnsSlots">
+          <slot :name="item" v-bind="data || {}"></slot>
+        </template>
+      </TableColumn>
     </ElTable>
 
     <Pagination
@@ -218,7 +214,9 @@
         setColumns,
         getColumnsRef,
         getCacheColumns,
-      } = useColumns(getProps, getPaginationInfo);
+        getColumnsSlots,
+        replaceColSlotKey,
+      } = useColumns(getProps, getPaginationInfo, slots);
 
       const { getScrollRef, redoHeight } = useTableScroll(
         getProps,
@@ -268,7 +266,7 @@
           ...attrs,
           ...customRow,
           ...unref(getProps),
-          // ...unref(getHeaderProps),
+
           scroll: unref(getScrollRef),
           loading: unref(getLoading),
           tableLayout: 'fixed',
@@ -277,7 +275,7 @@
           columns: toRaw(unref(getViewColumns)),
           dataSource: null,
           data: dataSource,
-          // footer: unref(getFooterProps),
+
           ...unref(getExpandOption),
         };
         if (slots.expandedRowRender) {
@@ -356,9 +354,6 @@
       expose(tableAction);
 
       emit('register', tableAction, formActions);
-      onMounted(() => {
-        console.log('tableElRef.value', unref(tableElRef));
-      });
 
       return {
         tableElRef,
@@ -380,6 +375,8 @@
         getPaginationInfo,
         pagiantion,
         showSelect,
+        getColumnsSlots,
+        replaceColSlotKey,
       };
     },
   });

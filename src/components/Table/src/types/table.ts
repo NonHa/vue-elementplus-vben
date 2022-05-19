@@ -1,13 +1,19 @@
-import type { VNodeChild } from 'vue';
+import type { VNodeChild, VNode } from 'vue';
 import type { PaginationProps } from './pagination';
 import type { FormProps } from '/@/components/Form';
 // import type { TableRowSelection as ITableRowSelection } from 'element-plus/lib/components/table';
 import type { TableColumnCtx } from 'element-plus/lib/components/table/src/table-column/defaults';
 // ColumnProps
-import { ComponentType } from './componentType';
+// import { ComponentType } from './componentType';
 import { VueNode } from '/@/utils/propTypes';
 import { RoleEnum } from '/@/enums/roleEnum';
+import type { ComponentType } from '/@/components/Form/src/types/index';
 
+export interface RenderCallbackParams {
+  row: Recordable;
+  // model: Recordable;
+  // field: string;
+}
 type ColumnProps = Partial<TableColumnCtx<any>>;
 export declare type SortOrder = 'ascend' | 'descend';
 export type ColumnSelectInit = {
@@ -445,7 +451,12 @@ export interface BasicColumn extends ColumnProps {
   customTitle?: VueNode;
 
   slots?: Recordable;
-
+  renderColumnComponent?:
+    | ((renderCallbackParams: RenderCallbackParams) => any)
+    | VNode
+    | VNode[]
+    | string;
+  slot?: Boolean;
   // Whether to hide the column by default, it can be displayed in the column configuration
   defaultHidden?: boolean;
 
@@ -467,6 +478,7 @@ export interface BasicColumn extends ColumnProps {
   auth?: RoleEnum | RoleEnum[] | string | string[];
   // 业务控制是否显示
   ifShow?: boolean | ((column: BasicColumn) => boolean);
+  editEvnets?: Object;
 }
 
 export type ColumnChangeParam = {

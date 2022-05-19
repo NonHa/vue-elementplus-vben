@@ -1,10 +1,10 @@
 <template>
   <div :class="getClass" ref="wrapperRef">
     <ElPageHeader
-      :ghost="ghost"
       :title="title"
       v-bind="omit($attrs, 'class')"
       ref="headerRef"
+      :icon="''"
       v-if="getShowHeader"
     >
       <template #default>
@@ -174,8 +174,10 @@
 
     .el-page-header {
       &:empty {
-        padding: 0;
+        // padding: 0;
       }
+      padding: 14px 16px;
+      background-color: @component-background;
     }
 
     &-content-bg {

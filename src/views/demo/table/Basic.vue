@@ -36,6 +36,10 @@
           {{ !striped ? '显示斑马纹' : '隐藏斑马纹' }}
         </el-button>
       </template>
+
+      <template #col-no>
+        <el-button type="primary" @click="toggleCanResize"> 自适应高度 </el-button>
+      </template>
     </BasicTable>
   </div>
 </template>
@@ -77,12 +81,19 @@
       let { getRoutes } = useRouter();
 
       function handleColumnChange(data: ColumnChangeParam[]) {
-        console.log('ColumnChanged', data);
+        // console.log('ColumnChanged', data);
       }
+      function btnClick() {
+        // console.log('btnClick');
+      }
+      let columns = getBasicColumns();
+      columns[1].editEvnets = {
+        input: btnClick,
+      };
       // const checkedKeys = ref<Array<string | number>>([]);
       const [registerTable, { getForm }] = useTable({
         api: api,
-        columns: getBasicColumns(),
+        columns,
         useSearchForm: true,
         formConfig: getFormConfig(),
         showTableSetting: true,
@@ -100,7 +111,7 @@
       }
       function initSelectRows(key) {}
       return {
-        columns: getBasicColumns(),
+        columns,
         data: getBasicData(),
         canResize,
         loading,

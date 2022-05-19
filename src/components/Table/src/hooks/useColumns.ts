@@ -1,6 +1,6 @@
 import type { BasicColumn, BasicTableProps, CellFormat, GetColumnsParams } from '../types/table';
 import type { PaginationProps } from '../types/pagination';
-import type { ComputedRef } from 'vue';
+import type { ComputedRef, Slots } from 'vue';
 import { computed, Ref, ref, toRaw, unref, watch } from 'vue';
 import { renderEditCell } from '../components/editable';
 import { usePermission } from '/@/hooks/web/usePermission';
@@ -103,7 +103,8 @@ function handleActionColumn(propsRef: ComputedRef<BasicTableProps>, columns: Bas
 
 export function useColumns(
   propsRef: ComputedRef<BasicTableProps>,
-  getPaginationRef: ComputedRef<boolean | PaginationProps>
+  getPaginationRef: ComputedRef<boolean | PaginationProps>,
+  slots: Slots
 ) {
   const columnsRef = ref(unref(propsRef).columns) as unknown as Ref<BasicColumn[]>;
   let cacheColumns = unref(propsRef).columns;
@@ -252,7 +253,18 @@ export function useColumns(
   function getCacheColumns() {
     return cacheColumns;
   }
+  const getColumnsSlots: ComputedRef<string[]> = computed(() => {
+    const keys = Object.keys(slots);
 
+    return keys
+      .map((item) => (item.startsWith('col-') ? item : null))
+      .filter((item) => !!item) as string[];
+  });
+
+  function replaceColSlotKey(key: string) {
+    if (!key) return '';
+    return key?.replace?.(/col\-/, '') ?? '';
+  }
   return {
     getColumnsRef,
     getCacheColumns,
@@ -260,6 +272,8 @@ export function useColumns(
     setColumns,
     getViewColumns,
     setCacheColumnsByField,
+    getColumnsSlots,
+    replaceColSlotKey,
   };
 }
 

@@ -17,17 +17,20 @@ export function getBasicColumns(): BasicColumn[] {
         { text: 'Male', value: 'male' },
         { text: 'Female', value: 'female' },
       ],
+      editComponent: 'ElInput',
     },
     {
       label: '地址',
       prop: 'address',
+      renderColumnComponent: 'col-on',
     },
     {
       label: '编号',
       prop: 'no',
       width: 150,
       sortable: true,
-      defaultHidden: true,
+      // defaultHidden: true,
+      slot: true,
     },
     {
       label: '开始时间',

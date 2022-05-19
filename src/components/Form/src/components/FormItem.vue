@@ -268,7 +268,7 @@
         const compAttr: Recordable = {
           ...propsData,
           ...on,
-          ...bindValue,
+          // ...bindValue,
         };
 
         if (!renderComponentContent) {
