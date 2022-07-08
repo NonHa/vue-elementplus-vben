@@ -91,17 +91,18 @@ export const useUserStore = defineStore({
       }
     ): Promise<GetUserInfoModel | null> {
       try {
+       
         const { goHome = true, mode, ...loginParams } = params;
         const data = await loginApi(loginParams, mode);
-        // console.log('data', data?.data.result);
-
+        
         const { token } = data;
-
+       
         // save token
         this.setToken(token);
         let { getMenuList } = useAppStore();
         await getMenuList();
         return this.afterLoginAction(goHome);
+        return null
       } catch (error) {
         return Promise.reject(error);
       }

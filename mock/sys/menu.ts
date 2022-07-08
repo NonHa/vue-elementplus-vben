@@ -326,15 +326,16 @@ export default [
     timeout: 1000,
     method: 'get',
     response: (request: requestParams) => {
-      const token = getRequestToken(request);
-      if (!token) {
-        return resultError('Invalid token!');
-      }
-      const checkUser = createFakeUserList().find((item) => item.token === token);
-      if (!checkUser) {
-        return resultError('Invalid user token!');
-      }
-      const id = checkUser.userId;
+      
+      // const token = getRequestToken(request);
+      // if (!token) {
+      //   return resultError('Invalid token!' );
+      // }
+      // const checkUser = createFakeUserList().find((item) => item.token === token);
+      // if (!checkUser) {
+      //   return resultError('Invalid user token!' );
+      // }
+      const id = '1';
       let menu: Object[];
       switch (id) {
         case '1':

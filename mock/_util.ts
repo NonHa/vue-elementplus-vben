@@ -2,8 +2,8 @@
 
 export function resultSuccess<T = Recordable>(result: T, { message = 'ok' } = {}) {
   return {
-    code: 0,
-    result,
+    code: 200,
+    data: result,
     message,
     type: 'success',
   };

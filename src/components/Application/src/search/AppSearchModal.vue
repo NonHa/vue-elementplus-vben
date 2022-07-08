@@ -184,13 +184,13 @@ function handleClose() {
     padding: 14px 14px 0;
     justify-content: space-between;
     align-items: center;
-    /deep/.el-input__prefix {
+    :deep(.el-input__prefix) {
       left: 15px;
       top: 4px;
       height: 40px !important;
       align-items: center !important;
     }
-    /deep/.el-input--prefix .el-input__inner {
+    :deep(.el-input--prefix .el-input__inner) {
       font-size: 14px !important;
     }
   }

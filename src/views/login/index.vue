@@ -1,120 +1,215 @@
-<!--
- * @Author: your name
- * @Date: 2022-01-05 15:44:46
- * @LastEditTime: 2022-01-07 17:38:16
- * @LastEditors: Please set LastEditors
- * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- * @FilePath: \ym-Vue3\src\views\login\index.vue
--->
 <template>
-  <el-form
-    ref="formRef"
-    :model="loginForm"
-    class="login-form"
-    autocomplete="on"
-    label-position="left"
-    size="small"
-    :rules="getFormRules"
-  >
-    <div class="title-container">
-      <h3 class="title">伊百丽经营管理系统</h3>
+  <div :class="prefixCls" class="relative w-full h-full px-4">
+    <AppLocalePicker
+      class="absolute text-white top-4 right-4 enter-x xl:text-gray-600"
+      :showText="false"
+      v-if="!sessionTimeout && showLocale"
+    />
+    <AppDarkModeToggle class="absolute top-3 right-7 enter-x" v-if="!sessionTimeout" />
+
+    <span class="-enter-x xl:hidden">
+      <AppLogo :alwaysShowTitle="true" />
+    </span>
+
+    <div class="container relative h-full py-2 mx-auto sm:px-10">
+      <div class="flex h-full">
+        <div class="hidden min-h-full pl-4 mr-4 xl:flex xl:flex-col xl:w-6/12">
+          <AppLogo class="-enter-x" />
+          <div class="my-auto">
+            <img
+              :alt="title"
+              src="../../assets/svg/login-box-bg.svg"
+              class="w-1/2 -mt-16 -enter-x"
+            />
+            <div class="mt-10 font-medium text-white -enter-x">
+              <span class="inline-block mt-4 text-3xl"> {{ ('sys.login.signInTitle') }}</span>
+            </div>
+            <div class="mt-5 font-normal text-white text-md dark:text-gray-500 -enter-x">
+              {{ ('sys.login.signInDesc') }}
+            </div>
+          </div>
+        </div>
+        <div class="flex w-full h-full py-5 xl:h-auto xl:py-0 xl:my-0 xl:w-6/12">
+          <div
+            :class="`${prefixCls}-form`"
+            class="relative w-full px-5 py-8 mx-auto my-auto rounded-md shadow-md xl:ml-16 xl:bg-transparent sm:px-8 xl:p-4 xl:shadow-none sm:w-3/4 lg:w-2/4 xl:w-auto enter-x"
+          >
+            <LoginForm />
+            <!-- <ForgetPasswordForm />
+            <RegisterForm />
+            <MobileForm />
+            <QrCodeForm /> -->
+          </div>
+        </div>
+      </div>
     </div>
-    <el-form-item prop="userName">
-      <el-input ref="userName_input" v-model="loginForm.account" placeholder="请输入用户名" />
-    </el-form-item>
-
-    <el-form-item prop="password">
-      <el-input ref="password_input" v-model="loginForm.password" placeholder="请输入密码" />
-      <span class="show-pwd">
-        <!-- <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" /> -->
-      </span>
-    </el-form-item>
-
-    <el-form-item style="height: 30px; border: none">
-      <label
-        for="rememberMe"
-        title="下次不需要再登录"
-        style="color: #6f6f6f; font-weight: normal; float: left"
-      >
-        <input
-          type="checkbox"
-          style="height: 16px; width: 16px"
-          id="rememberMe"
-          name="rememberMe"
-        />
-        记住密码
-      </label>
-      <label
-        for="autoLogin"
-        title="自动登录"
-        style="color: #6f6f6f; font-weight: normal; float: right"
-      >
-        <input
-          type="checkbox"
-          style="height: 16px; width: 16px; margin-left: 20px"
-          id="autoLogin"
-          name="autoLogin"
-        />
-        自动登录
-      </label>
-    </el-form-item>
-    <el-button :loading="loading" class="login-btn" size="small" type="primary" @click="handleLogin"
-      >登录</el-button
-    >
-  </el-form>
+  </div>
 </template>
-
 <script lang="ts" setup>
-  import { reactive, ref } from 'vue';
-  import { useUserStore } from '/@/store/modules/user';
-  // import { useDesign } from '/@/hooks/web/useDesign';
-  import { useFormRules, useFormValid } from './useLogin';
-  import { useMessage } from '/@/hooks/web/useMessage';
+  import { computed } from 'vue';
+  import { AppLogo } from '/@/components/Application';
+  import { AppLocalePicker, AppDarkModeToggle } from '/@/components/Application';
+  import LoginForm from './LoginForm.vue';
+  // import ForgetPasswordForm from './ForgetPasswordForm.vue';
+  // import RegisterForm from './RegisterForm.vue';
+  // import MobileForm from './MobileForm.vue';
+  // import QrCodeForm from './QrCodeForm.vue';
+  import { useGlobSetting } from '/@/hooks/setting';
+ 
+  import { useDesign } from '/@/hooks/web/useDesign';
+  import { useLocaleStore } from '/@/store/modules/locale';
 
-  const loginForm = reactive({
-    password: '',
-    account: '',
+  defineProps({
+    sessionTimeout: {
+      type: Boolean,
+    },
   });
-  let loading = ref(false);
-  const formRef = ref();
 
-  const { getFormRules } = useFormRules();
-  const { validForm } = useFormValid(formRef);
-
-  const { notification, createErrorModal } = useMessage();
-
-  const userStore = useUserStore();
-  async function handleLogin() {
-    // if (!data) return;
-    let loginFormFun = async () => {
-      try {
-        loading.value = true;
-        const userInfo = await userStore.login({
-          password: loginForm.password,
-          username: loginForm.account,
-          mode: 'none', //不要默认的错误提示
-        });
-        console.log('userInfo', userInfo);
-
-        if (userInfo) {
-          notification.success({
-            title: 'sys.login.loginSuccessTitle',
-            message: `${'sys.login.loginSuccessDesc'}: ${userInfo.realName}`,
-            // duration: 3,
-          });
-        }
-      } catch (error) {
-        createErrorModal({
-          title: 'sys.api.errorTip',
-          message: (error as unknown as Error).message || 'sys.api.networkExceptionMsg',
-          // getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
-        });
-      } finally {
-        loading.value = false;
-      }
-    };
-    await validForm(loginFormFun);
-    // console.log('data', data);
-  }
+  const globSetting = useGlobSetting();
+  const { prefixCls } = useDesign('login');
+ 
+  const localeStore = useLocaleStore();
+  const showLocale = localeStore.getShowPicker;
+  const title = computed(() => globSetting?.title ?? '');
 </script>
-<style scoped lang="less"></style>
+<style lang="less">
+  @prefix-cls: ~'@{namespace}-login';
+  @logo-prefix-cls: ~'@{namespace}-app-logo';
+  @countdown-prefix-cls: ~'@{namespace}-countdown-input';
+  @dark-bg: #293146;
+
+  html[data-theme='dark'] {
+    .@{prefix-cls} {
+      background-color: @dark-bg;
+
+      &::before {
+        background-image: url(/@/assets/svg/login-bg-dark.svg);
+      }
+
+      .ant-input,
+      .ant-input-password {
+        background-color: #232a3b;
+      }
+
+      .ant-btn:not(.ant-btn-link):not(.ant-btn-primary) {
+        border: 1px solid #4a5569;
+      }
+
+      &-form {
+        background: transparent !important;
+      }
+
+      .app-iconify {
+        color: #fff;
+      }
+    }
+
+    input.fix-auto-fill,
+    .fix-auto-fill input {
+      -webkit-text-fill-color: #c9d1d9 !important;
+      box-shadow: inherit !important;
+    }
+  }
+
+  .@{prefix-cls} {
+    min-height: 100%;
+    overflow: hidden;
+    @media (max-width: @screen-xl) {
+      background-color: #293146;
+
+      .@{prefix-cls}-form {
+        background-color: #fff;
+      }
+    }
+
+    &::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      margin-left: -48%;
+      background-image: url(/@/assets/svg/login-bg.svg);
+      background-position: 100%;
+      background-repeat: no-repeat;
+      background-size: auto 100%;
+      content: '';
+      @media (max-width: @screen-xl) {
+        display: none;
+      }
+    }
+
+    .@{logo-prefix-cls} {
+      position: absolute;
+      top: 12px;
+      height: 30px;
+
+      &__title {
+        font-size: 16px;
+        color: #fff;
+      }
+
+      img {
+        width: 32px;
+      }
+    }
+
+    .container {
+      .@{logo-prefix-cls} {
+        display: flex;
+        width: 60%;
+        height: 80px;
+
+        &__title {
+          font-size: 24px;
+          color: #fff;
+        }
+
+        img {
+          width: 48px;
+        }
+      }
+    }
+
+    &-sign-in-way {
+      .anticon {
+        font-size: 22px;
+        color: #888;
+        cursor: pointer;
+
+        &:hover {
+          color: @primary-color;
+        }
+      }
+    }
+
+    input:not([type='checkbox']) {
+      min-width: 360px;
+
+      @media (max-width: @screen-xl) {
+        min-width: 320px;
+      }
+
+      @media (max-width: @screen-lg) {
+        min-width: 260px;
+      }
+
+      @media (max-width: @screen-md) {
+        min-width: 240px;
+      }
+
+      @media (max-width: @screen-sm) {
+        min-width: 160px;
+      }
+    }
+
+    .@{countdown-prefix-cls} input {
+      min-width: unset;
+    }
+
+    .ant-divider-inner-text {
+      font-size: 12px;
+      color: @text-color-secondary;
+    }
+  }
+</style>

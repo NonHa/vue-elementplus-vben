@@ -6,9 +6,13 @@
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \ym-Vue3\src\main.ts
  */
+import 'virtual:windi-base.css';
+import 'virtual:windi-components.css';
+import '/@/design/index.less';
+import 'virtual:windi-utilities.css';
 import 'virtual:svg-icons-register';
 
-import '/@/design/index.less';
+
 // import ElementPlus from 'element-plus';
 // import 'element-plus/dist/index.css';
 
@@ -19,6 +23,7 @@ import { initAppConfigStore } from '/@/logics/initAppConfig';
 import { setupRouter, router } from '/@/router';
 import { setupStore } from '/@/store/index';
 import { registerGlobComp } from '/@/components/registerGlobComp';
+import { setupGlobDirectives } from '/@/directives';
 
 async function bootstrap() {
   const app = createApp(App);
@@ -28,6 +33,7 @@ async function bootstrap() {
   initAppConfigStore();
   setupRouter(app);
   setupRouterGuard(router);
+  setupGlobDirectives(app);
 
   // app.use(ElementPlus)
   app.mount('#app');
