@@ -438,6 +438,7 @@ export type CellFormat =
 // @ts-ignore
 export interface BasicColumn extends ColumnProps {
   children?: BasicColumn[];
+
   filters?: {
     text: string;
     value: string;
@@ -448,7 +449,7 @@ export interface BasicColumn extends ColumnProps {
 
   //
   flag?: 'INDEX' | 'DEFAULT' | 'CHECKBOX' | 'RADIO' | 'ACTION';
-  customTitle?: VueNode;
+  customTitle?: string;
 
   slots?: Recordable;
   renderColumnComponent?:
@@ -479,6 +480,8 @@ export interface BasicColumn extends ColumnProps {
   // 业务控制是否显示
   ifShow?: boolean | ((column: BasicColumn) => boolean);
   editEvnets?: Object;
+  formatter?: Function;
+  mapList?: any[];
 }
 
 export type ColumnChangeParam = {

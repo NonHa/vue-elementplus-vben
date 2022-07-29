@@ -50,7 +50,7 @@ export function useTable(tableProps?: Props): [
       },
       {
         immediate: true,
-        deep: true,
+        deep: true
       }
     );
   }
@@ -155,7 +155,7 @@ export function useTable(tableProps?: Props): [
     },
     collapseAll: () => {
       getTableInstance().collapseAll();
-    },
+    }
   };
 
   return [register, methods];

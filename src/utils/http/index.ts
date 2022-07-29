@@ -49,12 +49,12 @@ const transform: AxiosTransform = {
       throw new Error('sys.api.apiRequestFailed');
     }
     //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
-    const { code, data: result, message } = data;
+    const { code, message } = data;
 
     // 这里逻辑可以根据项目进行修改
     const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS;
     if (hasSuccess) {
-      return result;
+      return data;
     }
 
     // 在此处根据自己项目的实际情况对不同的code执行不同的操作
@@ -114,7 +114,8 @@ const transform: AxiosTransform = {
     if (config.method?.toUpperCase() === RequestEnum.GET) {
       if (!isString(params)) {
         // 给 get 请求加上时间戳参数，避免从缓存中拿数据。
-        config.params = Object.assign(params || {}, joinTimestamp(joinTime, false));
+        // config.params = Object.assign(params || {}, joinTimestamp(joinTime, false));
+        config.params = params;
       } else {
         // 兼容restful风格
         config.url = config.url + params + `${joinTimestamp(joinTime, true)}`;
@@ -151,7 +152,7 @@ const transform: AxiosTransform = {
    */
   responseInterceptors: (res: AxiosResponse<any>) => {
     return res;
-  },
+  }
 };
 function createAxios(opt?: Partial<CreateAxiosOptions>) {
   return new VAxios(
@@ -193,8 +194,8 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
           // 忽略重复请求
           ignoreCancelToken: true,
           // 是否携带token
-          withToken: true,
-        },
+          withToken: true
+        }
       },
       opt || {}
     )

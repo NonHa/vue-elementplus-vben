@@ -3,7 +3,7 @@ import { UploadApiResult } from '/@/api/sys/model/uploadModel';
 export enum UploadResultStatus {
   SUCCESS = 'success',
   ERROR = 'error',
-  UPLOADING = 'uploading',
+  UPLOADING = 'uploading'
 }
 
 export interface FileItem {
@@ -29,12 +29,12 @@ export interface FileBasicColumn {
    * Renderer of the table cell. The return value should be a VNode, or an object for colSpan/rowSpan config
    * @type Function | ScopedSlot
    */
-  customRender?: Function;
+  formatter?: Function;
   /**
    * Title of this column
    * @type any (string | slot)
    */
-  title: string;
+  label: string;
 
   /**
    * Width of this column
@@ -45,7 +45,7 @@ export interface FileBasicColumn {
    * Display field of the data record, could be set like a.b.c
    * @type string
    */
-  dataIndex: string;
+  columnKey: string;
   /**
    * specify how content is aligned
    * @default 'left'

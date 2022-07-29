@@ -9,7 +9,7 @@ import {
   watch,
   reactive,
   Ref,
-  watchEffect,
+  watchEffect
 } from 'vue';
 import { useTimeoutFn } from '/@/hooks/core/useTimeout';
 import { buildUUID } from '/@/utils/uuid';
@@ -42,13 +42,13 @@ export function useDataSource(
     clearSelectedRowKeys,
     tableData,
     getPagination,
-    toggleTableSelect,
+    toggleTableSelect
   }: ActionType,
   emit: EmitType
 ) {
   const searchState = reactive<SearchState>({
     sortInfo: {},
-    filterInfo: {},
+    filterInfo: {}
   });
   const dataSourceRef = ref<Recordable[]>([]);
   const rawDataSourceRef = ref<Recordable>({});
@@ -64,7 +64,7 @@ export function useDataSource(
       !api && dataSource && (dataSourceRef.value = dataSource);
     },
     {
-      immediate: true,
+      immediate: true
     }
   );
 
@@ -92,6 +92,7 @@ export function useDataSource(
     //   searchState.filterInfo = filterInfo;
     //   params.filterInfo = filterInfo;
     // }
+
     fetch(params);
   }
 
@@ -118,6 +119,7 @@ export function useDataSource(
 
   const getDataSourceRef = computed(() => {
     const dataSource = unref(dataSourceRef);
+
     if (!dataSource || dataSource.length === 0) {
       return unref(dataSourceRef);
     }
@@ -197,7 +199,7 @@ export function useDataSource(
         unref(propsRef).dataSource?.splice(index, 1);
     }
     setPagination({
-      total: unref(propsRef).dataSource?.length,
+      total: unref(propsRef).dataSource?.length
     });
   }
 
@@ -255,7 +257,7 @@ export function useDataSource(
       beforeFetch,
       afterFetch,
       useSearchForm,
-      pagination,
+      pagination
     } = unref(propsRef);
 
     if (!api || !isFunction(api)) return;
@@ -295,24 +297,26 @@ export function useDataSource(
       }
 
       const res = await api(params);
+      const data = res.data.list;
+      console.log('data', data);
 
-      rawDataSourceRef.value = res;
+      rawDataSourceRef.value = data;
 
-      const isArrayResult = Array.isArray(res);
+      const isArrayResult = Array.isArray(data);
 
-      let resultItems: Recordable[] = isArrayResult ? res : get(res, listField);
-      const resultTotal: number = isArrayResult ? 0 : get(res, totalField);
+      let resultItems: Recordable[] = isArrayResult ? data : get(data, listField);
+      const resultTotal: number = isArrayResult ? 0 : get(data, totalField);
 
       // 假如数据变少，导致总页数变少并小于当前选中页码，通过getPaginationRef获取到的页码是不正确的，需获取正确的页码再次执行
-      if (resultTotal) {
-        const currentTotalPage = Math.ceil(resultTotal / pageSize);
-        if (current > currentTotalPage) {
-          setPagination({
-            current: currentTotalPage,
-          });
-          return await fetch(opt);
-        }
-      }
+      // if (resultTotal) {
+      //   const currentTotalPage = Math.ceil(resultTotal / pageSize);
+      //   if (current > currentTotalPage) {
+      //     setPagination({
+      //       current: currentTotalPage
+      //     });
+      //     return await fetch(opt);
+      //   }
+      // }
 
       if (afterFetch && isFunction(afterFetch)) {
         resultItems = (await afterFetch(resultItems)) || resultItems;
@@ -322,23 +326,23 @@ export function useDataSource(
       // console.log('dataSourceRef-----', dataSourceRef);
 
       setPagination({
-        total: resultTotal || 0,
+        total: resultTotal || 0
       });
       if (opt && opt.page) {
         setPagination({
-          current: opt.page || 1,
+          current: opt.page || 1
         });
       }
       emit('fetch-success', {
         items: unref(resultItems),
-        total: resultTotal,
+        total: resultTotal
       });
       return resultItems;
     } catch (error) {
       emit('fetch-error', error);
       dataSourceRef.value = [];
       setPagination({
-        total: 0,
+        total: 0
       });
     } finally {
       setLoading(false);
@@ -365,8 +369,6 @@ export function useDataSource(
 
   onMounted(() => {
     useTimeoutFn(() => {
-      console.log(99999);
-
       unref(propsRef).immediate && fetch();
     }, 16);
   });
@@ -385,6 +387,6 @@ export function useDataSource(
     deleteTableDataRecord,
     insertTableDataRecord,
     findTableDataRecord,
-    handleTableChange,
+    handleTableChange
   };
 }

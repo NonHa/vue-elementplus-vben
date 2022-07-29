@@ -9,32 +9,32 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  export default defineComponent({
-    name: 'ElButton',
-    inheritAttrs: false,
-  });
+import { defineComponent } from 'vue';
+export default defineComponent({
+  name: 'ElButton',
+  inheritAttrs: false
+});
 </script>
 <script lang="ts" setup>
-  import { computed, unref } from 'vue';
-  import { ElButton } from 'element-plus';
-  import Icon from '/@/components/Icon/src/Icon.vue';
-  import { buttonProps } from './props';
-  import { useAttrs } from '/@/hooks/core/useAttrs';
+import { computed, unref } from 'vue';
+import { ElButton } from 'element-plus';
+import Icon from '/@/components/Icon/src/Icon.vue';
+import { buttonProps } from './props';
+import { useAttrs } from '/@/hooks/core/useAttrs';
 
-  const props = defineProps(buttonProps);
-  // get component class
-  const attrs = useAttrs({ excludeDefaultKeys: false });
-  const getButtonClass = computed(() => {
-    const { color, disabled } = props;
-    return [
-      {
-        [`ant-btn-${color}`]: !!color,
-        [`is-disabled`]: disabled,
-      },
-    ];
-  });
+const props = defineProps(buttonProps);
+// get component class
+const attrs = useAttrs({ excludeDefaultKeys: false });
+const getButtonClass = computed(() => {
+  const { color, disabled } = props;
+  return [
+    {
+      [`ant-btn-${color}`]: !!color,
+      [`is-disabled`]: disabled
+    }
+  ];
+});
 
-  // get inherit binding value
-  const getBindValue = computed(() => ({ ...unref(attrs), ...props }));
+// get inherit binding value
+const getBindValue = computed(() => ({ ...unref(attrs), ...props }));
 </script>

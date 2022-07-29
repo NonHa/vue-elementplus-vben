@@ -36,10 +36,10 @@ export const useUserStore = defineStore({
     // Whether the login expired
     sessionTimeout: false,
     // Last fetch time
-    lastUpdateTime: 0,
+    lastUpdateTime: 0
   }),
   persist: {
-    enabled: true,
+    enabled: true
   },
   getters: {
     getUserInfo(): UserInfo {
@@ -56,7 +56,7 @@ export const useUserStore = defineStore({
     },
     getLastUpdateTime(): number {
       return this.lastUpdateTime;
-    },
+    }
   },
   actions: {
     setToken(info: string | undefined) {
@@ -91,18 +91,16 @@ export const useUserStore = defineStore({
       }
     ): Promise<GetUserInfoModel | null> {
       try {
-       
         const { goHome = true, mode, ...loginParams } = params;
-        const data = await loginApi(loginParams, mode);
-        
-        const { token } = data;
-       
+        const { data } = await loginApi(loginParams, mode);
+
+        const { token, tokenHead } = data;
+
         // save token
-        this.setToken(token);
-        let { getMenuList } = useAppStore();
+        this.setToken(`${tokenHead} ${token}`);
+        const { getMenuList } = useAppStore();
         await getMenuList();
         return this.afterLoginAction(goHome);
-        return null
       } catch (error) {
         return Promise.reject(error);
       }
@@ -177,10 +175,10 @@ export const useUserStore = defineStore({
           }
         },
         title: '提示',
-        message: '确定退出登录？',
+        message: '确定退出登录？'
       });
-    },
-  },
+    }
+  }
 });
 
 // Need to be used outside the setup

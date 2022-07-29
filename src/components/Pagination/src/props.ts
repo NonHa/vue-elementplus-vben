@@ -3,9 +3,9 @@ import { paginationProps } from 'element-plus/lib/components/pagination/src/pagi
 export const PaginationProps = {
   ...paginationProps,
   page: {
-    type: Number,
+    type: Number
   },
   limit: {
-    type: Number,
-  },
+    type: Number
+  }
 };

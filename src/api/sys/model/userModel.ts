@@ -15,9 +15,12 @@ export interface RoleInfo {
  * @description: Login interface return value
  */
 export interface LoginResultModel {
-  userId: string | number;
-  token: string;
-  role: RoleInfo;
+  data: {
+    userId: string | number;
+    token: string;
+    role: RoleInfo;
+    tokenHead: string;
+  };
 }
 
 /**

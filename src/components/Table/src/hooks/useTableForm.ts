@@ -18,7 +18,7 @@ export function useTableForm(
       showAdvancedButton: true,
       ...formConfig,
       submitButtonOptions: { loading: unref(getLoading), ...submitButtonOptions },
-      compact: true,
+      compact: true
     };
   });
 
@@ -46,6 +46,6 @@ export function useTableForm(
     getFormProps,
     replaceFormSlotKey,
     getFormSlotKeys,
-    handleSearchInfoChange,
+    handleSearchInfoChange
   };
 }

@@ -47,7 +47,7 @@ type RuleObject = {
   pattern?: RegExp;
   required?: boolean;
   transform?: (value: any) => any;
-  type?: any;
+  type?: any; 
   whitespace?: boolean;
   /** Customize rule level `validateTrigger`. Must be subset of Field `validateTrigger` */
   validateTrigger?: string | string[];

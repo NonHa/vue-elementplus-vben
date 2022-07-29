@@ -8,10 +8,10 @@
 -->
 
 <template>
-  <el-menu class="el-menu-vertical-demo"> </el-menu>
+  <el-menu class="el-menu-vertical-demo" />
 </template>
 
 <script setup>
-  import { reactive, toRefs, onBeforeMount, onMounted } from 'vue';
+import { reactive, toRefs, onBeforeMount, onMounted } from 'vue';
 </script>
 <style scoped lang="less"></style>

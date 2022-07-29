@@ -8,11 +8,11 @@
 -->
 <template>
   <ElContainer :class="prefixCls">
-    <LayoutHeader v-if="getShowFullHeaderRef"></LayoutHeader>
+    <LayoutHeader v-if="getShowFullHeaderRef" />
     <ElContainer>
-      <Aside v-if="getShowSidebar"></Aside>
+      <Aside v-if="getShowSidebar" />
       <ElContainer :class="`${prefixCls}-main`">
-        <LayoutMultipleHeader></LayoutMultipleHeader>
+        <LayoutMultipleHeader />
         <LayoutContent />
       </ElContainer>
 
@@ -22,53 +22,53 @@
 </template>
 
 <script lang="ts" setup>
-  import { unref, computed } from 'vue';
-  import Aside from './aside/index.vue';
-  // import Header from './header/index.vue';
-  import LayoutMultipleHeader from './header/MultipleHeader.vue';
-  import LayoutContent from './content/index.vue';
+import { unref, computed } from 'vue';
+import Aside from './aside/index.vue';
+// import Header from './header/index.vue';
+import LayoutMultipleHeader from './header/MultipleHeader.vue';
+import LayoutContent from './content/index.vue';
 
-  import { ElContainer, ElMain } from 'element-plus';
-  import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting';
-  import LayoutHeader from './header/index.vue';
-  import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
-  // import { useAppInject } from '/@/hooks/web/useAppInject';
-  import { useDesign } from '/@/hooks/web/useDesign';
-  const { prefixCls } = useDesign('default-layout');
+import { ElContainer, ElMain } from 'element-plus';
+import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting';
+import LayoutHeader from './header/index.vue';
+import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
+// import { useAppInject } from '/@/hooks/web/useAppInject';
+import { useDesign } from '/@/hooks/web/useDesign';
+const { prefixCls } = useDesign('default-layout');
 
-  const { getShowFullHeaderRef } = useHeaderSetting();
-  console.log('getShowFullHeaderRef', getShowFullHeaderRef.value);
+const { getShowFullHeaderRef } = useHeaderSetting();
+console.log('getShowFullHeaderRef', getShowFullHeaderRef.value);
 
-  // const { getIsMobile } = useAppInject();
+// const { getIsMobile } = useAppInject();
 
-  const { getShowSidebar, getIsMixSidebar, getShowMenu } = useMenuSetting();
+const { getShowSidebar, getIsMixSidebar, getShowMenu } = useMenuSetting();
 
-  const layoutClass = computed(() => {
-    let cls: string[] = ['ant-layout'];
-    if (unref(getIsMixSidebar) || unref(getShowMenu)) {
-      cls.push('ant-layout-has-sider');
-    }
-    return cls;
-  });
+const layoutClass = computed(() => {
+  let cls: string[] = ['ant-layout'];
+  if (unref(getIsMixSidebar) || unref(getShowMenu)) {
+    cls.push('ant-layout-has-sider');
+  }
+  return cls;
+});
 </script>
 <style lang="less">
-  @prefix-cls: ~'@{namespace}-default-layout';
+@prefix-cls: ~'@{namespace}-default-layout';
 
-  .@{prefix-cls} {
-    display: flex;
-    width: 100%;
+.@{prefix-cls} {
+  display: flex;
+  width: 100%;
+  min-height: 100%;
+  background-color: @content-bg;
+  flex-direction: column;
+
+  > .ant-layout {
     min-height: 100%;
-    background-color: @content-bg;
-    flex-direction: column;
-
-    > .ant-layout {
-      min-height: 100%;
-    }
-
-    &-main {
-      width: 100%;
-      margin-left: 1px;
-      flex-direction: column;
-    }
   }
+
+  &-main {
+    width: 100%;
+    margin-left: 1px;
+    flex-direction: column;
+  }
+}
 </style>

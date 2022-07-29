@@ -1,19 +1,19 @@
 <script lang="tsx">
-import type { CSSProperties, PropType } from "vue";
-import { defineComponent, computed, unref } from "vue";
-import { ElTooltip } from "element-plus";
-import { CircleCloseFilled } from "@element-plus/icons-vue";
-import { getPopupContainer } from "/@/utils";
-import { isString, isArray } from "/@/utils/is";
-import { getSlot } from "/@/utils/helper/tsxHelper";
-import { useDesign } from "/@/hooks/web/useDesign";
+import type { CSSProperties, PropType } from 'vue';
+import { defineComponent, computed, unref } from 'vue';
+import { ElTooltip } from 'element-plus';
+import { CircleCloseFilled } from '@element-plus/icons-vue';
+import { getPopupContainer } from '/@/utils';
+import { isString, isArray } from '/@/utils/is';
+import { getSlot } from '/@/utils/helper/tsxHelper';
+import { useDesign } from '/@/hooks/web/useDesign';
 
 const props = {
   /**
    * Help text max-width
    * @default: 600px
    */
-  maxWidth: { type: String, default: "600px" },
+  maxWidth: { type: String, default: '600px' },
   /**
    * Whether to display the serial number
    * @default: false
@@ -23,28 +23,28 @@ const props = {
    * Help text font color
    * @default: #ffffff
    */
-  color: { type: String, default: "#ffffff" },
+  color: { type: String, default: '#ffffff' },
   /**
    * Help text font size
    * @default: 14px
    */
-  fontSize: { type: String, default: "14px" },
+  fontSize: { type: String, default: '14px' },
   /**
    * Help text list
    */
-  placement: { type: String, default: "right" },
+  placement: { type: String, default: 'right' },
   /**
    * Help text list
    */
-  text: { type: [Array, String] as PropType<string[] | string> },
+  text: { type: [Array, String] as PropType<string[] | string> }
 };
 
 export default defineComponent({
-  name: "BasicHelp",
+  name: 'BasicHelp',
   // components: { Tooltip },
   props,
   setup(props, { slots }) {
-    const { prefixCls } = useDesign("basic-help");
+    const { prefixCls } = useDesign('basic-help');
 
     const getTooltipStyle = computed(
       (): CSSProperties => ({ color: props.color, fontSize: props.fontSize })
@@ -64,7 +64,7 @@ export default defineComponent({
           return (
             <p key={text}>
               <>
-                {props.showIndex ? `${index + 1}. ` : ""}
+                {props.showIndex ? `${index + 1}. ` : ''}
                 {text}
               </>
             </p>
@@ -81,34 +81,33 @@ export default defineComponent({
           title={<div style={unref(getTooltipStyle)}>{renderTitle()}</div>}
           autoAdjustOverflow={true}
           overlayStyle={unref(getOverlayStyle)}
-          placement={props.placement as "right"}
-          getPopupContainer={() => getPopupContainer()}
-        >
+          placement={props.placement as 'right'}
+          getPopupContainer={() => getPopupContainer()}>
           <span class={prefixCls}>{getSlot(slots) || <CircleCloseFilled />}</span>
         </ElTooltip>
       );
     };
-  },
+  }
 });
 </script>
 <style lang="less">
-// @prefix-cls: ~'@{namespace}-basic-help';
+@prefix-cls: ~'@{namespace}-basic-help';
 
-// .@{prefix-cls} {
-//   display: inline-block;
-//   margin-left: 6px;
-//   font-size: 14px;
-//   color: @text-color-help-dark;
-//   cursor: pointer;
+.@{prefix-cls} {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 14px;
+  color: @text-color-help-dark;
+  cursor: pointer;
 
-//   &:hover {
-//     color: @primary-color;
-//   }
+  &:hover {
+    color: @primary-color;
+  }
 
-//   &__wrap {
-//     p {
-//       margin-bottom: 0;
-//     }
-//   }
-// }
+  &__wrap {
+    p {
+      margin-bottom: 0;
+    }
+  }
+}
 </style>

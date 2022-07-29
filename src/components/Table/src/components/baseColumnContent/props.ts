@@ -1,4 +1,4 @@
-import type { PropType } from 'vue';
+import type { PropType, Slots } from 'vue';
 import type { ComponentType } from '/@/components/Form/src/types/index';
 import { BasicColumn } from '/@/components/Table/src/types/table';
 
@@ -8,14 +8,17 @@ type Row = {
 export const columnProps = {
   row: {
     type: Object as PropType<Row>,
-    default: {},
+    default: {}
   },
   column: {
     type: Object as PropType<BasicColumn>,
-    default: {},
+    default: {}
   },
   field: {
     type: String,
-    default: '',
+    default: ''
   },
+  getColumnsSlots: {
+    type: Array
+  }
 };

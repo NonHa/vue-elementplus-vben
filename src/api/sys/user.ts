@@ -15,7 +15,7 @@ enum Api {
   Login = '/admin/login',
   Logout = '/logout',
   GetUserInfo = '/getUserInfo',
-  GetPermCode = '/getPermCode',
+  GetPermCode = '/getPermCode'
 }
 
 /**
@@ -25,10 +25,10 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
   return defHttp.post<LoginResultModel>(
     {
       url: Api.Login,
-      params,
+      params
     },
     {
-      errorMessageMode: mode,
+      errorMessageMode: mode
     }
   );
 }

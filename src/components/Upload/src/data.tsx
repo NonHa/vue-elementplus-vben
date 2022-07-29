@@ -2,7 +2,7 @@ import type { BasicColumn, ActionItem } from '/@/components/Table';
 import { FileItem, PreviewFileItem, UploadResultStatus } from './typing';
 import {
   // checkImgType,
-  isImgTypeByName,
+  isImgTypeByName
 } from './helper';
 import { ElProgress, ElTag } from 'element-plus';
 import TableAction from '/@/components/Table/src/components/TableAction.vue';
@@ -16,16 +16,16 @@ export function createTableColumns(): BasicColumn[] {
   return [
     {
       columnKey: 'thumbUrl',
-      label: 'component.upload.legend',
+      label: '略缩图',
       width: 100,
       formatter: ({ record }) => {
         const { thumbUrl } = (record as FileItem) || {};
         return thumbUrl && <ThumbUrl fileUrl={thumbUrl} />;
-      },
+      }
     },
     {
       columnKey: 'name',
-      label: 'component.upload.fileName',
+      label: '文件名',
       align: 'left',
       formatter: ({ text, record }) => {
         const { percent, status: uploadStatus } = (record as FileItem) || {};
@@ -45,15 +45,15 @@ export function createTableColumns(): BasicColumn[] {
             <ElProgress percent={percent} size="small" status={status} />
           </span>
         );
-      },
+      }
     },
     {
       columnKey: 'size',
-      label: 'component.upload.fileSize',
+      label: '文件大小',
       width: 100,
       formatter: ({ text = 0 }) => {
         return text && (text / 1024).toFixed(2) + 'KB';
-      },
+      }
     },
     // {
     //   columnKey: 'type',
@@ -62,7 +62,7 @@ export function createTableColumns(): BasicColumn[] {
     // },
     {
       columnKey: 'status',
-      label: 'component.upload.fileStatue',
+      label: '状态',
       width: 100,
       formatter: ({ text }) => {
         if (text === UploadResultStatus.SUCCESS) {
@@ -74,14 +74,14 @@ export function createTableColumns(): BasicColumn[] {
         }
 
         return text;
-      },
-    },
+      }
+    }
   ];
 }
 export function createActionColumn(handleRemove: Function): BasicColumn {
   return {
     width: 120,
-    label: 'component.upload.operating',
+    label: '操作',
     columnKey: 'action',
     fixed: false,
     formatter: ({ record }) => {
@@ -89,8 +89,8 @@ export function createActionColumn(handleRemove: Function): BasicColumn {
         {
           label: 'component.upload.del',
           color: 'error',
-          onClick: handleRemove.bind(null, record),
-        },
+          onClick: handleRemove.bind(null, record)
+        }
       ];
       // if (checkImgType(record)) {
       //   actions.unshift({
@@ -99,7 +99,7 @@ export function createActionColumn(handleRemove: Function): BasicColumn {
       //   });
       // }
       return <TableAction actions={actions} outside={true} />;
-    },
+    }
   };
 }
 // 文件预览列表
@@ -116,26 +116,26 @@ export function createPreviewColumns(): BasicColumn[] {
         } else {
           return <>123</>;
         }
-      },
+      }
     },
     {
       columnKey: 'name',
       label: 'component.upload.fileName',
-      align: 'left',
-    },
+      align: 'left'
+    }
   ];
 }
 
 export function createPreviewActionColumn({
   handleRemove,
-  handleDownload,
+  handleDownload
 }: {
   handleRemove: Fn;
   handleDownload: Fn;
 }): BasicColumn {
   return {
     width: 160,
-    label: 'component.upload.operating',
+    label: '操作',
     columnKey: 'action',
     fixed: false,
     formatter: ({ record }) => {
@@ -143,15 +143,15 @@ export function createPreviewActionColumn({
         {
           label: 'component.upload.del',
           color: 'error',
-          onClick: handleRemove.bind(null, record),
+          onClick: handleRemove.bind(null, record)
         },
         {
           label: 'component.upload.download',
-          onClick: handleDownload.bind(null, record),
-        },
+          onClick: handleDownload.bind(null, record)
+        }
       ];
 
       return <TableAction actions={actions} outside={true} />;
-    },
+    }
   };
 }

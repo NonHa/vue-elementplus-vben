@@ -46,7 +46,7 @@ export function useForm(props?: Props): UseFormReturnType {
       },
       {
         immediate: true,
-        deep: true,
+        deep: true
       }
     );
   }
@@ -123,7 +123,7 @@ export function useForm(props?: Props): UseFormReturnType {
     ): Promise<void> => {
       const form = await getForm();
       return form.validateField(props, callback);
-    },
+    }
   };
 
   return [register, methods];

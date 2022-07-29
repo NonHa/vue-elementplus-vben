@@ -79,10 +79,10 @@ function handleIndexColumn(
     },
     ...(isFixedLeft
       ? {
-          fixed: 'left',
+          fixed: 'left'
         }
       : {}),
-    ...indexColumnProps,
+    ...indexColumnProps
   });
 }
 
@@ -96,7 +96,7 @@ function handleActionColumn(propsRef: ComputedRef<BasicTableProps>, columns: Bas
       ...columns[hasIndex],
       fixed: 'right',
       ...actionColumn,
-      flag: ACTION_COLUMN_FLAG,
+      flag: ACTION_COLUMN_FLAG
     });
   }
 }
@@ -218,7 +218,7 @@ export function useColumns(
       cacheColumns.forEach((item) => {
         newColumns.push({
           ...item,
-          defaultHidden: !columnKeys.includes(`${item.index!}` || (item.columnKey as string)),
+          defaultHidden: !columnKeys.includes(`${item.index!}` || (item.columnKey as string))
         });
       });
       // Sort according to another array
@@ -273,7 +273,7 @@ export function useColumns(
     getViewColumns,
     setCacheColumnsByField,
     getColumnsSlots,
-    replaceColSlotKey,
+    replaceColSlotKey
   };
 }
 

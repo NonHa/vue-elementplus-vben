@@ -24,7 +24,12 @@
     </el-form-item>
 
     <el-form-item prop="password">
-      <el-input ref="password_input" type="password" v-model="loginForm.password" placeholder="请输入密码" />
+      <el-input
+        ref="password_input"
+        type="password"
+        v-model="loginForm.password"
+        placeholder="请输入密码"
+      />
       <span class="show-pwd">
         <!-- <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" /> -->
       </span>
@@ -58,66 +63,72 @@
         自动登录
       </label>
     </el-form-item>
-    <el-button :loading="loading" class="login-btn" size="small" type="primary" @click="handleLogin"
-      >登录</el-button
+    <el-button
+      :loading="loading"
+      class="login-btn"
+      size="small"
+      type="primary"
+      @click="handleLogin"
     >
+      登录
+    </el-button>
   </el-form>
 </template>
 
 <script lang="ts" setup>
-  import { reactive, ref } from 'vue';
-  import { useUserStore } from '/@/store/modules/user';
-  // import { useDesign } from '/@/hooks/web/useDesign';
-  import { useFormRules, useFormValid } from './useLogin';
-  import { useMessage } from '/@/hooks/web/useMessage';
+import { reactive, ref } from 'vue';
+import { useUserStore } from '/@/store/modules/user';
+import { useProductStore } from '/@/store/modules/product';
+// import { useDesign } from '/@/hooks/web/useDesign';
+import { useFormRules, useFormValid } from './useLogin';
+import { useMessage } from '/@/hooks/web/useMessage';
 
-  const loginForm = reactive({
-    password: '',
-    account: '',
-  });
-  let loading = ref(false);
-  const formRef = ref();
+const loginForm = reactive({
+  password: '',
+  account: ''
+});
+let loading = ref(false);
+const formRef = ref();
 
-  const { getFormRules } = useFormRules();
-  const { validForm } = useFormValid(formRef);
+const { getFormRules } = useFormRules();
+const { validForm } = useFormValid(formRef);
 
-  const { notification, createErrorModal } = useMessage();
+const { notification, createErrorModal } = useMessage();
 
-  const userStore = useUserStore();
-  async function handleLogin() {
-    // if (!data) return;
-    
-    let loginFormFun = async () => {
-      try {
-       
-        loading.value = true;
-        const userInfo = await userStore.login({
-          password: loginForm.password,
-          username: loginForm.account,
-          mode: 'none', //不要默认的错误提示
+const userStore = useUserStore();
+const useProduct = useProductStore();
+async function handleLogin() {
+  // if (!data) return;
+
+  let loginFormFun = async () => {
+    try {
+      loading.value = true;
+      const userInfo = await userStore.login({
+        password: loginForm.password,
+        username: loginForm.account,
+        mode: 'none' //不要默认的错误提示
+      });
+
+      if (userInfo) {
+        notification.success({
+          title: 'sys.login.loginSuccessTitle',
+          message: `${'sys.login.loginSuccessDesc'}: ${userInfo.realName}`
+          // duration: 3,
         });
-       
-
-
-        if (userInfo) {
-          notification.success({
-            title: 'sys.login.loginSuccessTitle',
-            message: `${'sys.login.loginSuccessDesc'}: ${userInfo.realName}`,
-            // duration: 3,
-          });
-        }
-      } catch (error) {
-        createErrorModal({
-          title: 'sys.api.errorTip',
-          message: (error as unknown as Error).message || 'sys.api.networkExceptionMsg',
-          // getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
-        });
-      } finally {
-        loading.value = false;
+        useProduct.getAllList();
       }
-    };
-    await validForm(loginFormFun);
-    // console.log('data', data);
-  }
+    } catch (error) {
+      createErrorModal({
+        title: 'sys.api.errorTip',
+        message: (error as unknown as Error).message || 'sys.api.networkExceptionMsg'
+        // getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
+      });
+    } finally {
+      loading.value = false;
+    }
+  };
+  await validForm(loginFormFun);
+  // console.log('data', data);
+}
 </script>
 <style scoped lang="less"></style>

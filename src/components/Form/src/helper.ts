@@ -11,10 +11,10 @@ import { isNumber, isObject } from '/@/utils/is';
  */
 export function createPlaceholderMessage(component: ComponentType) {
   if (component.includes('ElInput') || component.includes('ElComplete')) {
-    return 'common.inputText';
+    return '';
   }
   if (component.includes('ElPicker')) {
-    return 'common.chooseText';
+    return '';
   }
   if (
     component.includes('ElSelect') ||
@@ -24,7 +24,7 @@ export function createPlaceholderMessage(component: ComponentType) {
     component.includes('ElSwitch')
   ) {
     // return `请选择${label}`;
-    return 'common.chooseText';
+    return '';
   }
   return '';
 }
@@ -75,5 +75,5 @@ export const defaultValueComponents = [
   'ElInput',
   'ElInputPassword',
   'ElInputSearch',
-  'ElInputTextArea',
+  'ElInputTextArea'
 ];

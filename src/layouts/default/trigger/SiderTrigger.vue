@@ -13,17 +13,17 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import { Fold, Expand } from '@element-plus/icons-vue';
-  import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
+import { defineComponent } from 'vue';
+import { Fold, Expand } from '@element-plus/icons-vue';
+import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
 
-  export default defineComponent({
-    name: 'SiderTrigger',
-    components: { Fold, Expand },
-    setup() {
-      const { getCollapsed, toggleCollapsed } = useMenuSetting();
+export default defineComponent({
+  name: 'SiderTrigger',
+  components: { Fold, Expand },
+  setup() {
+    const { getCollapsed, toggleCollapsed } = useMenuSetting();
 
-      return { getCollapsed, toggleCollapsed };
-    },
-  });
+    return { getCollapsed, toggleCollapsed };
+  }
+});
 </script>

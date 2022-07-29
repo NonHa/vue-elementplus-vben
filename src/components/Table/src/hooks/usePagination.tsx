@@ -35,7 +35,7 @@ export function usePagination(refProps: ComputedRef<BasicTableProps>, pagiantion
     small: true,
     background: true,
     disabled: false,
-    hideOnSinglePage: false,
+    hideOnSinglePage: false
   });
   const show = ref(true);
 
@@ -45,12 +45,12 @@ export function usePagination(refProps: ComputedRef<BasicTableProps>, pagiantion
       if (!isBoolean(pagination) && pagination) {
         configRef.value = {
           ...unref(configRef),
-          ...(pagination ?? {}),
+          ...(pagination ?? {})
         };
       }
     },
     {
-      deep: true,
+      deep: true
     }
   );
 
@@ -71,9 +71,9 @@ export function usePagination(refProps: ComputedRef<BasicTableProps>, pagiantion
       // pageSizeOptions: PAGE_SIZE_OPTIONS,
       // itemRender: itemRender,
       // showQuickJumper: true,
-      total: 100,
+      total: 0,
       ...pagiantion,
-      ...unref(configRef),
+      ...unref(configRef)
     };
   });
 
@@ -81,7 +81,7 @@ export function usePagination(refProps: ComputedRef<BasicTableProps>, pagiantion
     const paginationInfo = unref(getPaginationInfo);
     configRef.value = {
       ...(!isBoolean(paginationInfo) ? paginationInfo : {}),
-      ...info,
+      ...info
     };
   }
 

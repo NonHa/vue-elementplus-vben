@@ -10,47 +10,51 @@
   <div :class="prefixCls">
     <slot name="insertFooter"></slot>
     <ElButton @click="handleCancel" v-if="showCancelBtn">
-      {{ cancelText }}
+      {{ footerBtnOption.cancelText }}
     </ElButton>
     <slot name="centerFooter"></slot>
     <!-- :type="okType" -->
     <ElButton type="primary" @click="handleOk" :loading="confirmLoading" v-if="showOkBtn">
-      {{ okText }}
+      {{ footerBtnOption.sureText }}
     </ElButton>
     <slot name="appendFooter"></slot>
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import { ElButton } from 'element-plus';
-  import { basicProps } from '../props';
-  import { useDesign } from '/@/hooks/web/useDesign';
+import { defineComponent, computed, unref } from 'vue';
+import { ElButton } from 'element-plus';
+import { basicProps } from '../props';
+import { useDesign } from '/@/hooks/web/useDesign';
 
-  export default defineComponent({
-    name: 'BasicModalFooter',
-    props: basicProps,
-    components: { ElButton },
-    emits: ['ok', 'cancel'],
-    setup(_, { emit }) {
-      const { prefixCls } = useDesign('cropper-footer');
+export default defineComponent({
+  name: 'BasicModalFooter',
+  components: { ElButton },
+  props: basicProps,
+  emits: ['ok', 'cancel'],
+  setup(_, { emit }) {
+    const { prefixCls } = useDesign('cropper-footer');
 
-      function handleOk(e: Event) {
-        emit('ok', e);
-      }
+    const footerBtnOption = computed(() => {
+      return unref(_).footerBtnOption;
+    });
 
-      function handleCancel(e: Event) {
-        emit('cancel', e);
-      }
+    function handleOk(e: Event) {
+      emit('ok', e);
+    }
 
-      return { handleOk, handleCancel, prefixCls };
-    },
-  });
+    function handleCancel(e: Event) {
+      emit('cancel', e);
+    }
+
+    return { handleOk, handleCancel, prefixCls, footerBtnOption };
+  }
+});
 </script>
 
 <style lang="less" scoped>
-  @prefix-cls: ~'@{namespace}-cropper-footer';
-  .@{prefix-cls} {
-    text-align: right;
-    padding: 14px;
-  }
+@prefix-cls: ~'@{namespace}-cropper-footer';
+.@{prefix-cls} {
+  text-align: right;
+  padding: 14px;
+}
 </style>

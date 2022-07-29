@@ -15,54 +15,54 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import { BasicArrow, BasicTitle } from '/@/components/Basic';
+import { defineComponent } from 'vue';
+import { BasicArrow, BasicTitle } from '/@/components/Basic';
 
-  const props = {
-    prefixCls: { type: String },
-    helpMessage: {
-      type: [Array, String] as PropType<string[] | string>,
-      default: '',
-    },
-    title: { type: String },
-    show: { type: Boolean },
-    canExpan: { type: Boolean },
-  };
+const props = {
+  prefixCls: { type: String },
+  helpMessage: {
+    type: [Array, String] as PropType<string[] | string>,
+    default: ''
+  },
+  title: { type: String },
+  show: { type: Boolean },
+  canExpan: { type: Boolean }
+};
 
-  export default defineComponent({
-    components: { BasicArrow, BasicTitle },
-    inheritAttrs: false,
-    props,
-    emits: ['expand'],
-  });
+export default defineComponent({
+  components: { BasicArrow, BasicTitle },
+  inheritAttrs: false,
+  props,
+  emits: ['expand']
+});
 </script>
 
 <style lang="less">
-  @prefix-cls: ~'@{namespace}-collapse-container';
+@prefix-cls: ~'@{namespace}-collapse-container';
 
-  .@{prefix-cls} {
-    background-color: @component-background;
-    border-radius: 2px;
-    transition: all 0.3s ease-in-out;
+.@{prefix-cls} {
+  background-color: @component-background;
+  border-radius: 2px;
+  transition: all 0.3s ease-in-out;
 
-    &__header {
-      display: flex;
-      height: 32px;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid @border-color-light;
-    }
-
-    &__footer {
-      border-top: 1px solid @border-color-light;
-    }
-
-    &__action {
-      display: flex;
-      text-align: right;
-      flex: 1;
-      align-items: center;
-      justify-content: flex-end;
-    }
+  &__header {
+    display: flex;
+    height: 32px;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid @border-color-light;
   }
+
+  &__footer {
+    border-top: 1px solid @border-color-light;
+  }
+
+  &__action {
+    display: flex;
+    text-align: right;
+    flex: 1;
+    align-items: center;
+    justify-content: flex-end;
+  }
+}
 </style>

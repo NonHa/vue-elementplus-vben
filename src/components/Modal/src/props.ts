@@ -25,7 +25,7 @@ export const modalProps = {
   cancelText: { type: String, default: 'common.cancelText' },
   okText: { type: String, default: 'common.okText' },
 
-  closeFunc: Function as PropType<() => Promise<boolean>>,
+  closeFunc: Function as PropType<() => Promise<boolean>>
 };
 
 export const basicProps = Object.assign({}, modalProps, {
@@ -48,7 +48,13 @@ export const basicProps = Object.assign({}, modalProps, {
    * @description: Show confirmation button
    */
   showOkBtn: { type: Boolean, default: true },
-
+  footerBtnOption: {
+    type: Object,
+    default: {
+      cancelText: '取消',
+      sureText: '确定'
+    }
+  },
   wrapperProps: Object as PropType<Partial<ModalWrapperProps>>,
 
   afterClose: Function as PropType<() => Promise<VueNode>>,
@@ -88,5 +94,5 @@ export const basicProps = Object.assign({}, modalProps, {
 
   wrapClassName: { type: String },
 
-  zIndex: { type: Number },
+  zIndex: { type: Number }
 });

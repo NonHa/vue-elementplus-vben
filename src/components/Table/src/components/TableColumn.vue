@@ -1,7 +1,7 @@
 <template>
   <ElTableColumn
     v-for="(columnItem, index) in columns"
-    :key="index"
+    :key="`${columnItem?.property!}` + index"
     :prop="columnItem.prop"
     :label="columnItem.prop"
   >
@@ -16,12 +16,12 @@
 </template>
 
 <script lang="ts" setup>
-  import { ElTableColumn } from 'element-plus';
-  import { columnProps } from './columnProps';
-  import ColumnContent from './baseColumnContent/content.vue';
-  import { useSlots, useAttrs } from 'vue';
-  const props = defineProps(columnProps);
-  function setCol(row) {}
-  let slots = useSlots();
-  // console.log('columns', Object.keys(slots));
+import { ElTableColumn } from 'element-plus';
+import { columnProps } from './columnProps';
+import ColumnContent from './baseColumnContent/content.vue';
+import { useSlots, useAttrs } from 'vue';
+const props = defineProps(columnProps);
+function setCol(row) {}
+let slots = useSlots();
+// console.log('columns', Object.keys(slots));
 </script>

@@ -9,7 +9,7 @@
 <template>
   <BasicTitle v-if="!isDetail" :class="prefixCls">
     <slot name="title"></slot>
-    {{ !$slots.title ? title : "" }}
+    {{ !$slots.title ? title : '' }}
   </BasicTitle>
 
   <div :class="[prefixCls, `${prefixCls}--detail`]" v-else>
@@ -26,36 +26,36 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-import { BasicTitle } from "/@/components/Basic";
-import { ArrowLeft } from "@element-plus/icons-vue";
+import { defineComponent } from 'vue';
+import { BasicTitle } from '/@/components/Basic';
+import { ArrowLeft } from '@element-plus/icons-vue';
 
-import { useDesign } from "/@/hooks/web/useDesign";
+import { useDesign } from '/@/hooks/web/useDesign';
 
-import { propTypes } from "/@/utils/propTypes";
+import { propTypes } from '/@/utils/propTypes';
 export default defineComponent({
-  name: "BasicDrawerHeader",
+  name: 'BasicDrawerHeader',
   components: { BasicTitle, ArrowLeft },
   props: {
     isDetail: propTypes.bool,
     showDetailBack: propTypes.bool,
-    title: propTypes.string,
+    title: propTypes.string
   },
-  emits: ["close"],
+  emits: ['close'],
   setup(_, { emit }) {
-    const { prefixCls } = useDesign("basic-drawer-header");
+    const { prefixCls } = useDesign('basic-drawer-header');
 
     function handleClose() {
-      emit("close");
+      emit('close');
     }
 
     return { prefixCls, handleClose };
-  },
+  }
 });
 </script>
 
 <style lang="less">
-@prefix-cls: ~"@{namespace}-basic-drawer-header";
+@prefix-cls: ~'@{namespace}-basic-drawer-header';
 @footer-height: 60px;
 .@{prefix-cls} {
   display: flex;

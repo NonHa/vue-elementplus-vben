@@ -43,7 +43,7 @@ export const usePermissionStore = defineStore({
     // Backstage menu list
     backMenuList: [],
     // menu List
-    frontMenuList: [],
+    frontMenuList: []
   }),
 
   getters: {
@@ -61,7 +61,7 @@ export const usePermissionStore = defineStore({
     },
     getIsDynamicAddedRoute(): boolean {
       return this.isDynamicAddedRoute;
-    },
+    }
   },
   actions: {
     setPermCodeList(codeList: string[]) {
@@ -139,11 +139,11 @@ export const usePermissionStore = defineStore({
       routes = routes.filter(routeFilter);
 
       // Convert multi-level routing to level 2 routing
-      let { getSideBarMenuList } = useAppStore();
+      const { getSideBarMenuList } = useAppStore();
 
-      let menu = getSideBarMenuList;
+      const menu = getSideBarMenuList;
 
-      let menuNames: string[] = [];
+      const menuNames: string[] = [];
 
       const getMenuNames = function (menuItem: getMenuListResultModel) {
         menuItem.forEach((v) => {
@@ -156,12 +156,14 @@ export const usePermissionStore = defineStore({
       // console.log('menu---', menu);
       // let mapRoutes: AppRouteRecordRaw[] = [];
       const filterRouteBymenu = function (routes: AppRouteRecordRaw[]) {
-        let routeItem: AppRouteRecordRaw[] = [];
+        const routeItem: AppRouteRecordRaw[] = [];
+
         routes.forEach((v) => {
           if (v.children) {
             v.children = filterRouteBymenu(v.children);
           }
-          if (menuNames.includes(v.name)) routeItem.push(v);
+          routeItem.push(v);
+          // if (menuNames.includes(v.name)) routeItem.push(v);
         });
         return routeItem;
       };
@@ -176,11 +178,10 @@ export const usePermissionStore = defineStore({
       patchHomeAffix(routes);
       // console.log('routes---', routes);
       // console.log('routes',routes);
-      console.log('routes=============', routes);
 
       return routes;
-    },
-  },
+    }
+  }
 });
 
 // Need to be used outside the setup

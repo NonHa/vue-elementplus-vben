@@ -4,17 +4,12 @@
       <div :class="getClass" @click.stop v-if="visible">
         <div :class="`${prefixCls}-content`" v-click-outside="handleClose">
           <div :class="`${prefixCls}-input__wrapper`">
-            <ElInput
-              :class="`${prefixCls}-input`"
-              placeholder="搜索"
-              ref="inputRef"
-              allow-clear
-            >
+            <ElInput :class="`${prefixCls}-input`" placeholder="搜索" ref="inputRef" allow-clear>
               <template #prefix>
                 <Search />
               </template>
             </ElInput>
-            <span :class="`${prefixCls}-cancel`" @click="handleClose"> 取消 </span>
+            <span :class="`${prefixCls}-cancel`" @click="handleClose">取消</span>
           </div>
 
           <div :class="`${prefixCls}-not-data`" v-show="getIsNotData">暂无搜索结果</div>
@@ -30,8 +25,8 @@
               :class="[
                 `${prefixCls}-list__item`,
                 {
-                  [`${prefixCls}-list__item--active`]: activeIndex === index,
-                },
+                  [`${prefixCls}-list__item--active`]: activeIndex === index
+                }
               ]"
             >
               <div :class="`${prefixCls}-list__item-icon`">
@@ -53,29 +48,29 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, unref, ref, watch, nextTick } from "vue";
-import { Search } from "@element-plus/icons-vue";
-import AppSearchFooter from "./AppSearchFooter.vue";
-import Icon from "/@/components/Icon";
+import { computed, unref, ref, watch, nextTick } from 'vue';
+import { Search } from '@element-plus/icons-vue';
+import AppSearchFooter from './AppSearchFooter.vue';
+import Icon from '/@/components/Icon';
 // @ts-ignore
-import vClickOutside from "/@/directives/clickOutside";
-import { useDesign } from "/@/hooks/web/useDesign";
-import { useRefs } from "/@/hooks/core/useRefs";
-import { useMenuSearch } from "./useMenuSearch";
+import vClickOutside from '/@/directives/clickOutside';
+import { useDesign } from '/@/hooks/web/useDesign';
+import { useRefs } from '/@/hooks/core/useRefs';
+import { useMenuSearch } from './useMenuSearch';
 // import { useI18n } from '/@/hooks/web/useI18n';
-import { useAppInject } from "/@/hooks/web/useAppInject";
-import { ElInput } from "element-plus";
+import { useAppInject } from '/@/hooks/web/useAppInject';
+import { ElInput } from 'element-plus';
 const props = defineProps({
-  visible: { type: Boolean },
+  visible: { type: Boolean }
 });
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits(['close']);
 
 const scrollWrap = ref(null);
 const inputRef = ref<Nullable<HTMLElement>>(null);
 
 // const { t } = useI18n();
-const { prefixCls } = useDesign("app-search-modal");
+const { prefixCls } = useDesign('app-search-modal');
 const [refs, setRefs] = useRefs();
 const { getIsMobile } = useAppInject();
 
@@ -85,7 +80,7 @@ const {
   keyword,
   activeIndex,
   handleEnter,
-  handleMouseenter,
+  handleMouseenter
 } = useMenuSearch(refs, scrollWrap, emit);
 
 const getIsNotData = computed(() => !keyword || unref(searchResult).length === 0);
@@ -94,8 +89,8 @@ const getClass = computed(() => {
   return [
     prefixCls,
     {
-      [`${prefixCls}--mobile`]: unref(getIsMobile),
-    },
+      [`${prefixCls}--mobile`]: unref(getIsMobile)
+    }
   ];
 });
 
@@ -111,12 +106,12 @@ watch(
 
 function handleClose() {
   searchResult.value = [];
-  emit("close");
+  emit('close');
 }
 </script>
 <style lang="less" scoped>
-@prefix-cls: ~"@{namespace}-app-search-modal";
-@footer-prefix-cls: ~"@{namespace}-app-search-footer";
+@prefix-cls: ~'@{namespace}-app-search-modal';
+@footer-prefix-cls: ~'@{namespace}-app-search-footer';
 .@{prefix-cls} {
   position: fixed;
   top: 0;
@@ -202,7 +197,7 @@ function handleClose() {
     color: #1c1e21;
     border-radius: 6px;
     padding: 4px 11px;
-    span[role="img"] {
+    span[role='img'] {
       color: #999;
     }
   }

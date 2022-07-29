@@ -30,7 +30,7 @@ export function useFormEvents({
   defaultValueRef,
   formElRef,
   schemaRef,
-  handleFormValues,
+  handleFormValues
 }: UseFormActionContext) {
   async function resetFields(): Promise<void> {
     const { resetFunc, submitOnReset } = unref(getProps);
@@ -57,7 +57,9 @@ export function useFormEvents({
     const fields = unref(getSchema)
       .map((item) => item.field)
       .filter(Boolean);
-
+    Object.keys(formModel).forEach((key) => {
+      formModel[key] = null;
+    });
     const validKeys: string[] = [];
     Object.keys(values).forEach((key) => {
       const schema = unref(getSchema).find((item) => item.field === key);
@@ -101,7 +103,7 @@ export function useFormEvents({
       return;
     }
 
-    let fieldList: string[] = isString(fields) ? [fields] : fields;
+    const fieldList: string[] = isString(fields) ? [fields] : fields;
     // if (isString(fields)) {
     //   fieldList = [fields];
     // }
@@ -267,6 +269,6 @@ export function useFormEvents({
     removeSchemaByFiled,
     resetFields,
     setFieldsValue,
-    scrollToField,
+    scrollToField
   };
 }

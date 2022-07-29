@@ -18,7 +18,7 @@ const demo: AppRouteModule = {
   meta: {
     orderNo: 10,
     icon: 'ion:grid-outline',
-    title: 'Demo',
+    title: 'Demo'
   },
   children: [
     {
@@ -27,8 +27,35 @@ const demo: AppRouteModule = {
       component: () => import('/@/views/demo/table/Basic.vue'),
       meta: {
         // affix: true,
-        title: 'table',
-      },
+        title: '商品列表'
+      }
+    },
+    {
+      path: 'productCate',
+      name: 'ProductCate',
+      component: () => import('/@/views/demo/table/productCate.vue'),
+      meta: {
+        // affix: true,
+        title: '商品分类'
+      }
+    },
+    {
+      path: 'productAttr',
+      name: 'ProductAttr',
+      component: () => import('/@/views/demo/table/productAttr.vue'),
+      meta: {
+        // affix: true,
+        title: '商品类型'
+      }
+    },
+    {
+      path: 'brand',
+      name: 'Brand',
+      component: () => import('/@/views/demo/table/brand.vue'),
+      meta: {
+        // affix: true,
+        title: '品牌管理'
+      }
     },
     {
       path: 'print',
@@ -36,8 +63,8 @@ const demo: AppRouteModule = {
       component: () => import('/@/views/demo/feat/print.vue'),
       meta: {
         // affix: true,
-        title: 'print',
-      },
+        title: 'print'
+      }
     },
     {
       path: 'context-menu',
@@ -45,8 +72,8 @@ const demo: AppRouteModule = {
       component: () => import('/@/views/demo/context-menu/index.vue'),
       meta: {
         // affix: true,
-        title: 'ContextMenu',
-      },
+        title: 'ContextMenu'
+      }
     },
     {
       path: 'watermark',
@@ -54,8 +81,8 @@ const demo: AppRouteModule = {
       component: () => import('/@/views/demo/watermark/index.vue'),
       meta: {
         // affix: true,
-        title: 'Watermark',
-      },
+        title: 'Watermark'
+      }
     },
     {
       path: 'ripple',
@@ -63,8 +90,8 @@ const demo: AppRouteModule = {
       component: () => import('/@/views/demo/ripple/index.vue'),
       meta: {
         // affix: true,
-        title: 'Ripple',
-      },
+        title: 'Ripple'
+      }
     },
     {
       path: 'cropper',
@@ -72,9 +99,9 @@ const demo: AppRouteModule = {
       component: () => import('/@/views/demo/cropper/index.vue'),
       meta: {
         // affix: true,
-        title: 'Cropper',
-      },
-    },
+        title: 'Cropper'
+      }
+    }
     // {
     //   path: 'workbench',
     //   name: 'Dashboard2',
@@ -83,7 +110,7 @@ const demo: AppRouteModule = {
     //     title: 'Dashboard3',
     //   },
     // },
-  ],
+  ]
 };
 
 export default demo;

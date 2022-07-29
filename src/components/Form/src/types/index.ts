@@ -113,4 +113,5 @@ export type ComponentType =
   | 'ElRender'
   | 'ElSlider'
   | 'ElRate'
+  | 'ElCalendar'
   | 'ElDivider';

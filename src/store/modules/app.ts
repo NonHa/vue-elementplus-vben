@@ -11,7 +11,7 @@ import type {
   HeaderSetting,
   MenuSetting,
   TransitionSetting,
-  MultiTabsSetting,
+  MultiTabsSetting
 } from '/#/config';
 import type { BeforeMiniState } from '/#/store';
 
@@ -45,7 +45,7 @@ export const useAppStore = defineStore({
     pageLoading: false,
     projectConfig: Persistent.getLocal(PROJ_CFG_KEY),
     beforeMiniInfo: {},
-    sidebarMenuList: [],
+    sidebarMenuList: []
   }),
   getters: {
     getPageLoading(): boolean {
@@ -77,7 +77,7 @@ export const useAppStore = defineStore({
     },
     getSideBarMenuList(): getMenuListResultModel {
       return this.sidebarMenuList;
-    },
+    }
   },
   actions: {
     setPageLoading(loading: boolean): void {
@@ -116,12 +116,12 @@ export const useAppStore = defineStore({
       }
     },
     async getMenuList(): Promise<getMenuListResultModel> {
-      let menuList = await getMenuList();
+      const { data } = await getMenuList();
 
-      this.sidebarMenuList = menuList;
-      return menuList;
-    },
-  },
+      this.sidebarMenuList = data;
+      return data;
+    }
+  }
 });
 
 // Need to be used outside the setup

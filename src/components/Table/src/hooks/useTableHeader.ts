@@ -14,25 +14,25 @@ export function useTableHeader(propsRef) {
       title,
       titleHelpMessage,
       showTableSetting,
-      tableSetting,
+      tableSetting
       // onColumnsChange: handlers.onColumnsChange,
     } as Recordable,
     {
       ...(slots.toolbar
         ? {
-            toolbar: () => getSlot(slots, 'toolbar'),
+            toolbar: () => getSlot(slots, 'toolbar')
           }
         : {}),
       ...(slots.tableTitle
         ? {
-            tableTitle: () => getSlot(slots, 'tableTitle'),
+            tableTitle: () => getSlot(slots, 'tableTitle')
           }
         : {}),
       ...(slots.headerTop
         ? {
-            headerTop: () => getSlot(slots, 'headerTop'),
+            headerTop: () => getSlot(slots, 'headerTop')
           }
-        : {}),
+        : {})
     }
   );
 }

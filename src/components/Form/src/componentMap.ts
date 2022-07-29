@@ -19,7 +19,7 @@ import {
   ElRate,
   ElDivider,
   ElCheckboxGroup,
-  ElRadioGroup,
+  ElRadioGroup
 } from 'element-plus';
 
 import ApiRadioGroup from './components/ApiRadioGroup.vue';
@@ -28,6 +28,7 @@ import ApiSelect from './components/ApiSelect.vue';
 import ApiTree from './components/ApiTree.vue';
 import ApiTreeSelect from './components/ApiTreeSelect.vue';
 import ApiCascader from './components/ApiCascader.vue';
+import BaseSelect from './components/BaseSelect.vue';
 import { BasicUpload } from '/@/components/Upload';
 import { StrengthMeter } from '/@/components/StrengthMeter';
 import { IconPicker } from '/@/components/Icon';
@@ -41,113 +42,113 @@ interface comType {
 const componentMap = new Map<ComponentType, comType>();
 
 componentMap.set('ElInput', {
-  com: ElInput,
+  com: ElInput
 });
 componentMap.set('ElInputGroup', {
   com: ElInput,
-  type: 'text',
+  type: 'text'
 });
 componentMap.set('ElInputPassword', {
   com: ElInput,
-  type: 'password',
+  type: 'password'
 });
 componentMap.set('ElInputSearch', {
   com: ElInput,
-  type: 'search',
+  type: 'search'
 });
 componentMap.set('ElInputTextArea', {
   com: ElInput,
-  type: 'textArea',
+  type: 'textArea'
 });
 componentMap.set('ElInputNumber', {
-  com: ElInputNumber,
+  com: ElInputNumber
 });
 componentMap.set('ElAutoComplete', {
-  com: ElAutocomplete,
+  com: ElAutocomplete
 });
 
 componentMap.set('ElSelect', {
-  com: ElSelect,
+  com: BaseSelect
 });
 componentMap.set('ElApiSelect', {
-  com: ApiSelect,
+  com: ApiSelect
 });
 componentMap.set('ElApiTree', {
-  com: ApiTree,
+  com: ApiTree
 });
 // componentMap.set('ElTreeSelect', ElTreeSelect);
 componentMap.set('ElApiTreeSelect', {
-  com: ApiTreeSelect,
+  com: ApiTreeSelect
 });
 componentMap.set('ElApiRadioGroup', {
-  com: ApiRadioGroup,
+  com: ApiRadioGroup
 });
 componentMap.set('ElSwitch', {
-  com: ElSwitch,
+  com: ElSwitch
 });
 componentMap.set('ElRadioButtonGroup', {
-  com: RadioButtonGroup,
+  com: RadioButtonGroup
 });
 componentMap.set('ElRadioGroup', {
-  com: ElRadioGroup,
+  com: ElRadioGroup
 });
 componentMap.set('ElCheckbox', {
-  com: ElCheckbox,
+  com: ElCheckbox
 });
 componentMap.set('ElCheckboxGroup', {
-  com: ElCheckboxGroup,
+  com: ElCheckboxGroup
 });
 componentMap.set('ElApiCascader', {
-  com: ApiCascader,
+  com: ApiCascader
 });
 componentMap.set('ElCascader', {
-  com: ElCascader,
+  com: ElCascader
 });
 componentMap.set('ElSlider', {
-  com: ElSlider,
+  com: ElSlider
 });
 componentMap.set('ElRate', {
-  com: ElRate,
+  com: ElRate
 });
 
 componentMap.set('ElDatePicker', {
-  com: ElDatePicker,
+  com: ElDatePicker
 });
 componentMap.set('ElMonthPicker', {
   com: ElDatePicker,
-  type: 'month',
+  type: 'month'
 });
 componentMap.set('ElRangePicker', {
   com: ElDatePicker,
-  type: 'daterange',
+  type: 'daterange'
 });
 componentMap.set('ElWeekPicker', {
   com: ElDatePicker,
-  type: 'week',
+  type: 'week'
 });
 componentMap.set('ElTimePicker', {
-  com: ElTimePicker,
+  com: ElTimePicker
 });
 componentMap.set('ElStrengthMeter', {
-  com: StrengthMeter,
+  com: StrengthMeter
 });
 componentMap.set('ElIconPicker', {
-  com: IconPicker,
+  com: IconPicker
 });
 componentMap.set('ElInputCountDown', {
-  com: CountdownInput,
+  com: CountdownInput
 });
 
 componentMap.set('ElUpload', {
-  com: BasicUpload,
+  com: BasicUpload
 });
 componentMap.set('ElDivider', {
-  com: ElDivider,
+  com: ElDivider
 });
 
 export function add(compName: ComponentType, component: Component) {
   componentMap.set(compName, {
-    com: component,
+    com: component
   });
 }
 

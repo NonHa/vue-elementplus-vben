@@ -82,8 +82,8 @@ export class VAxios {
       headers: {
         'Content-type': ContentTypeEnum.FORM_DATA,
         // @ts-ignore
-        ignoreCancelToken: true,
-      },
+        ignoreCancelToken: true
+      }
     });
   }
   /**
@@ -109,13 +109,13 @@ export class VAxios {
       requestInterceptors,
       requestInterceptosCatch,
       responseInterceptors,
-      responseInterceptosCatch,
+      responseInterceptosCatch
     } = transform;
     const axiosCanceler = new AxiosCanceler();
     this.axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
       const {
         // @ts-ignore
-        headers: { ignoreCancelToken },
+        headers: { ignoreCancelToken }
       } = config;
       const ignoreCancel =
         ignoreCancelToken !== undefined
@@ -157,7 +157,7 @@ export class VAxios {
     }
     return {
       ...config,
-      data: qs.stringify(config.data, { arrayFormat: 'brackets' }),
+      data: qs.stringify(config.data, { arrayFormat: 'brackets' })
     };
   }
   get<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
@@ -190,8 +190,6 @@ export class VAxios {
       this.axiosInstance
         .request<any, AxiosResponse<Result>>(conf)
         .then((res: AxiosResponse<Result>) => {
-          console.log('res',res);
-          
           if (transformRequestHook && isFunction(transformRequestHook)) {
             try {
               const ret = transformRequestHook(res, opt);
