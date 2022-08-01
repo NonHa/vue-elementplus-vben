@@ -14,8 +14,17 @@ import { ErrorMessageMode } from '/#/axios';
 enum Api {
   Login = '/admin/login',
   Logout = '/logout',
-  GetUserInfo = '/getUserInfo',
-  GetPermCode = '/getPermCode'
+  GetUserInfo = '/admin/info',
+  GetPermCode = '/getPermCode',
+  getUserList = '/admin/list',
+  updateUser = '/admin/update',
+  register = '/admin/register',
+  roleList = '/role/list',
+  updateRoleById = '/role/update',
+  addRole = '/role/add',
+  menuList = '/menu/list',
+  updateMenu = '/menu/update',
+  addMenu = '/menu/add'
 }
 
 /**
@@ -46,4 +55,61 @@ export function getPermCode() {
 
 export function doLogout() {
   return defHttp.get({ url: Api.Logout });
+}
+export function getUserList(params) {
+  return defHttp.post({
+    url: Api.getUserList,
+    params
+  });
+}
+
+export function updateUser(params) {
+  return defHttp.post({
+    url: Api.updateUser,
+    params
+  });
+}
+export function register(params) {
+  return defHttp.post({
+    url: Api.register,
+    params
+  });
+}
+export function roleList(params) {
+  return defHttp.post({
+    url: Api.roleList,
+    params
+  });
+}
+export function updateRoleById(params) {
+  return defHttp.post({
+    url: Api.updateRoleById,
+    params
+  });
+}
+export function addRole(params) {
+  return defHttp.post({
+    url: Api.addRole,
+    params
+  });
+}
+export function menuList(params) {
+  return defHttp.post({
+    url: Api.menuList,
+    params
+  });
+}
+
+export function updateMenu(params) {
+  return defHttp.post({
+    url: Api.updateMenu,
+    params
+  });
+}
+
+export function addMenu(params) {
+  return defHttp.post({
+    url: Api.addMenu,
+    params
+  });
 }

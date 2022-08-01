@@ -13,182 +13,28 @@ export function getBasicColumns(): BasicColumn[] {
       fixed: 'left'
     },
     {
-      label: '订单编号',
-      prop: 'orderSn',
-      width: 150
-    },
-    {
-      label: '提交时间',
-      prop: 'createTime',
-      width: 150
-    },
-    {
-      label: '用户账号',
-      prop: 'memberUsername'
-    },
-    {
-      label: '订单金额',
-      prop: 'totalAmount',
-      width: '160px'
-    },
-    {
-      label: '支付方式',
-      prop: 'payType',
-      mapList: [
-        {
-          title: '未支付',
-          field: 0
-        },
-        {
-          title: '支付宝',
-          field: 1
-        },
-        {
-          title: '微信',
-          field: 2
-        }
-      ],
-      formatter: setBaseTableFormatter
-    },
-    {
-      label: '订单来源',
-      prop: 'sourceType',
-      mapList: [
-        {
-          title: 'PC订单',
-          field: 0
-        },
-        {
-          title: 'app订单',
-          field: 1
-        }
-      ],
-      formatter: setBaseTableFormatter
-    },
-    {
-      label: '订单状态',
-      prop: 'status',
-      mapList: [
-        {
-          title: '待付款',
-          field: 0
-        },
-        {
-          title: '待发货',
-          field: 1
-        },
-        {
-          title: '已发货',
-          field: 2
-        },
-        {
-          title: '已完成',
-          field: 3
-        },
-        {
-          title: '已关闭',
-          field: 4
-        },
-        {
-          title: '无效订单',
-          field: 5
-        }
-      ],
-      formatter: setBaseTableFormatter
-    },
-    {
-      label: '操作',
-      prop: 'operate',
-      slot: true,
-      width: 200
-    }
-  ];
-}
-export function getReturnApplyColumns(): BasicColumn[] {
-  return [
-    {
-      label: '服务单号',
-      prop: 'id',
-      fixed: 'left'
-    },
-    {
-      label: '申请时间',
-      prop: 'createTime',
-      width: 150
-    },
-
-    {
-      label: '用户账号',
-      prop: 'memberUsername'
-    },
-    {
-      label: '退款金额',
-      prop: 'productRealPrice',
-      width: '160px'
-    },
-
-    {
-      label: '申请状态',
-      prop: 'status',
-      mapList: [
-        {
-          title: '待处理',
-          field: 0
-        },
-        {
-          title: '退货中',
-          field: 1
-        },
-        {
-          title: '已完成',
-          field: 2
-        },
-        {
-          title: '已拒绝',
-          field: 3
-        }
-      ],
-      formatter: setBaseTableFormatter
-    },
-    {
-      label: '处理时间',
-      prop: 'handleTime',
-      width: '160px'
-    },
-    {
-      label: '操作',
-      prop: 'operate',
-      slot: true,
-      width: 200
-    }
-  ];
-}
-export function getReturnReasonColumns(): BasicColumn[] {
-  return [
-    {
-      label: '编号',
-      prop: 'id',
-      fixed: 'left'
-    },
-    {
-      label: '原因类型',
+      label: '角色名称',
       prop: 'name',
       width: 150
     },
+    {
+      label: '描述',
+      prop: 'description',
+      width: 150
+    },
+    {
+      label: '用户数',
+      prop: 'adminCount'
+    },
 
     {
-      label: '排序',
-      prop: 'sort',
-      width: '160px'
+      label: '提交时间',
+      prop: 'createTime'
     },
     {
-      label: '是否可用',
-      prop: 'status'
-    },
-    {
-      label: '添加时间',
-      prop: 'createTime',
-      width: 150
+      label: '是否启用',
+      prop: 'status',
+      slot: true
     },
     {
       label: '操作',
@@ -198,20 +44,35 @@ export function getReturnReasonColumns(): BasicColumn[] {
     }
   ];
 }
-export const getReturnReasonSchema = [
+
+export const getAdvanceSchema = () => {
+  return [
+    {
+      field: `keyword`,
+      label: `订单编号`,
+      component: 'ElInput',
+      colProps: {
+        xl: 24,
+        lg: 24
+      }
+    }
+  ];
+};
+export const getEditUserSchema = [
   {
     field: `name`,
-    label: `原因类型`,
+    label: `角色名称`,
     component: 'ElInput',
     colProps: {
       xl: 24,
       lg: 24
     }
   },
+
   {
-    field: 'sort',
-    label: '排序',
-    component: 'ElInput',
+    field: `description`,
+    label: `描述`,
+    component: 'ElInputTextArea',
     colProps: {
       xl: 24,
       lg: 24
@@ -220,10 +81,10 @@ export const getReturnReasonSchema = [
   {
     field: `status`,
     label: `是否启用`,
-
+    component: 'ElSelect',
     colProps: {
-      lg: 24,
-      xl: 24
+      xl: 24,
+      lg: 24
     },
     render: (getValues, formModel) => {
       return (
@@ -239,212 +100,7 @@ export const getReturnReasonSchema = [
     }
   }
 ];
-export const getAdvanceSchema = () => {
-  return [
-    {
-      field: `orderSn`,
-      label: `订单编号`,
-      component: 'ElInput',
-      colProps: {
-        xl: 8,
-        lg: 12
-      }
-    },
-    {
-      field: 'receiverKeyWord',
-      label: '收货人',
-      component: 'ElInput',
-      colProps: {
-        xl: 8,
-        lg: 12
-      }
-    },
 
-    {
-      field: `status`,
-      label: `订单状态`,
-      component: 'ElSelect',
-      colProps: {
-        xl: 8,
-        lg: 12
-      },
-      searchList: [
-        {
-          label: '待付款',
-          value: 0
-        },
-        {
-          label: '待发货',
-          value: 1
-        },
-        {
-          label: '已发货',
-          value: 2
-        },
-        {
-          label: '已完成',
-          value: 3
-        },
-        {
-          label: '已关闭',
-          value: 4
-        },
-        {
-          label: '无效订单',
-          value: 5
-        }
-      ]
-    },
-    {
-      field: `orderType`,
-      label: `订单分类`,
-      component: 'ElSelect',
-      colProps: {
-        xl: 8,
-        lg: 12
-      },
-      searchList: [
-        {
-          label: '秒杀订单',
-          value: 1
-        },
-        {
-          label: '正常订单',
-          value: 0
-        }
-      ]
-    },
-    {
-      field: `sourceType`,
-      label: `订单来源`,
-      component: 'ElSelect',
-      colProps: {
-        xl: 8,
-        lg: 12
-      },
-      searchList: [
-        {
-          label: 'PC订单',
-          value: 0
-        },
-        {
-          label: 'app订单',
-          value: 1
-        }
-      ]
-    },
-    {
-      field: `createTime`,
-      label: `提交时间`,
-      component: 'ElDatePicker',
-      colProps: {
-        xl: 8,
-        lg: 12
-      },
-      componentProps: {
-        valueFormat: 'YYYY-MM-DD'
-      }
-    }
-  ];
-};
-export const getReasonSchema = () => {
-  return [
-    {
-      field: `status`,
-      label: `是否启用`,
-      component: 'ElSelect',
-      colProps: {
-        xl: 8,
-        lg: 12
-      },
-      searchList: [
-        {
-          label: '否',
-          value: 0
-        },
-        {
-          label: '是',
-          value: 1
-        }
-      ]
-    }
-  ];
-};
-export const getOrderSettingSchema = () => {
-  return [
-    {
-      field: `flashOrderOvertime`,
-      label: `秒杀订单超过：`,
-      component: 'ElInput',
-      colProps: {
-        xl: 24,
-        lg: 24
-      },
-      renderComponentContent: () => {
-        return {
-          append: () => '分'
-        };
-      }
-    },
-    {
-      field: 'normalOrderOvertime',
-      label: '正常订单超过：',
-      component: 'ElInput',
-      colProps: {
-        xl: 24,
-        lg: 24
-      },
-      renderComponentContent: () => {
-        return {
-          append: () => '分'
-        };
-      }
-    },
-
-    {
-      field: `confirmOvertime`,
-      label: `发货超过：`,
-      component: 'ElInput',
-      colProps: {
-        xl: 24,
-        lg: 24
-      },
-      renderComponentContent: () => {
-        return {
-          append: () => '天'
-        };
-      }
-    },
-    {
-      field: `finishOvertime`,
-      label: `订单完成超过：`,
-      component: 'ElInput',
-      colProps: {
-        xl: 24,
-        lg: 24
-      },
-      renderComponentContent: () => {
-        return {
-          append: () => '天'
-        };
-      }
-    },
-    {
-      field: `commentOvertime`,
-      label: `订单来源：`,
-      component: 'ElInput',
-      colProps: {
-        xl: 24,
-        lg: 24
-      },
-      renderComponentContent: () => {
-        return {
-          append: () => '天'
-        };
-      }
-    }
-  ];
-};
 export function getFormConfig(): Partial<FormProps> {
   return {
     labelWidth: 100,

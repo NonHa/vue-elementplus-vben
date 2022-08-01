@@ -13,182 +13,33 @@ export function getBasicColumns(): BasicColumn[] {
       fixed: 'left'
     },
     {
-      label: '订单编号',
-      prop: 'orderSn',
+      label: '账号',
+      prop: 'username',
       width: 150
     },
     {
-      label: '提交时间',
-      prop: 'createTime',
+      label: '姓名',
+      prop: 'nickName',
       width: 150
     },
     {
-      label: '用户账号',
-      prop: 'memberUsername'
-    },
-    {
-      label: '订单金额',
-      prop: 'totalAmount',
-      width: '160px'
-    },
-    {
-      label: '支付方式',
-      prop: 'payType',
-      mapList: [
-        {
-          title: '未支付',
-          field: 0
-        },
-        {
-          title: '支付宝',
-          field: 1
-        },
-        {
-          title: '微信',
-          field: 2
-        }
-      ],
-      formatter: setBaseTableFormatter
-    },
-    {
-      label: '订单来源',
-      prop: 'sourceType',
-      mapList: [
-        {
-          title: 'PC订单',
-          field: 0
-        },
-        {
-          title: 'app订单',
-          field: 1
-        }
-      ],
-      formatter: setBaseTableFormatter
-    },
-    {
-      label: '订单状态',
-      prop: 'status',
-      mapList: [
-        {
-          title: '待付款',
-          field: 0
-        },
-        {
-          title: '待发货',
-          field: 1
-        },
-        {
-          title: '已发货',
-          field: 2
-        },
-        {
-          title: '已完成',
-          field: 3
-        },
-        {
-          title: '已关闭',
-          field: 4
-        },
-        {
-          title: '无效订单',
-          field: 5
-        }
-      ],
-      formatter: setBaseTableFormatter
-    },
-    {
-      label: '操作',
-      prop: 'operate',
-      slot: true,
-      width: 200
-    }
-  ];
-}
-export function getReturnApplyColumns(): BasicColumn[] {
-  return [
-    {
-      label: '服务单号',
-      prop: 'id',
-      fixed: 'left'
-    },
-    {
-      label: '申请时间',
-      prop: 'createTime',
-      width: 150
-    },
-
-    {
-      label: '用户账号',
-      prop: 'memberUsername'
-    },
-    {
-      label: '退款金额',
-      prop: 'productRealPrice',
-      width: '160px'
-    },
-
-    {
-      label: '申请状态',
-      prop: 'status',
-      mapList: [
-        {
-          title: '待处理',
-          field: 0
-        },
-        {
-          title: '退货中',
-          field: 1
-        },
-        {
-          title: '已完成',
-          field: 2
-        },
-        {
-          title: '已拒绝',
-          field: 3
-        }
-      ],
-      formatter: setBaseTableFormatter
-    },
-    {
-      label: '处理时间',
-      prop: 'handleTime',
-      width: '160px'
-    },
-    {
-      label: '操作',
-      prop: 'operate',
-      slot: true,
-      width: 200
-    }
-  ];
-}
-export function getReturnReasonColumns(): BasicColumn[] {
-  return [
-    {
-      label: '编号',
-      prop: 'id',
-      fixed: 'left'
-    },
-    {
-      label: '原因类型',
-      prop: 'name',
-      width: 150
-    },
-
-    {
-      label: '排序',
-      prop: 'sort',
-      width: '160px'
-    },
-    {
-      label: '是否可用',
-      prop: 'status'
+      label: 'email',
+      prop: 'email'
     },
     {
       label: '添加时间',
       prop: 'createTime',
-      width: 150
+      width: '160px'
+    },
+
+    {
+      label: '最后登录',
+      prop: 'loginTime'
+    },
+    {
+      label: '是否启用',
+      prop: 'status',
+      slot: true
     },
     {
       label: '操作',
@@ -198,253 +49,125 @@ export function getReturnReasonColumns(): BasicColumn[] {
     }
   ];
 }
-export const getReturnReasonSchema = [
-  {
-    field: `name`,
-    label: `原因类型`,
-    component: 'ElInput',
-    colProps: {
-      xl: 24,
-      lg: 24
-    }
-  },
-  {
-    field: 'sort',
-    label: '排序',
-    component: 'ElInput',
-    colProps: {
-      xl: 24,
-      lg: 24
-    }
-  },
-  {
-    field: `status`,
-    label: `是否启用`,
-
-    colProps: {
-      lg: 24,
-      xl: 24
+export function getMenuColumns(): BasicColumn[] {
+  return [
+    {
+      label: '编号',
+      prop: 'id',
+      fixed: 'left',
+      width: 200
     },
-    render: (getValues, formModel) => {
-      return (
-        <ElRadioGroup v-model={formModel.status}>
-          <ElRadio label={1} size="large">
-            是
-          </ElRadio>
-          <ElRadio label={0} size="large">
-            否
-          </ElRadio>
-        </ElRadioGroup>
-      );
+    {
+      label: '菜单名称',
+      prop: 'title',
+      width: 150
+    },
+    {
+      label: '菜单级数',
+      prop: 'level'
+    },
+    {
+      label: '前端名称',
+      prop: 'name'
+    },
+    {
+      label: '是否展示',
+      prop: 'hidden',
+      slot: true
+    },
+    {
+      label: '排序',
+      prop: 'sort'
+    },
+    {
+      label: '设置',
+      prop: 'set',
+      width: '200px',
+      slot: true
+    },
+    {
+      label: '操作',
+      prop: 'oprate',
+      width: '160px',
+      slot: true
     }
-  }
-];
+  ];
+}
 export const getAdvanceSchema = () => {
   return [
     {
-      field: `orderSn`,
+      field: `keyword`,
       label: `订单编号`,
       component: 'ElInput',
       colProps: {
-        xl: 8,
-        lg: 12
+        xl: 24,
+        lg: 24
+      }
+    }
+  ];
+};
+export const getEditMenuSchema = (list) => {
+  return [
+    {
+      field: `title`,
+      label: `菜单名称`,
+      component: 'ElInput',
+      colProps: {
+        xl: 24,
+        lg: 24
       }
     },
     {
-      field: 'receiverKeyWord',
-      label: '收货人',
+      field: `parentId`,
+      label: `上级分类`,
+      component: 'ElSelect',
+      colProps: colPropsCommon,
+      searchList: list.length > 0 ? list : []
+      // itemProps: itemPropsCommon
+    },
+    {
+      field: `name`,
+      label: `前端名称`,
       component: 'ElInput',
       colProps: {
-        xl: 8,
-        lg: 12
+        xl: 24,
+        lg: 24
+      }
+    },
+    {
+      field: `sort`,
+      label: `排序`,
+      component: 'ElInput',
+      colProps: {
+        xl: 24,
+        lg: 24
       }
     },
 
     {
-      field: `status`,
-      label: `订单状态`,
+      field: `hidden`,
+      label: `是否展示`,
       component: 'ElSelect',
-      colProps: {
-        xl: 8,
-        lg: 12
-      },
-      searchList: [
-        {
-          label: '待付款',
-          value: 0
-        },
-        {
-          label: '待发货',
-          value: 1
-        },
-        {
-          label: '已发货',
-          value: 2
-        },
-        {
-          label: '已完成',
-          value: 3
-        },
-        {
-          label: '已关闭',
-          value: 4
-        },
-        {
-          label: '无效订单',
-          value: 5
-        }
-      ]
-    },
-    {
-      field: `orderType`,
-      label: `订单分类`,
-      component: 'ElSelect',
-      colProps: {
-        xl: 8,
-        lg: 12
-      },
-      searchList: [
-        {
-          label: '秒杀订单',
-          value: 1
-        },
-        {
-          label: '正常订单',
-          value: 0
-        }
-      ]
-    },
-    {
-      field: `sourceType`,
-      label: `订单来源`,
-      component: 'ElSelect',
-      colProps: {
-        xl: 8,
-        lg: 12
-      },
-      searchList: [
-        {
-          label: 'PC订单',
-          value: 0
-        },
-        {
-          label: 'app订单',
-          value: 1
-        }
-      ]
-    },
-    {
-      field: `createTime`,
-      label: `提交时间`,
-      component: 'ElDatePicker',
-      colProps: {
-        xl: 8,
-        lg: 12
-      },
-      componentProps: {
-        valueFormat: 'YYYY-MM-DD'
-      }
-    }
-  ];
-};
-export const getReasonSchema = () => {
-  return [
-    {
-      field: `status`,
-      label: `是否启用`,
-      component: 'ElSelect',
-      colProps: {
-        xl: 8,
-        lg: 12
-      },
-      searchList: [
-        {
-          label: '否',
-          value: 0
-        },
-        {
-          label: '是',
-          value: 1
-        }
-      ]
-    }
-  ];
-};
-export const getOrderSettingSchema = () => {
-  return [
-    {
-      field: `flashOrderOvertime`,
-      label: `秒杀订单超过：`,
-      component: 'ElInput',
       colProps: {
         xl: 24,
         lg: 24
       },
-      renderComponentContent: () => {
-        return {
-          append: () => '分'
-        };
+      render: (getValues, formModel) => {
+        return (
+          <ElRadioGroup v-model={formModel.hidden}>
+            <ElRadio label={0} size="large">
+              是
+            </ElRadio>
+            <ElRadio label={1} size="large">
+              否
+            </ElRadio>
+          </ElRadioGroup>
+        );
       }
-    },
-    {
-      field: 'normalOrderOvertime',
-      label: '正常订单超过：',
-      component: 'ElInput',
-      colProps: {
-        xl: 24,
-        lg: 24
-      },
-      renderComponentContent: () => {
-        return {
-          append: () => '分'
-        };
-      }
-    },
+    }
+  ];
+};
 
-    {
-      field: `confirmOvertime`,
-      label: `发货超过：`,
-      component: 'ElInput',
-      colProps: {
-        xl: 24,
-        lg: 24
-      },
-      renderComponentContent: () => {
-        return {
-          append: () => '天'
-        };
-      }
-    },
-    {
-      field: `finishOvertime`,
-      label: `订单完成超过：`,
-      component: 'ElInput',
-      colProps: {
-        xl: 24,
-        lg: 24
-      },
-      renderComponentContent: () => {
-        return {
-          append: () => '天'
-        };
-      }
-    },
-    {
-      field: `commentOvertime`,
-      label: `订单来源：`,
-      component: 'ElInput',
-      colProps: {
-        xl: 24,
-        lg: 24
-      },
-      renderComponentContent: () => {
-        return {
-          append: () => '天'
-        };
-      }
-    }
-  ];
-};
 export function getFormConfig(): Partial<FormProps> {
   return {
     labelWidth: 100,
@@ -778,3 +501,70 @@ export const productCateFormSchemas = (list: any[] = [], CascaderList = []) => {
     }
   ];
 };
+
+export const getEditUserSchema = [
+  {
+    field: `username`,
+    label: `账号`,
+    component: 'ElInput',
+    colProps: {
+      xl: 8,
+      lg: 12
+    }
+  },
+  {
+    field: `nickName`,
+    label: `姓名`,
+    component: 'ElInput',
+    colProps: {
+      xl: 8,
+      lg: 12
+    }
+  },
+  {
+    field: `email`,
+    label: `邮箱`,
+    component: 'ElInput',
+    colProps: {
+      xl: 8,
+      lg: 12
+    }
+  },
+  {
+    field: `password`,
+    label: `密码`,
+    component: 'ElInput',
+    colProps: {
+      xl: 8,
+      lg: 12
+    }
+  },
+  {
+    field: `note`,
+    label: `备注`,
+    component: 'ElInput',
+    colProps: {
+      xl: 8,
+      lg: 12
+    }
+  },
+  {
+    field: `status`,
+    label: `是否启用`,
+    component: 'ElSelect',
+    colProps: {
+      xl: 8,
+      lg: 12
+    },
+    searchList: [
+      {
+        label: '否',
+        value: 0
+      },
+      {
+        label: '是',
+        value: 1
+      }
+    ]
+  }
+];

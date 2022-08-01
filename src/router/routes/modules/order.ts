@@ -39,6 +39,15 @@ const order: AppRouteModule = {
         // affix: true,
         title: '退货申请处理'
       }
+    },
+    {
+      path: 'returnReason',
+      name: 'ReturnReason',
+      component: () => import('/@/views/demo/order/returnReason.vue'),
+      meta: {
+        // affix: true,
+        title: '退货原因处理'
+      }
     }
   ]
 };

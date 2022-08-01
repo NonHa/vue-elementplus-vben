@@ -30,17 +30,24 @@
       <ElDescriptions :column="1" border>
         <el-descriptions-item label="订单金额">{{ applyItem.productPrice }}</el-descriptions-item>
         <el-descriptions-item label="确认退款金额">
-          {{ applyItem.productPrice }}
+          <el-input
+            :disabled="applyItem.status !== 0"
+            v-model="selectAddress.returnAmount"
+            placeholder=""
+          />
         </el-descriptions-item>
         <el-descriptions-item label="选择收货点">
           <BaseSelect
+            :disabled="applyItem.status !== 0"
             :model="model"
             field="companyAddressId"
             :options="options"
             @select-change="handleChange"
           />
         </el-descriptions-item>
-        <el-descriptions-item label="收货人姓名">{{ selectAddress.name }}</el-descriptions-item>
+        <el-descriptions-item label="收货人姓名">
+          {{ selectAddress.receiveMan }}
+        </el-descriptions-item>
         <el-descriptions-item label="所在区域">
           {{ selectAddress.province }} {{ selectAddress.city }} {{ selectAddress.region }}
         </el-descriptions-item>
@@ -51,22 +58,40 @@
           {{ selectAddress.phone }}
         </el-descriptions-item>
       </ElDescriptions>
-      <ElDescriptions :column="1" border>
-        <el-descriptions-item label="处理人员">{{ applyItem.handleMan }}</el-descriptions-item>
-        <el-descriptions-item label="处理时间">{{ applyItem.handleTime }}</el-descriptions-item>
-        <el-descriptions-item label="处理备注">{{ applyItem.handleNote }}</el-descriptions-item>
-      </ElDescriptions>
-      <ElDescriptions :column="1" border>
-        <el-descriptions-item label="收货人员">{{ applyItem.handleMan }}</el-descriptions-item>
-        <el-descriptions-item label="收货时间">{{ applyItem.handleTime }}</el-descriptions-item>
-        <el-descriptions-item label="收货备注">{{ applyItem.handleNote }}</el-descriptions-item>
-      </ElDescriptions>
+      <template v-if="applyItem.status === 0">
+        <ElDescriptions :column="1" border>
+          <el-descriptions-item label="处理备注">
+            <el-input v-model="selectAddress.handleNote" placeholder="" />
+          </el-descriptions-item>
+        </ElDescriptions>
+      </template>
+
+      <template v-else>
+        <ElDescriptions :column="1" border>
+          <el-descriptions-item label="处理人员">{{ applyItem.handleMan }}</el-descriptions-item>
+          <el-descriptions-item label="处理时间">{{ applyItem.handleTime }}</el-descriptions-item>
+          <el-descriptions-item label="处理备注">{{ applyItem.handleNote }}</el-descriptions-item>
+        </ElDescriptions>
+        <ElDescriptions v-if="applyItem.status !== 1 && applyItem.status !== 3" :column="1" border>
+          <el-descriptions-item label="收货人员">{{ applyItem.receiveMan }}</el-descriptions-item>
+          <el-descriptions-item label="收货时间">{{ applyItem.handleTime }}</el-descriptions-item>
+          <el-descriptions-item label="收货备注">{{ applyItem.receiveNote }}</el-descriptions-item>
+        </ElDescriptions>
+      </template>
+
+      <template v-if="applyItem.status === 1">
+        <ElDescriptions :column="1" border>
+          <el-descriptions-item label="收货备注">
+            <el-input v-model="selectAddress.receiveNote" placeholder="" />
+          </el-descriptions-item>
+        </ElDescriptions>
+      </template>
     </ElCard>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { unref, toRefs, ref } from 'vue';
+import { unref, toRefs, ref, watch } from 'vue';
 import { ElCard, ElDescriptions, ElDescriptionsItem } from 'element-plus';
 import { useProductStore } from '/@/store/modules/product';
 import BaseSelect from '/@/components/Form/src/components/BaseSelect.vue';
@@ -74,7 +99,7 @@ let prop = defineProps({
   applyItem: Object
 });
 let { applyItem } = toRefs(prop);
-let model = ref({});
+let model = ref<{ companyAddressId: string }>({ companyAddressId: '' });
 let options = ref<{ value: number | string; label: string }[]>([]);
 let { getCompanyAddressList } = useProductStore();
 options.value = getCompanyAddressList.map((v) => {
@@ -90,15 +115,41 @@ let selectAddressData = {
   region: '',
   detailAddress: '',
   phone: '',
-  name: ''
+  receiveMan: '',
+  handleNote: '',
+  companyAddressId: null,
+  receiveNote: ''
 };
 let selectAddress = ref<typeof selectAddressData>(selectAddressData);
 
 const handleChange = (e) => {
-  let data = unref(getCompanyAddressList).filter((v) => v.id === e);
-  selectAddress.value = data[0];
-  console.log('selectAddress', unref(selectAddress));
+  let data = JSON.parse(JSON.stringify(unref(getCompanyAddressList).filter((v) => v.id === e)));
+
+  unref(selectAddress).province = data[0].province;
+  unref(selectAddress).city = data[0].city;
+  unref(selectAddress).region = data[0].region;
+  unref(selectAddress).detailAddress = data[0].detailAddress;
+  unref(selectAddress).phone = data[0].phone;
+  unref(selectAddress).companyAddressId = data[0].id;
 };
+
+watch(
+  () => unref(applyItem).id,
+  (val) => {
+    console.log('applyItem', applyItem);
+
+    unref(selectAddress).handleNote = unref(applyItem).handleNote;
+    unref(selectAddress).returnAmount = unref(applyItem).returnAmount;
+    unref(model).companyAddressId = unref(applyItem).companyAddressId;
+    unref(applyItem).companyAddressId && handleChange(unref(applyItem).companyAddressId);
+  },
+  {
+    immediate: true
+  }
+);
+defineExpose({
+  selectAddress
+});
 </script>
 
 <style lang="less" scoped>

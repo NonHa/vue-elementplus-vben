@@ -6,7 +6,6 @@
     :loading="loading"
     showTableSetting
     :pagination="pagination"
-    :beforeFetch="beforeFetch"
     :tableSearchQuery="{ pageNum: 1, pageSize: 50 }"
     :api="api"
     useSearchForm
@@ -30,16 +29,19 @@
     :footerBtnOption="footerBtnOption"
     :showCancelBtn="showCancelBtn"
     :showOkBtn="showOkBtn"
+    :closeFunc="closeFunc"
+    @ok="handleOk"
   >
-    <ReturnApplyItemMessage :applyItem="applyItem" />
+    <ReturnApplyItemMessage ref="messageRef" :applyItem="applyItem" />
   </BasicModal>
 </template>
 <script lang="ts" setup>
 import { ref, reactive, watch, onMounted, unref } from 'vue';
 import { BasicTable, ColumnChangeParam, useTable } from '/@/components/Table';
 import { getReturnApplyColumns, getReturnApplyFormConfig, getTreeTableData } from './orderData';
-import { orderReturnAplyList, deleteOrderById } from '/@/api/sys/order';
-import { useProductStore } from '/@/store/modules/product';
+import { orderReturnAplyList, deleteOrderById, updateOrderReturnApply } from '/@/api/sys/order';
+import { useUserStore } from '/@/store/modules/user';
+
 import { BasicModal } from '/@/components/Modal';
 import ReturnApplyItemMessage from './returnApplyItemMessage.vue';
 const canResize = ref(false);
@@ -49,6 +51,7 @@ const pagination = reactive({
   pageNum: 1
 });
 let modalRef = ref();
+let messageRef = ref();
 let applyItem = ref({});
 let showCancelBtn = ref(true);
 let showOkBtn = ref(true);
@@ -97,17 +100,10 @@ const [registerTable, { getForm, reload }] = useTable({
   rowKey: 'key',
   isTreeTable: true
 });
-let beforeFetch = (params) => {
-  let obj = params;
-  obj.productCategoryId = obj.category && obj.category[1];
-  delete obj.category;
-  return obj;
-};
 
 function selectableFun(row, index) {
   return true;
 }
-function initSelectRows(key) {}
 
 function handelDelete(row, column) {
   deleteOrderById({ id: row.id }).then((res) => {
@@ -116,5 +112,42 @@ function handelDelete(row, column) {
     }
   });
 }
+
 let data = [];
+const { getUserInfo } = useUserStore();
+function handleOk() {
+  // return;
+  let param = unref(messageRef).selectAddress;
+  updateOrderReturnApply({
+    ...param,
+    status: unref(applyItem).status + 1,
+    id: unref(applyItem).id,
+
+    receiveMan: getUserInfo.username,
+    handleMan: getUserInfo.username
+  }).then((res) => {
+    if (res.code === 200) {
+      unref(modalRef).visibleRef = false;
+
+      reload();
+    }
+  });
+}
+
+async function closeFunc() {
+  let param = unref(messageRef).selectAddress;
+  if (unref(applyItem).status === 0) {
+    let data = await updateOrderReturnApply({
+      ...param,
+      status: 3,
+      id: unref(applyItem).id,
+      receiveMan: getUserInfo.username,
+      handleMan: getUserInfo.username
+    });
+    if (data.code === 200) {
+      reload();
+    }
+    return data.code === 200;
+  }
+}
 </script>

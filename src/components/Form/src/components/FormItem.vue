@@ -244,6 +244,7 @@ export default defineComponent({
         }
       };
       const Comp = componentMap.get(component)?.com as ReturnType<typeof defineComponent>;
+      const typeCom = componentMap.get(component)?.type;
 
       const { autoSetPlaceHolder, size } = props.formProps;
       const propsData: Recordable = {
@@ -273,7 +274,8 @@ export default defineComponent({
         ...on,
         field,
         model: props.formModel,
-        clearable: true
+        clearable: true,
+        type: typeCom
         // ...bindValue,
       };
 

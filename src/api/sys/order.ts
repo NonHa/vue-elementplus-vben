@@ -4,7 +4,12 @@ enum Api {
   orderDelete = '/order/delete',
   orderSetting = '/order/setting/item',
   updateOrderSetting = '/order/setting/update',
-  orderReturnAplyList = '/order/returnApply/list'
+  orderReturnAplyList = '/order/returnApply/list',
+  updateOrderReturnApply = '/order/returnApply/update',
+  orderReturnReasonList = '/order/returnReason/list',
+  updateOrderReturnReason = '/order/returnReason/update',
+  addOrderReturnReason = '/order/returnReason/add',
+  deleteOrderReturnReason = '/order/returnReason/delete'
 }
 
 export function getOrderList(params) {
@@ -28,4 +33,25 @@ export function updateOrderSetting(params) {
 
 export function orderReturnAplyList(params) {
   return defHttp.post({ url: Api.orderReturnAplyList, params }, { errorMessageMode: 'none' });
+}
+
+export function updateOrderReturnApply(params) {
+  return defHttp.post({ url: Api.updateOrderReturnApply, params }, { errorMessageMode: 'none' });
+}
+export function orderReturnReasonList(params) {
+  return defHttp.post({ url: Api.orderReturnReasonList, params }, { errorMessageMode: 'none' });
+}
+
+export function updateOrderReturnReason(params) {
+  return defHttp.post({ url: Api.updateOrderReturnReason, params }, { errorMessageMode: 'none' });
+}
+
+export function addOrderReturnReason(params) {
+  return defHttp.post({ url: Api.addOrderReturnReason, params }, { errorMessageMode: 'none' });
+}
+export function deleteOrderReturnReason(params) {
+  return defHttp.post(
+    { url: Api.deleteOrderReturnReason, params },
+    { errorMessageMode: 'none', joinParamsToUrl: true }
+  );
 }

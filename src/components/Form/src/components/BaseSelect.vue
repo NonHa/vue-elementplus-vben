@@ -1,5 +1,5 @@
 <template>
-  <ElSelect v-model="model[field]" placeholder=" " @change="handleChange">
+  <ElSelect v-model="model[field]" placeholder=" " :disabled="disabled" @change="handleChange">
     <ElOption v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
   </ElSelect>
 </template>
@@ -18,7 +18,8 @@ let value = ref('');
 const props = defineProps({
   options: { type: Array as PropType<set[]> },
   model: { type: Object },
-  field: { type: String }
+  field: { type: String },
+  disabled: { type: Boolean, default: false }
 });
 
 let handleChange = (e) => {

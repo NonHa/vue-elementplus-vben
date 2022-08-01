@@ -58,7 +58,7 @@ componentMap.set('ElInputSearch', {
 });
 componentMap.set('ElInputTextArea', {
   com: ElInput,
-  type: 'textArea'
+  type: 'textarea'
 });
 componentMap.set('ElInputNumber', {
   com: ElInputNumber
