@@ -36,12 +36,11 @@
   </BasicTable>
 </template>
 <script lang="ts" setup>
-import { defineComponent, ref, reactive, watch, onMounted } from 'vue';
+import { ref, reactive, watch, onMounted } from 'vue';
 import { ElPopconfirm } from 'element-plus';
 import { BasicTable, ColumnChangeParam, useTable } from '/@/components/Table';
-import { getBasicColumns, getBasicData, getFormConfig, getTreeTableData } from './tableData';
-import { getTreeList, deleteProduct, productCategoryList } from '/@/api/sys/table';
-import { useRouter } from 'vue-router';
+import { getBasicColumns, getFormConfig } from './tableData';
+import { getTreeList, deleteProduct } from '/@/api/sys/table';
 import { useProductStore } from '/@/store/modules/product';
 
 const canResize = ref(false);
@@ -61,13 +60,8 @@ function toggleCanResize() {
 function handleColumnChange(data: ColumnChangeParam[]) {
   // console.log('ColumnChanged', data);
 }
-function btnClick() {
-  // console.log('btnClick');
-}
+
 let columns = getBasicColumns();
-columns[1].editEvnets = {
-  input: btnClick
-};
 
 // const checkedKeys = ref<Array<string | number>>([]);
 
@@ -94,7 +88,6 @@ let beforeFetch = (params) => {
 function selectableFun(row, index) {
   return true;
 }
-function initSelectRows(key) {}
 
 function handelDelete(row, column) {
   deleteProduct({ ids: row.id, deleteStatus: 1 }).then((res) => {
@@ -103,5 +96,5 @@ function handelDelete(row, column) {
     }
   });
 }
-let data = getBasicData();
+let data = [];
 </script>

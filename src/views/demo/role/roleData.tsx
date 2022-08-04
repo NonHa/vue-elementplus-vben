@@ -1,10 +1,8 @@
 import { FormProps, FormSchema } from '/@/components/Form/src/types/form';
 import { BasicColumn } from '/@/components/Table/src/types/table';
-import RenderContent from '/@/components/Table/src/components/baseColumnContent/renderContent';
-import { productCategoryList, brandList } from '/@/api/sys/table';
-import { ElPopconfirm, ElRadioGroup, ElRadio } from 'element-plus';
+
+import { ElRadioGroup, ElRadio } from 'element-plus';
 import { BasicUpload } from '/@/components/Upload';
-import { setBaseTableFormatter } from '/@/hooks/event/useTableFomatter';
 export function getBasicColumns(): BasicColumn[] {
   return [
     {
@@ -40,12 +38,12 @@ export function getBasicColumns(): BasicColumn[] {
       label: '操作',
       prop: 'operate',
       slot: true,
-      width: 200
+      width: 400
     }
   ];
 }
 
-export const getAdvanceSchema = () => {
+export const getAdvanceSchema = (): FormSchema[] => {
   return [
     {
       field: `keyword`,
@@ -58,7 +56,7 @@ export const getAdvanceSchema = () => {
     }
   ];
 };
-export const getEditUserSchema = [
+export const getEditUserSchema: FormSchema[] = [
   {
     field: `name`,
     label: `角色名称`,
@@ -107,12 +105,7 @@ export function getFormConfig(): Partial<FormProps> {
     schemas: [...getAdvanceSchema()]
   };
 }
-export function getReasonConfig(): Partial<FormProps> {
-  return {
-    labelWidth: 100,
-    schemas: [...getReasonSchema()]
-  };
-}
+
 export function getReturnApplyFormConfig(): Partial<FormProps> {
   return {
     labelWidth: 100,
@@ -223,7 +216,7 @@ export function getProductAttrFormConfig(): Partial<FormProps> {
     ]
   };
 }
-export const brandModalBrandSchemas = [
+export const brandModalBrandSchemas: FormSchema[] = [
   {
     field: `name`,
     label: `品牌名称`,
@@ -310,7 +303,7 @@ export const brandModalBrandSchemas = [
   }
 ];
 
-export const productAttributeFormSchemas = [
+export const productAttributeFormSchemas: FormSchema[] = [
   {
     field: `name`,
     label: `品牌名称`,
@@ -331,7 +324,7 @@ const colPropsCommon = {
 const itemPropsCommon = {
   labelWidth: '100px'
 };
-export const productCateFormSchemas = (list: any[] = [], CascaderList = []) => {
+export const productCateFormSchemas = (list: any[] = [], CascaderList = []): FormSchema[] => {
   return [
     {
       field: `name`,
@@ -391,7 +384,7 @@ export const productCateFormSchemas = (list: any[] = [], CascaderList = []) => {
 
       colProps: colPropsCommon,
       itemProps: {
-        lableWidth: '120px'
+        labelWidth: '120px'
       },
 
       render: (getValues, formModel) => {

@@ -1,10 +1,7 @@
 import { FormProps, FormSchema } from '/@/components/Form/src/types/form';
 import { BasicColumn } from '/@/components/Table/src/types/table';
-import RenderContent from '/@/components/Table/src/components/baseColumnContent/renderContent';
-import { productCategoryList, brandList } from '/@/api/sys/table';
-import { ElPopconfirm, ElRadioGroup, ElRadio } from 'element-plus';
+import { ElRadioGroup, ElRadio } from 'element-plus';
 import { BasicUpload } from '/@/components/Upload';
-import { setBaseTableFormatter } from '/@/hooks/event/useTableFomatter';
 export function getBasicColumns(): BasicColumn[] {
   return [
     {
@@ -28,8 +25,7 @@ export function getBasicColumns(): BasicColumn[] {
     },
     {
       label: '添加时间',
-      prop: 'createTime',
-      width: '160px'
+      prop: 'createTime'
     },
 
     {
@@ -45,7 +41,7 @@ export function getBasicColumns(): BasicColumn[] {
       label: '操作',
       prop: 'operate',
       slot: true,
-      width: 200
+      width: 250
     }
   ];
 }
@@ -93,7 +89,42 @@ export function getMenuColumns(): BasicColumn[] {
     }
   ];
 }
-export const getAdvanceSchema = () => {
+export function getResourceColumns(): BasicColumn[] {
+  return [
+    {
+      label: '编号',
+      prop: 'id',
+      fixed: 'left'
+    },
+    {
+      label: '资源名称',
+      prop: 'name',
+      width: 150
+    },
+    {
+      label: '资源路径',
+      prop: 'url',
+      width: 150
+    },
+    {
+      label: '描述',
+      prop: 'description'
+    },
+    {
+      label: '添加时间',
+      prop: 'createTime',
+      width: '160px'
+    },
+
+    {
+      label: '操作',
+      prop: 'operate',
+      slot: true,
+      width: 200
+    }
+  ];
+}
+export const getAdvanceSchema = (): FormSchema[] => {
   return [
     {
       field: `keyword`,
@@ -106,7 +137,7 @@ export const getAdvanceSchema = () => {
     }
   ];
 };
-export const getEditMenuSchema = (list) => {
+export const getEditMenuSchema = (list): FormSchema[] => {
   return [
     {
       field: `title`,
@@ -167,19 +198,52 @@ export const getEditMenuSchema = (list) => {
     }
   ];
 };
-
+export const getcategoryCateSchema = (list): FormSchema[] => {
+  return [
+    {
+      field: `name`,
+      label: `资源名称`,
+      component: 'ElInput',
+      colProps: {
+        xl: 24,
+        lg: 24
+      }
+    },
+    {
+      field: `url`,
+      label: `资源路径`,
+      component: 'ElInput',
+      colProps: {
+        xl: 24,
+        lg: 24
+      }
+    },
+    {
+      field: `categoryId`,
+      label: `资源分类`,
+      component: 'ElSelect',
+      colProps: colPropsCommon,
+      searchList: list.length > 0 ? list : []
+      // itemProps: itemPropsCommon
+    },
+    {
+      field: `description`,
+      label: `描述`,
+      component: 'ElInputTextArea',
+      colProps: {
+        xl: 24,
+        lg: 24
+      }
+    }
+  ];
+};
 export function getFormConfig(): Partial<FormProps> {
   return {
     labelWidth: 100,
     schemas: [...getAdvanceSchema()]
   };
 }
-export function getReasonConfig(): Partial<FormProps> {
-  return {
-    labelWidth: 100,
-    schemas: [...getReasonSchema()]
-  };
-}
+
 export function getReturnApplyFormConfig(): Partial<FormProps> {
   return {
     labelWidth: 100,
@@ -290,7 +354,7 @@ export function getProductAttrFormConfig(): Partial<FormProps> {
     ]
   };
 }
-export const brandModalBrandSchemas = [
+export const brandModalBrandSchemas: FormSchema[] = [
   {
     field: `name`,
     label: `品牌名称`,
@@ -377,7 +441,7 @@ export const brandModalBrandSchemas = [
   }
 ];
 
-export const productAttributeFormSchemas = [
+export const productAttributeFormSchemas: FormSchema[] = [
   {
     field: `name`,
     label: `品牌名称`,
@@ -398,7 +462,7 @@ const colPropsCommon = {
 const itemPropsCommon = {
   labelWidth: '100px'
 };
-export const productCateFormSchemas = (list: any[] = [], CascaderList = []) => {
+export const productCateFormSchemas = (list: any[] = [], CascaderList = []): FormSchema[] => {
   return [
     {
       field: `name`,
@@ -458,7 +522,7 @@ export const productCateFormSchemas = (list: any[] = [], CascaderList = []) => {
 
       colProps: colPropsCommon,
       itemProps: {
-        lableWidth: '120px'
+        labelWidth: '120px'
       },
 
       render: (getValues, formModel) => {
@@ -502,7 +566,7 @@ export const productCateFormSchemas = (list: any[] = [], CascaderList = []) => {
   ];
 };
 
-export const getEditUserSchema = [
+export const getEditUserSchema: FormSchema[] = [
   {
     field: `username`,
     label: `账号`,
@@ -533,7 +597,7 @@ export const getEditUserSchema = [
   {
     field: `password`,
     label: `密码`,
-    component: 'ElInput',
+    component: 'ElInputPassword',
     colProps: {
       xl: 8,
       lg: 12
@@ -542,7 +606,7 @@ export const getEditUserSchema = [
   {
     field: `note`,
     label: `备注`,
-    component: 'ElInput',
+    component: 'ElInputTextArea',
     colProps: {
       xl: 8,
       lg: 12
@@ -556,15 +620,17 @@ export const getEditUserSchema = [
       xl: 8,
       lg: 12
     },
-    searchList: [
-      {
-        label: '否',
-        value: 0
-      },
-      {
-        label: '是',
-        value: 1
-      }
-    ]
+    render: (getValues, formModel) => {
+      return (
+        <ElRadioGroup v-model={formModel.status}>
+          <ElRadio label={1} size="large">
+            是
+          </ElRadio>
+          <ElRadio label={0} size="large">
+            否
+          </ElRadio>
+        </ElRadioGroup>
+      );
+    }
   }
 ];

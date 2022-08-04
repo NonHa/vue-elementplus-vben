@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia';
 import { getBrandAll, getProductAttCateList, productCategoryList } from '/@/api/sys/table';
 import { companyAddress } from '/@/api/sys/base';
-
+import { roleList } from '/@/api/sys/user';
 interface ProductStore {
   brandList: [];
   productCategoryList: [];
   productAttributeList: [];
   companyAddressList: [];
+  roleList: [];
 }
 export const useProductStore = defineStore({
   id: 'app-product',
@@ -14,7 +15,8 @@ export const useProductStore = defineStore({
     brandList: [],
     productCategoryList: [],
     productAttributeList: [],
-    companyAddressList: []
+    companyAddressList: [],
+    roleList: []
   }),
   persist: {
     enabled: true,
@@ -38,6 +40,9 @@ export const useProductStore = defineStore({
     },
     getCompanyAddressList(): any[] {
       return this.companyAddressList;
+    },
+    getRoleList(): any[] {
+      return this.roleList;
     }
   },
   actions: {
@@ -60,11 +65,16 @@ export const useProductStore = defineStore({
       const productAttCate = await companyAddress();
       this.companyAddressList = productAttCate.data.list;
     },
+    async setRoleList() {
+      const { data } = await roleList({ page: 1, pageSize: 100 });
+      this.roleList = data.list;
+    },
     getAllList() {
       this.setBrandList();
       this.setProductCategoryList();
       this.setProductAttributeList();
       this.setCompanyAddressList();
+      this.setRoleList();
     }
   }
 });

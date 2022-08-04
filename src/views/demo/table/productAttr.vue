@@ -86,7 +86,6 @@ import { BasicModal } from '/@/components/Modal';
 
 import {
   getProductAttrCateColumns,
-  getBasicData,
   getProductAttrFormConfig,
   productAttributeFormSchemas
 } from './tableData';
@@ -154,7 +153,7 @@ function handelDelete(row) {
     });
   }
 }
-let data = getBasicData();
+let data = [];
 
 let sureEditForm = () => {
   if (unref(editMOdelRenderType) === 1) {

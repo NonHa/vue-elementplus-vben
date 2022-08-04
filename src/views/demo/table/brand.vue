@@ -71,12 +71,7 @@ import { ElPopconfirm, ElSwitch } from 'element-plus';
 import { BasicTable, useTable } from '/@/components/Table';
 import { BasicModal } from '/@/components/Modal';
 
-import {
-  getBrandColumns,
-  getBasicData,
-  getBrandFormConfig,
-  brandModalBrandSchemas
-} from './tableData';
+import { getBrandColumns, getBrandFormConfig, brandModalBrandSchemas } from './tableData';
 import { brandDelete, brandList, brandUpdate, brandAdd } from '/@/api/sys/table';
 import { BasicForm, useForm } from '/@/components/Form/index';
 
@@ -124,7 +119,7 @@ function handelDelete(row) {
     reload();
   });
 }
-let data = getBasicData();
+let data = [];
 
 let sureEditForm = async () => {
   if (unref(editRow).id) {

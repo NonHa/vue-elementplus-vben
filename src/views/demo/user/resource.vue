@@ -39,7 +39,7 @@
     <BasicForm
       @register="registerForm"
       :model="editRow"
-      :schemas="getEditUserSchema"
+      :schemas="formSchema"
       :showActionBtn="false"
     />
   </BasicModal>
@@ -48,8 +48,19 @@
 import { ref, reactive, watch, onMounted, unref } from 'vue';
 import { ElPopconfirm, ElSwitch } from 'element-plus';
 import { BasicTable, ColumnChangeParam, useTable } from '/@/components/Table';
-import { getBasicColumns, getFormConfig, getEditUserSchema } from './userData';
-import { getUserList, updateUser, register } from '/@/api/sys/user';
+import {
+  getResourceColumns,
+  getFormConfig,
+  getEditUserSchema,
+  getcategoryCateSchema
+} from './userData';
+import {
+  resourceList,
+  register,
+  resourceCategoryList,
+  updateResourceById,
+  addResource
+} from '/@/api/sys/user';
 import { BasicModal } from '/@/components/Modal';
 import { BasicForm, useForm } from '/@/components/Form/index';
 
@@ -62,7 +73,7 @@ const pagination = reactive({
   pageNum: 1
 });
 
-let api = getUserList;
+let api = resourceList;
 function toggleCanResize(row) {
   editRow.value = row && row.id ? row : { status: 1 };
   unref(modalRef).visibleRef = true;
@@ -76,13 +87,22 @@ const [registerForm, formActions] = useForm();
 function btnClick() {
   // console.log('btnClick');
 }
-let columns = getBasicColumns();
+let columns = getResourceColumns();
 columns[1].editEvnets = {
   input: btnClick
 };
 
-// const checkedKeys = ref<Array<string | number>>([]);
+let formSchema = ref([]);
 
+let { data: formData } = await resourceCategoryList({});
+formSchema.value = getcategoryCateSchema(
+  formData.list.map((v) => {
+    return {
+      label: v.name,
+      value: v.id
+    };
+  })
+);
 const [registerTable, { getForm, reload }] = useTable({
   api: api,
   columns,
@@ -109,7 +129,7 @@ async function switchChange(row) {
 let sureEditForm = async (type) => {
   if (unref(editRow).id) {
     let item = type ? { ...formActions.getFieldsValue(), id: unref(editRow).id } : unref(editRow);
-    await updateUser(item).then((res) => {
+    await updateResourceById(item).then((res) => {
       if (res) {
         unref(modalRef).visibleRef = false;
         reload();
@@ -117,7 +137,7 @@ let sureEditForm = async (type) => {
       }
     });
   } else {
-    register(formActions.getFieldsValue()).then((res) => {
+    addResource(formActions.getFieldsValue()).then((res) => {
       if (res) {
         unref(modalRef).visibleRef = false;
         reload();

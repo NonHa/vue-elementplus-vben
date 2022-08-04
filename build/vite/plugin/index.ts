@@ -39,7 +39,7 @@ export function createVitePlugin(viteEnv: ViteEnv, isBuild: boolean) {
     // OptimizationPersist(),
     // ElementPlus(),
     Components({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [ElementPlusResolver()]
     }),
     styleImport({
       libs: [
@@ -48,16 +48,16 @@ export function createVitePlugin(viteEnv: ViteEnv, isBuild: boolean) {
           esModule: true,
           resolveStyle: (name) => {
             return `element-plus/theme-chalk/${name}.css`;
-          },
-        },
-      ],
+          }
+        }
+      ]
     }),
-     VitePluginCertificate({
-      source: 'coding',
-    }),
+    VitePluginCertificate({
+      source: 'coding'
+    })
   ];
-    // vite-plugin-windicss
-    vitePlugins.push(windiCSS());
+  // vite-plugin-windicss
+  vitePlugins.push(windiCSS());
 
   vitePlugins.push(configSvgIconsPlugin(isBuild));
   // vitePlugins.push(purgeIcons());

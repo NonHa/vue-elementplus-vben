@@ -17,7 +17,8 @@
       <el-button type="danger" @click="toggleCanResize">新增</el-button>
     </template>
     <template #col-operate="{ row, column }">
-      <el-button size="small" type="primary" @click="toggleCanResize(row)">编辑</el-button>
+      <el-button size="small" type="primary" @click="toggleCanResize(row, 1)">分配角色</el-button>
+      <el-button size="small" type="primary" @click="toggleCanResize(row, 2)">编辑</el-button>
       <ElPopconfirm title="Are you sure to delete this?" @confirm="handelDelete(row, column)">
         <template #reference>
           <el-button size="small" type="danger">删除</el-button>
@@ -39,7 +40,7 @@
     <BasicForm
       @register="registerForm"
       :model="editRow"
-      :schemas="getEditUserSchema"
+      :schemas="formSchema"
       :showActionBtn="false"
     />
   </BasicModal>
@@ -49,21 +50,48 @@ import { ref, reactive, watch, onMounted, unref } from 'vue';
 import { ElPopconfirm, ElSwitch } from 'element-plus';
 import { BasicTable, ColumnChangeParam, useTable } from '/@/components/Table';
 import { getBasicColumns, getFormConfig, getEditUserSchema } from './userData';
-import { getUserList, updateUser, register } from '/@/api/sys/user';
+import { getUserList, updateUser, register, updateUserRole } from '/@/api/sys/user';
 import { BasicModal } from '/@/components/Modal';
 import { BasicForm, useForm } from '/@/components/Form/index';
+import { useProductStore } from '/@/store/modules/product';
+const { getRoleList } = useProductStore();
 
 const canResize = ref(false);
 const modalRef = ref(false);
 const editRow = ref({});
 const loading = ref(false);
+const clickType = ref(0);
+const formSchema = ref([]);
+formSchema.value = getEditUserSchema;
 const pagination = reactive({
   pageSize: 10,
   pageNum: 1
 });
 
 let api = getUserList;
-function toggleCanResize(row) {
+function toggleCanResize(row, type) {
+  clickType.value = type;
+  if (type === 1) {
+    formSchema.value = [
+      {
+        field: `roleIds`,
+        label: `上级分类`,
+        component: 'ElSelect',
+        itemProps: {
+          multiple: true
+        },
+        searchList: getRoleList.map((v) => {
+          return {
+            label: v.name,
+            value: v.id
+          };
+        })
+        // itemProps: itemPropsCommon
+      }
+    ];
+  } else {
+    formSchema.value = getEditUserSchema;
+  }
   editRow.value = row && row.id ? row : { status: 1 };
   unref(modalRef).visibleRef = true;
 }
@@ -97,9 +125,6 @@ const [registerTable, { getForm, reload }] = useTable({
   isTreeTable: true
 });
 
-function selectableFun(row, index) {
-  return true;
-}
 async function switchChange(row) {
   editRow.value = row;
   unref(editRow).status = unref(editRow).status === 0 ? 1 : 0;
@@ -107,6 +132,15 @@ async function switchChange(row) {
 }
 
 let sureEditForm = async (type) => {
+  if (unref(clickType) === 1) {
+    console.log('modalRef', formActions.getFieldsValue());
+
+    updateUserRole({ adminId: unref(editRow).id, ...formActions.getFieldsValue() }).then((res) => {
+      unref(modalRef).visibleRef = false;
+      reload();
+    });
+    return;
+  }
   if (unref(editRow).id) {
     let item = type ? { ...formActions.getFieldsValue(), id: unref(editRow).id } : unref(editRow);
     await updateUser(item).then((res) => {

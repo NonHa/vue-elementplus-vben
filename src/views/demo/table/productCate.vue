@@ -88,7 +88,6 @@ import { BasicModal } from '/@/components/Modal';
 
 import {
   getProductCateColumns,
-  getBasicData,
   getProductAttrFormConfig,
   productCateFormSchemas
 } from './tableData';
@@ -101,6 +100,7 @@ import {
   getAttrList
 } from '/@/api/sys/table';
 import { BasicForm, useForm } from '/@/components/Form/index';
+import { FormProps, FormSchema } from '/@/components/Form/src/types/form';
 
 const canResize = ref(false);
 const loading = ref(false);
@@ -158,7 +158,7 @@ function handelDelete(row) {
 }
 
 let data = [];
-let productCateForm = ref([]);
+let productCateForm = ref<FormSchema[]>([]);
 const afterFetch = async (data) => {
   await getAttrList().then((res) => {
     let { data: list } = res;

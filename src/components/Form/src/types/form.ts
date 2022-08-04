@@ -131,9 +131,14 @@ export interface FormProps {
   transformDateFunc?: (date: any) => string;
   colon?: boolean;
 }
+type searchItem = {
+  value: Number | String;
+  label: Number | String;
+  children: searchItem[];
+};
 export interface FormSchema {
   // Field name
-  field: string;
+  field?: string;
   // Event name triggered by internal value change, default change
   changeEvent?: string;
   // Variable name bound to v-model Default value
@@ -154,7 +159,7 @@ export interface FormSchema {
   // Disable the adjustment of labelWidth with global settings of formModel, and manually set labelCol and wrapperCol by yourself
   disabledLabelWidth?: boolean;
   // render component
-  component: ComponentType | string;
+  component?: ComponentType;
   // Component parameters
   componentProps?:
     | ((opt: {
@@ -192,7 +197,7 @@ export interface FormSchema {
   show?: boolean | ((renderCallbackParams: RenderCallbackParams) => boolean);
 
   // Render the content in the form-item tag
-  render?: (renderCallbackParams: RenderCallbackParams) => VNode | VNode[] | string;
+  render?: (renderCallbackParams: RenderCallbackParams, model?: object) => VNode | VNode[] | string;
 
   // Rendering col content requires outer wrapper form-item
   renderColContent?: (renderCallbackParams: RenderCallbackParams) => VNode | VNode[] | string;
@@ -212,7 +217,7 @@ export interface FormSchema {
   dynamicDisabled?: boolean | ((renderCallbackParams: RenderCallbackParams) => boolean);
 
   dynamicRules?: (renderCallbackParams: RenderCallbackParams) => Rule[];
-  searchList?: any[];
+  searchList?: searchItem[];
 }
 export interface HelpComponentProps {
   maxWidth: string;

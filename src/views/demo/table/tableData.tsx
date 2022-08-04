@@ -1,8 +1,7 @@
 import { FormProps, FormSchema } from '/@/components/Form/src/types/form';
 import { BasicColumn } from '/@/components/Table/src/types/table';
-import RenderContent from '/@/components/Table/src/components/baseColumnContent/renderContent';
-import { productCategoryList, brandList } from '/@/api/sys/table';
-import { ElPopconfirm, ElRadioGroup, ElRadio } from 'element-plus';
+
+import { ElRadioGroup, ElRadio } from 'element-plus';
 import { BasicUpload } from '/@/components/Upload';
 export function getBasicColumns(): BasicColumn[] {
   return [
@@ -239,7 +238,7 @@ export function getMergeHeaderColumns(): BasicColumn[] {
     }
   ];
 }
-export const getAdvanceSchema = (list, brands) => {
+export const getAdvanceSchema = (list, brands): FormSchema[] => {
   return [
     {
       field: `keyword`,
@@ -375,7 +374,7 @@ export function getProductAttrFormConfig(): Partial<FormProps> {
     ]
   };
 }
-export const brandModalBrandSchemas = [
+export const brandModalBrandSchemas: FormSchema[] = [
   {
     field: `name`,
     label: `品牌名称`,
@@ -462,7 +461,7 @@ export const brandModalBrandSchemas = [
   }
 ];
 
-export const productAttributeFormSchemas = [
+export const productAttributeFormSchemas: FormSchema[] = [
   {
     field: `name`,
     label: `品牌名称`,
@@ -483,7 +482,7 @@ const colPropsCommon = {
 const itemPropsCommon = {
   labelWidth: '100px'
 };
-export const productCateFormSchemas = (list: any[] = [], CascaderList = []) => {
+export const productCateFormSchemas = (list: any[] = [], CascaderList = []): FormSchema[] => {
   return [
     {
       field: `name`,
@@ -543,7 +542,7 @@ export const productCateFormSchemas = (list: any[] = [], CascaderList = []) => {
 
       colProps: colPropsCommon,
       itemProps: {
-        lableWidth: '120px'
+        labelWidth: '120px'
       },
 
       render: (getValues, formModel) => {
@@ -586,52 +585,3 @@ export const productCateFormSchemas = (list: any[] = [], CascaderList = []) => {
     }
   ];
 };
-export function getBasicData() {
-  const data: any = (() => {
-    const arr: any = [];
-    for (let index = 0; index < 40; index++) {
-      arr.push({
-        id: `${index}`,
-        name: 'John Brown',
-        age: `1${index}`,
-        no: `${index + 10}`,
-        address: 'New York No. 1 Lake ParkNew York No. 1 Lake Park',
-        beginTime: new Date().toLocaleString(),
-        endTime: new Date().toLocaleString()
-      });
-    }
-    return arr;
-  })();
-  return data;
-}
-
-export function getTreeTableData() {
-  const data: any = (() => {
-    const arr: any = [];
-    for (let index = 0; index < 40; index++) {
-      arr.push({
-        id: `${index}`,
-        name: 'John Brown',
-        age: `1${index}`,
-        no: `${index + 10}`,
-        address: 'New York No. 1 Lake ParkNew York No. 1 Lake Park',
-        beginTime: new Date().toLocaleString(),
-        endTime: new Date().toLocaleString(),
-        children: [
-          {
-            id: `l2-${index}`,
-            name: 'John Brown',
-            age: `1${index}`,
-            no: `${index + 10}`,
-            address: 'New York No. 1 Lake ParkNew York No. 1 Lake Park',
-            beginTime: new Date().toLocaleString(),
-            endTime: new Date().toLocaleString()
-          }
-        ]
-      });
-    }
-    return arr;
-  })();
-
-  return data;
-}
