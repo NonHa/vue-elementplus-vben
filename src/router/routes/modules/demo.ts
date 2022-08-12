@@ -18,7 +18,7 @@ const demo: AppRouteModule = {
   meta: {
     orderNo: 10,
     icon: 'ion:grid-outline',
-    title: 'Demo'
+    title: '商品'
   },
   children: [
     {

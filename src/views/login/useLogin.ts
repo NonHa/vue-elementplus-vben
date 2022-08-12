@@ -8,7 +8,7 @@ export enum LoginStateEnum {
   REGISTER,
   RESET_PASSWORD,
   MOBILE,
-  QR_CODE,
+  QR_CODE
 }
 
 type ValidationRule = {
@@ -47,7 +47,7 @@ type RuleObject = {
   pattern?: RegExp;
   required?: boolean;
   transform?: (value: any) => any;
-  type?: any; 
+  type?: any;
   whitespace?: boolean;
   /** Customize rule level `validateTrigger`. Must be subset of Field `validateTrigger` */
   validateTrigger?: string | string[];
@@ -117,7 +117,7 @@ export function useFormRules(formData?: Recordable) {
 
     const mobileRule = {
       sms: smsFormRule,
-      mobile: mobileFormRule,
+      mobile: mobileFormRule
     };
     switch (unref(currentState)) {
       // register form rules
@@ -126,17 +126,17 @@ export function useFormRules(formData?: Recordable) {
           account: accountFormRule,
           password: passwordFormRule,
           confirmPassword: [
-            { validator: validateConfirmPassword(formData?.password), trigger: 'change' },
+            { validator: validateConfirmPassword(formData?.password), trigger: 'change' }
           ],
           policy: [{ validator: validatePolicy, trigger: 'change' }],
-          ...mobileRule,
+          ...mobileRule
         };
 
       // reset password form rules
       case LoginStateEnum.RESET_PASSWORD:
         return {
           account: accountFormRule,
-          ...mobileRule,
+          ...mobileRule
         };
 
       // mobile form rules
@@ -147,7 +147,7 @@ export function useFormRules(formData?: Recordable) {
       default:
         return {
           account: accountFormRule,
-          password: passwordFormRule,
+          password: passwordFormRule
         };
     }
   });
@@ -159,7 +159,7 @@ function createRule(message: string) {
     {
       required: true,
       message,
-      trigger: 'change',
-    },
+      trigger: 'change'
+    }
   ];
 }

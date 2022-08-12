@@ -18,7 +18,7 @@ const dashboard: AppRouteModule = {
   meta: {
     orderNo: 10,
     icon: 'ion:grid-outline',
-    title: 'Dashboard',
+    title: 'Dashboard'
   },
   children: [
     {
@@ -27,18 +27,18 @@ const dashboard: AppRouteModule = {
       component: () => import('/@/views/dashboard/index.vue'),
       meta: {
         // affix: true,
-        title: 'Dashboard1',
-      },
+        title: 'Dashboard1'
+      }
     },
     {
       path: 'workbench',
       name: 'Dashboard2',
       component: () => import('../../../views/login/loginForm.vue'),
       meta: {
-        title: 'Dashboard3',
-      },
-    },
-  ],
+        title: 'Dashboard3'
+      }
+    }
+  ]
 };
 
 export default dashboard;

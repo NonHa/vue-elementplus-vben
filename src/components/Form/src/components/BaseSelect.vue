@@ -1,6 +1,6 @@
 <template>
   <ElSelect v-model="model[field]" placeholder=" " :disabled="disabled" @change="handleChange">
-    <ElOption v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+    <ElOption v-for="item in options" :key="item.field" :label="item.title" :value="item.field" />
   </ElSelect>
 </template>
 
@@ -11,8 +11,8 @@ import { ref } from 'vue';
 name: 'BaseSelect';
 const emit = defineEmits(['update:modelValue', 'select-change']);
 type set = {
-  value: number | string;
-  label: string;
+  field: number | string;
+  title: string;
 };
 let value = ref('');
 const props = defineProps({

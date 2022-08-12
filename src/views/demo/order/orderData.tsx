@@ -268,28 +268,28 @@ export const getAdvanceSchema = (): FormSchema[] => {
       },
       searchList: [
         {
-          label: '待付款',
-          value: 0
+          title: '待付款',
+          field: 0
         },
         {
-          label: '待发货',
-          value: 1
+          title: '待发货',
+          field: 1
         },
         {
-          label: '已发货',
-          value: 2
+          title: '已发货',
+          field: 2
         },
         {
-          label: '已完成',
-          value: 3
+          title: '已完成',
+          field: 3
         },
         {
-          label: '已关闭',
-          value: 4
+          title: '已关闭',
+          field: 4
         },
         {
-          label: '无效订单',
-          value: 5
+          title: '无效订单',
+          field: 5
         }
       ]
     },
@@ -303,12 +303,12 @@ export const getAdvanceSchema = (): FormSchema[] => {
       },
       searchList: [
         {
-          label: '秒杀订单',
-          value: 1
+          title: '秒杀订单',
+          field: 1
         },
         {
-          label: '正常订单',
-          value: 0
+          title: '正常订单',
+          field: 0
         }
       ]
     },
@@ -322,12 +322,12 @@ export const getAdvanceSchema = (): FormSchema[] => {
       },
       searchList: [
         {
-          label: 'PC订单',
-          value: 0
+          title: 'PC订单',
+          field: 0
         },
         {
-          label: 'app订单',
-          value: 1
+          title: 'app订单',
+          field: 1
         }
       ]
     },
@@ -357,12 +357,12 @@ export const getReasonSchema = (): FormSchema[] => {
       },
       searchList: [
         {
-          label: '否',
-          value: 0
+          title: '否',
+          field: 0
         },
         {
-          label: '是',
-          value: 1
+          title: '是',
+          field: 1
         }
       ]
     }
@@ -478,20 +478,20 @@ export function getReturnApplyFormConfig(): Partial<FormProps> {
         },
         searchList: [
           {
-            label: '待处理',
-            value: 0
+            title: '待处理',
+            field: 0
           },
           {
-            label: '退货中',
-            value: 1
+            title: '退货中',
+            field: 1
           },
           {
-            label: '已完成',
-            value: 2
+            title: '已完成',
+            field: 2
           },
           {
-            label: '已拒绝',
-            value: 3
+            title: '已拒绝',
+            field: 3
           }
         ]
       },

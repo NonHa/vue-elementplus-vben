@@ -270,12 +270,13 @@ export default defineComponent({
       };
 
       const compAttr: Recordable = {
+        type: typeCom,
         ...propsData,
         ...on,
         field,
         model: props.formModel,
-        clearable: true,
-        type: typeCom
+        clearable: true
+
         // ...bindValue,
       };
 
@@ -287,6 +288,7 @@ export default defineComponent({
         : {
             default: () => renderComponentContent
           };
+
       return (
         <>
           <Comp {...compAttr} v-model={props.formModel[field]}>
@@ -336,9 +338,7 @@ export default defineComponent({
             ? render(unref(getValues), props.formModel)
             : renderComponent();
         };
-        if (slot) {
-          console.log(' getContent();', getContent());
-        }
+
         const showSuffix = !!suffix;
         const getSuffix = isFunction(suffix) ? suffix(unref(getValues)) : suffix;
 

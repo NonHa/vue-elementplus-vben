@@ -132,9 +132,9 @@ export interface FormProps {
   colon?: boolean;
 }
 type searchItem = {
-  value: Number | String;
-  label: Number | String;
-  children: searchItem[];
+  title: Number | String;
+  field: Number | String;
+  children?: searchItem[];
 };
 export interface FormSchema {
   // Field name

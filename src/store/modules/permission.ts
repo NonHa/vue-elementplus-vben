@@ -19,6 +19,7 @@ import { getMenuListResultModel, RouteItem } from '/@/api/sys/model/menuModel';
 
 import { useUserStore } from './user';
 import { PageEnum } from '/@/enums/pageEnum';
+import type { menuItem } from './user';
 
 import { useAppStore } from '/@/store/modules/app';
 interface PermissionState {
@@ -97,14 +98,7 @@ export const usePermissionStore = defineStore({
       //   const { ignoreRoute } = meta || {};
       //   return !ignoreRoute;
       // };
-      const roleList = toRaw(userStore.getRoleList) || [];
 
-      const routeFilter = (route: AppRouteRecordRaw) => {
-        const { meta } = route;
-        const { roles } = meta || {};
-        if (!roles) return true;
-        return roleList.some((role) => roles.includes(role));
-      };
       /**
        * @description 根据设置的首页path，修正routes中的affix标记（固定首页）
        * */
@@ -135,26 +129,21 @@ export const usePermissionStore = defineStore({
         return;
       };
 
-      routes = filter(asyncRoutes, routeFilter);
-      routes = routes.filter(routeFilter);
+      routes = asyncRoutes;
 
       // Convert multi-level routing to level 2 routing
-      const { getSideBarMenuList } = useAppStore();
 
-      const menu = getSideBarMenuList;
+      const menu = toRaw(userStore.getMenu) || [];
 
       const menuNames: string[] = [];
 
-      const getMenuNames = function (menuItem: getMenuListResultModel) {
+      const getMenuNames = function (menuItem: menuItem[]) {
         menuItem.forEach((v) => {
-          menuNames.push(v.name as string);
-          v.children && getMenuNames(v.children);
+          menuNames.push(v.title as string);
         });
       };
       getMenuNames(menu);
 
-      // console.log('menu---', menu);
-      // let mapRoutes: AppRouteRecordRaw[] = [];
       const filterRouteBymenu = function (routes: AppRouteRecordRaw[]) {
         const routeItem: AppRouteRecordRaw[] = [];
 
@@ -162,11 +151,12 @@ export const usePermissionStore = defineStore({
           if (v.children) {
             v.children = filterRouteBymenu(v.children);
           }
-          routeItem.push(v);
-          // if (menuNames.includes(v.name)) routeItem.push(v);
+          const { title } = v.meta;
+          if (menuNames.includes(title)) routeItem.push(v);
         });
         return routeItem;
       };
+
       routes = filterRouteBymenu(routes);
       // console.log('mapRoutes', routes);
 

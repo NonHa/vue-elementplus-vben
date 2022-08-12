@@ -1,6 +1,5 @@
 <template>
   <BasicTable
-    titleHelpMessage="温馨提醒"
     :columns="columns"
     :dataSource="data"
     :canResize="canResize"
@@ -14,10 +13,10 @@
     @register="registerTable"
   >
     <template #form-advanceBefore>
-      <el-button type="danger" @click="toggleCanResize">新增</el-button>
+      <el-button type="danger" @click="toggleCanResize({})">新增</el-button>
     </template>
     <template #col-operate="{ row, column }">
-      <el-button size="small" type="primary" @click="toggleCanResize(row, 1)">分配角色</el-button>
+      <el-button size="small" type="primary" @click="toggleCanResize(row, 3)">查看</el-button>
       <el-button size="small" type="primary" @click="toggleCanResize(row, 2)">编辑</el-button>
       <ElPopconfirm title="Are you sure to delete this?" @confirm="handelDelete(row, column)">
         <template #reference>
@@ -25,76 +24,54 @@
         </template>
       </ElPopconfirm>
     </template>
-
-    <template #col-status="{ row, column }">
-      <ElSwitch
-        v-model="row.status"
-        class="ml-2"
-        :active-value="1"
-        :inactive-value="0"
-        :before-change="() => switchChange(row)"
-      />
-    </template>
   </BasicTable>
-  <BasicModal ref="modalRef" @ok="sureEditForm('edit')">
+  <BasicModal ref="modalRef" @ok="sureEditForm('edit')" :height="500">
+    <template v-if="clickType === 3">
+      <TimeQuantum ref="timeRef" :promotionRow="editRow" />
+    </template>
+
     <BasicForm
+      v-else
       @register="registerForm"
       :model="editRow"
       :schemas="formSchema"
       :showActionBtn="false"
     />
+    <template v-if="clickType === 3" #insertFooter>
+      <ElButton type="success" @click="sureClick">新增</ElButton>
+    </template>
   </BasicModal>
 </template>
 <script lang="ts" setup>
 import { ref, reactive, watch, onMounted, unref } from 'vue';
 import { ElPopconfirm, ElSwitch } from 'element-plus';
 import { BasicTable, ColumnChangeParam, useTable } from '/@/components/Table';
-import { getBasicColumns, getFormConfig, getEditUserSchema } from './userData';
-import { getUserList, updateUser, register, updateUserRole } from '/@/api/sys/user';
+import { getCoupColumns, getFormConfig, getEditCoupSchema } from './promotionData';
+import { couponList, updateCoupon, addCoupon, deletecCoupon } from '/@/api/sys/promotion';
 import { BasicModal } from '/@/components/Modal';
 import { BasicForm, useForm } from '/@/components/Form/index';
-import { useProductStore } from '/@/store/modules/product';
-import { FormProps, FormSchema } from '/@/components/Form/src/types/form';
-
-const { getRoleList } = useProductStore();
+import TimeQuantum from './timeQuantum.vue';
 
 const canResize = ref(false);
 const modalRef = ref(false);
+const timeRef = ref();
 const editRow = ref({});
 const loading = ref(false);
 const clickType = ref(0);
-const formSchema = ref<FormSchema[]>([]);
-formSchema.value = getEditUserSchema;
+const formSchema = ref([]);
+formSchema.value = getEditCoupSchema;
 const pagination = reactive({
   pageSize: 10,
   pageNum: 1
 });
 
-let api = getUserList;
+let api = couponList;
 function toggleCanResize(row, type) {
   clickType.value = type;
-  if (type === 1) {
-    formSchema.value = [
-      {
-        field: `roleIds`,
-        label: `上级分类`,
-        component: 'ElSelect',
-        itemProps: {
-          multiple: true
-        },
-        searchList: getRoleList.map((v) => {
-          return {
-            title: v.name,
-            field: v.id
-          };
-        })
-        // itemProps: itemPropsCommon
-      }
-    ];
-  } else {
-    formSchema.value = getEditUserSchema;
-  }
-  editRow.value = row && row.id ? row : { status: 1 };
+
+  editRow.value = row && row.id ? row : {};
+  console.log('editRow', editRow);
+
   unref(modalRef).visibleRef = true;
 }
 
@@ -106,12 +83,7 @@ const [registerForm, formActions] = useForm();
 function btnClick() {
   // console.log('btnClick');
 }
-let columns = getBasicColumns();
-columns[1].editEvnets = {
-  input: btnClick
-};
-
-// const checkedKeys = ref<Array<string | number>>([]);
+let columns = getCoupColumns();
 
 const [registerTable, { getForm, reload }] = useTable({
   api: api,
@@ -127,25 +99,11 @@ const [registerTable, { getForm, reload }] = useTable({
   isTreeTable: true
 });
 
-async function switchChange(row) {
-  editRow.value = row;
-  unref(editRow).status = unref(editRow).status === 0 ? 1 : 0;
-  return await sureEditForm();
-}
-
 let sureEditForm = async (type) => {
-  if (unref(clickType) === 1) {
-    console.log('modalRef', formActions.getFieldsValue());
-
-    updateUserRole({ adminId: unref(editRow).id, ...formActions.getFieldsValue() }).then((res) => {
-      unref(modalRef).visibleRef = false;
-      reload();
-    });
-    return;
-  }
   if (unref(editRow).id) {
     let item = type ? { ...formActions.getFieldsValue(), id: unref(editRow).id } : unref(editRow);
-    await updateUser(item).then((res) => {
+
+    await updateCoupon(item).then((res) => {
       if (res) {
         unref(modalRef).visibleRef = false;
         reload();
@@ -153,7 +111,9 @@ let sureEditForm = async (type) => {
       }
     });
   } else {
-    register(formActions.getFieldsValue()).then((res) => {
+    let item = formActions.getFieldsValue();
+
+    addCoupon(item).then((res) => {
       if (res) {
         unref(modalRef).visibleRef = false;
         reload();
@@ -164,9 +124,15 @@ let sureEditForm = async (type) => {
   return false;
 };
 function handelDelete(row, column) {
-  editRow.value = row;
-  unref(editRow).status = 0;
-  sureEditForm();
+  deletecCoupon({ id: row.id }).then((res) => {
+    if (res.code === 200) {
+      reload();
+    }
+  });
 }
+
+const sureClick = () => {
+  unref(timeRef).toggleCanResize({}, null);
+};
 let data = [];
 </script>

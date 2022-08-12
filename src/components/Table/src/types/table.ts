@@ -481,7 +481,7 @@ export interface BasicColumn extends ColumnProps {
   ifShow?: boolean | ((column: BasicColumn) => boolean);
   editEvnets?: Object;
   formatter?: Function;
-  mapList?: any[];
+  mapList?: { title: String; field: String | Number }[];
 }
 
 export type ColumnChangeParam = {

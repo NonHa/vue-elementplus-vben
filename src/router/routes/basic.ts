@@ -12,7 +12,7 @@ import {
   REDIRECT_NAME,
   LAYOUT,
   EXCEPTION_COMPONENT,
-  PAGE_NOT_FOUND_NAME,
+  PAGE_NOT_FOUND_NAME
 } from '/@/router/constant';
 
 // 404 on a page
@@ -23,7 +23,7 @@ export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
   meta: {
     title: 'ErrorPage',
     hideBreadcrumb: true,
-    hideMenu: true,
+    hideMenu: true
   },
   children: [
     {
@@ -33,10 +33,10 @@ export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
       meta: {
         title: 'ErrorPage',
         hideBreadcrumb: true,
-        hideMenu: true,
-      },
-    },
-  ],
+        hideMenu: true
+      }
+    }
+  ]
 };
 
 export const REDIRECT_ROUTE: AppRouteRecordRaw = {
@@ -46,7 +46,7 @@ export const REDIRECT_ROUTE: AppRouteRecordRaw = {
   meta: {
     title: REDIRECT_NAME,
     hideBreadcrumb: true,
-    hideMenu: true,
+    hideMenu: true
   },
   children: [
     {
@@ -55,10 +55,10 @@ export const REDIRECT_ROUTE: AppRouteRecordRaw = {
       component: () => import('/@/layouts/default/index.vue'),
       meta: {
         title: REDIRECT_NAME,
-        hideBreadcrumb: true,
-      },
-    },
-  ],
+        hideBreadcrumb: true
+      }
+    }
+  ]
 };
 
 export const ERROR_LOG_ROUTE: AppRouteRecordRaw = {
@@ -70,6 +70,7 @@ export const ERROR_LOG_ROUTE: AppRouteRecordRaw = {
     title: 'ErrorLog',
     hideBreadcrumb: true,
     hideChildrenInMenu: true,
+    hideMenu: true
   },
   children: [
     {
@@ -79,8 +80,8 @@ export const ERROR_LOG_ROUTE: AppRouteRecordRaw = {
       meta: {
         title: 'error',
         hideBreadcrumb: true,
-        currentActiveMenu: '/error-log',
-      },
-    },
-  ],
+        currentActiveMenu: '/error-log'
+      }
+    }
+  ]
 };

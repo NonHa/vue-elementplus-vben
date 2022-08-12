@@ -38,4 +38,9 @@ export interface GetUserInfoModel {
   avatar: string;
   // 介绍
   desc?: string;
+  data: {
+    username: String;
+    role?: String[];
+    menus: any[];
+  };
 }

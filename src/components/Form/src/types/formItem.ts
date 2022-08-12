@@ -67,4 +67,6 @@ export interface FormItem extends FormItemProps {
    * When to validate the value of children node
    */
   validateTrigger?: string | string[] | false;
+
+  multiple?: boolean;
 }

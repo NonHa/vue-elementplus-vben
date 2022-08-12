@@ -4,7 +4,7 @@ import { LAYOUT } from '/@/router/constant';
 
 const user: AppRouteModule = {
   path: '/user',
-  name: 'User',
+  name: '权限',
   component: LAYOUT,
   redirect: '/User/list',
   meta: {

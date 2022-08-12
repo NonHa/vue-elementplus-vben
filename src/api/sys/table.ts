@@ -5,6 +5,7 @@ enum Api {
   getAuthCode = '/sso/getAuthCode',
   verifyAuthCode = '/sso/verifyAuthCode',
   treeList = '/product/list',
+  simpleList = '/product/simpleList',
   productCategoryList = '/productCategory/list/withChildren',
   getproductCategoryList = '/productCategory/list',
   deleteproductCategoryById = '/productCategory/delete',
@@ -34,7 +35,9 @@ export function getMenuList(params) {
 export function getTreeList(params) {
   return defHttp.post({ url: Api.treeList, params }, { errorMessageMode: 'none' });
 }
-
+export function simpleList(params) {
+  return defHttp.get({ url: Api.simpleList, params }, { errorMessageMode: 'none' });
+}
 export function getAuthCode(params) {
   return defHttp.get({ url: Api.getAuthCode, params }, { errorMessageMode: 'none' });
 }

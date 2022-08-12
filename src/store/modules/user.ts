@@ -16,12 +16,18 @@ import { RouteRecordRaw } from 'vue-router';
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { isArray } from '/@/utils/is';
 import { h } from 'vue';
+
+export type menuItem = {
+  id?: String;
+  title: String;
+};
 interface UserState {
   userInfo: Nullable<UserInfo>;
   token?: string;
   roleList: RoleEnum[];
   sessionTimeout?: boolean;
   lastUpdateTime: number;
+  menus: menuItem[];
 }
 
 export const useUserStore = defineStore({
@@ -36,7 +42,8 @@ export const useUserStore = defineStore({
     // Whether the login expired
     sessionTimeout: false,
     // Last fetch time
-    lastUpdateTime: 0
+    lastUpdateTime: 0,
+    menus: []
   }),
   persist: {
     enabled: true
@@ -56,6 +63,9 @@ export const useUserStore = defineStore({
     },
     getLastUpdateTime(): number {
       return this.lastUpdateTime;
+    },
+    getMenu(): menuItem[] {
+      return this.menus;
     }
   },
   actions: {
@@ -74,6 +84,9 @@ export const useUserStore = defineStore({
     },
     setSessionTimeout(flag: boolean) {
       this.sessionTimeout = flag;
+    },
+    setMenu(menus: menuItem[]) {
+      this.menus = menus;
     },
     resetState() {
       this.userInfo = null;
@@ -98,8 +111,7 @@ export const useUserStore = defineStore({
 
         // save token
         this.setToken(`${tokenHead} ${token}`);
-        const { getMenuList } = useAppStore();
-        await getMenuList();
+
         return this.afterLoginAction(goHome);
       } catch (error) {
         return Promise.reject(error);
@@ -117,8 +129,6 @@ export const useUserStore = defineStore({
       } else {
         const permissionStore = usePermissionStore();
 
-        // console.log('menu', menu);
-
         if (!permissionStore.isDynamicAddedRoute) {
           const routes = await permissionStore.buildRoutesAction();
           routes.forEach((route) => {
@@ -134,15 +144,16 @@ export const useUserStore = defineStore({
     async getUserInfoAction(): Promise<UserInfo | null> {
       if (!this.getToken) return null;
       const { data: userInfo } = await getUserInfo();
-      const { roles = [] } = userInfo;
-      if (isArray(roles)) {
-        const roleList = roles.map((item) => item.value) as RoleEnum[];
-        this.setRoleList(roleList);
-      } else {
-        userInfo.roles = [];
-        this.setRoleList([]);
-      }
-      this.setUserInfo(userInfo);
+      const { roles = [], menus } = userInfo;
+      // if (isArray(roles)) {
+      //   const roleList = roles.map((item) => item.value) as RoleEnum[];
+      //   this.setRoleList(roleList);
+      // } else {
+      //   userInfo.roles = [];
+      //   this.setRoleList([]);
+      // }
+      // this.setUserInfo(userInfo);
+      this.setMenu(menus);
       return userInfo;
     },
     /**

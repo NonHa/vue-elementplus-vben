@@ -266,14 +266,20 @@ export const getAdvanceSchema = (list, brands): FormSchema[] => {
         xl: 8,
         lg: 12
       },
+      componentProps: {
+        props: {
+          value: 'field',
+          label: 'title'
+        }
+      },
       searchList: list.map((v) => {
         return {
-          value: v.id,
-          label: v.name,
+          field: v.id,
+          title: v.name,
           children: v.children.map((k) => {
             return {
-              value: k.id,
-              label: k.name
+              field: k.id,
+              title: k.name
             };
           })
         };
@@ -289,8 +295,8 @@ export const getAdvanceSchema = (list, brands): FormSchema[] => {
       },
       searchList: brands.map((v) => {
         return {
-          label: v.name,
-          value: v.id
+          title: v.name,
+          field: v.id
         };
       })
     },
@@ -304,12 +310,12 @@ export const getAdvanceSchema = (list, brands): FormSchema[] => {
       },
       searchList: [
         {
-          label: '上架',
-          value: 1
+          title: '上架',
+          field: 1
         },
         {
-          label: '下架',
-          value: 0
+          title: '下架',
+          field: 0
         }
       ]
     },
@@ -323,12 +329,12 @@ export const getAdvanceSchema = (list, brands): FormSchema[] => {
       },
       searchList: [
         {
-          label: '审核通过',
-          value: 1
+          title: '审核通过',
+          field: 1
         },
         {
-          label: '未审核',
-          value: 0
+          title: '未审核',
+          field: 0
         }
       ]
     }
