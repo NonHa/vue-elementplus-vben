@@ -1,4 +1,5 @@
 import { FormProps, FormSchema } from '/@/components/Form/src/types/form';
+import type { searchItem } from '/@/components/Form/src/types/form';
 import { BasicColumn } from '/@/components/Table/src/types/table';
 
 import { ElRadioGroup, ElRadio } from 'element-plus';
@@ -488,7 +489,10 @@ const colPropsCommon = {
 const itemPropsCommon = {
   labelWidth: '100px'
 };
-export const productCateFormSchemas = (list: any[] = [], CascaderList = []): FormSchema[] => {
+export const productCateFormSchemas = (
+  list: searchItem[] = [],
+  CascaderList: searchItem[] = []
+): FormSchema[] => {
   return [
     {
       field: `name`,
@@ -570,7 +574,12 @@ export const productCateFormSchemas = (list: any[] = [], CascaderList = []): For
       component: 'ElCascader',
       colProps: colPropsCommon,
       itemProps: itemPropsCommon,
-
+      componentProps: {
+        props: {
+          value: 'field',
+          label: 'title'
+        }
+      },
       searchList: CascaderList.length > 0 ? CascaderList : []
     },
     {

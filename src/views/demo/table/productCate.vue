@@ -21,8 +21,8 @@
       <el-button type="danger" @click="editBrand">新增</el-button>
     </template>
 
-    <template #col-set="{ row, column }">
-      <el-button size="small" @click="getProductAttrList(row, 0)">查看下级</el-button>
+    <template #col-set="{ row }">
+      <el-button size="small" @click="getProductAttrList(row)">查看下级</el-button>
     </template>
     <template #col-oprate="{ row, column }">
       <el-button size="small" type="primary" @click="editBrand(row)">编辑</el-button>
@@ -36,7 +36,7 @@
 
   <BasicModal ref="modalRef" @ok="sureEditForm(1)" :height="500">
     <BasicForm
-      v-if="editMOdelRenderType === 1"
+      v-if="editModelRenderType === 1"
       @register="registerForm"
       :model="editRow"
       :schemas="productCateForm"
@@ -44,7 +44,7 @@
     />
 
     <BasicTable
-      v-else-if="editMOdelRenderType === 2"
+      v-else-if="editModelRenderType === 2"
       title="基础示例"
       titleHelpMessage="温馨提醒"
       :columns="columns"
@@ -52,7 +52,6 @@
       :canResize="canResize"
       :loading="loading"
       showTableSetting
-      :pagination="pagination"
       useSearchForm
       height="300"
       @row-click="handleClick2"
@@ -81,7 +80,7 @@
   </BasicModal>
 </template>
 <script lang="ts" setup>
-import { defineComponent, ref, reactive, watch, onMounted, unref, isRef } from 'vue';
+import { ref, reactive, watch, onMounted, unref, isRef, computed } from 'vue';
 import { ElPopconfirm } from 'element-plus';
 import { BasicTable, useTable } from '/@/components/Table';
 import { BasicModal } from '/@/components/Modal';
@@ -95,12 +94,11 @@ import {
   deleteproductCategoryById,
   getproductCategoryList,
   createproductCategory,
-  productAttributeAdd,
   updateproductCategory,
   getAttrList
 } from '/@/api/sys/table';
 import { BasicForm, useForm } from '/@/components/Form/index';
-import { FormProps, FormSchema } from '/@/components/Form/src/types/form';
+import { FormSchema } from '/@/components/Form/src/types/form';
 
 const canResize = ref(false);
 const loading = ref(false);
@@ -113,7 +111,7 @@ const pagination = reactive({
 let api = getproductCategoryList;
 let modalRef = ref();
 let attrModalRef = ref();
-let editMOdelRenderType = ref(1);
+let editModelRenderType = ref(1);
 
 const editRow = ref<{
   id?: Number;
@@ -121,11 +119,12 @@ const editRow = ref<{
 
 const editAttrRow = ref<{
   id?: Number;
+  parentId?: Number;
 }>({});
 function editBrand(row, showChildrenModel) {
-  editRow.value = row;
   if (!showChildrenModel) {
-    editMOdelRenderType.value = 1;
+    editRow.value = row;
+    editModelRenderType.value = 1;
     unref(modalRef).visibleRef = true;
   } else {
     unref(attrModalRef).visibleRef = true;
@@ -151,9 +150,20 @@ const [registerTable, { getForm, reload }] = useTable({
   rowKey: 'key',
   isTreeTable: true
 });
+const reloadTable = computed(() => {
+  return unref(editModelRenderType) === 2 && unref(modalRef).visibleRef;
+});
+
+const reloadFun = () => {
+  if (reloadTable.value) {
+    getProductAttrList(unref(editRow));
+  } else {
+    reload();
+  }
+};
 function handelDelete(row) {
   deleteproductCategoryById(row.id).then((res) => {
-    reload();
+    reloadFun();
   });
 }
 
@@ -162,24 +172,25 @@ let productCateForm = ref<FormSchema[]>([]);
 const afterFetch = async (data) => {
   await getAttrList().then((res) => {
     let { data: list } = res;
+
     productCateForm.value = productCateFormSchemas(
       [
-        { value: 0, label: ' 无上级分类' },
+        { field: 0, title: ' 无上级分类' },
         ...data.map((v) => {
           return {
-            value: v.id,
-            label: v.name
+            field: v.id,
+            title: v.name
           };
         })
       ],
       list.list.map((v) => {
         return {
-          value: v.id,
-          label: v.name,
+          field: v.id,
+          title: v.name,
           children: v.productAttributeList.map((k) => {
             return {
-              value: k.id,
-              label: k.name
+              field: k.id,
+              title: k.name
             };
           })
         };
@@ -193,34 +204,31 @@ let sureEditForm = (level) => {
   const obj = level === 1 ? unref(editRow) : unref(editAttrRow);
   let model = level === 1 ? unref(modalRef) : unref(attrModalRef);
   data.productAttributeIdList = data.productAttributeIdList && [data.productAttributeIdList[1]];
-
-  // return;
   if (!obj.id) {
     createproductCategory({
       ...data
     }).then((res) => {
       if (res) {
         model.visibleRef = false;
-        reload();
+        reloadFun();
       }
     });
   } else {
     updateproductCategory({
       ...data,
-
       id: obj.id
     }).then((res) => {
       if (res) {
         model.visibleRef = false;
-        reload();
+        reloadFun();
       }
     });
   }
 };
-const attrType = ref(0);
+
 let productAttrDate = ref([]);
-let getProductAttrList = (row, type) => {
-  attrType.value = type;
+let getProductAttrList = (row) => {
+  editRow.value = row;
   unref(editAttrRow).parentId = row.id;
   getproductCategoryList({
     page: 1,
@@ -228,15 +236,15 @@ let getProductAttrList = (row, type) => {
     parentId: row.id
   }).then((res) => {
     if (res) {
-      editMOdelRenderType.value = 2;
-
-      productAttrDate.value = res.list;
+      editModelRenderType.value = 2;
+      productAttrDate.value = res.data.list;
       unref(modalRef).visibleRef = true;
     }
   });
 };
 
 const editProductAttr = (row) => {
+  editAttrRow.value = { parentId: unref(editRow).id };
   unref(attrModalRef).visibleRef = true;
 };
 

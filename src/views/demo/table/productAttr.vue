@@ -50,7 +50,6 @@
       :canResize="canResize"
       :loading="loading"
       showTableSetting
-      :pagination="pagination"
       useSearchForm
       height="300"
     >

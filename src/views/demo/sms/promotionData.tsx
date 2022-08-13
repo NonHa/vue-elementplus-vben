@@ -4,6 +4,13 @@ import { ElRadioGroup, ElRadio, ElDatePicker } from 'element-plus';
 import { BasicUpload } from '/@/components/Upload';
 import { setBaseTableFormatter } from '/@/hooks/event/useTableFomatter';
 import CoupEidtType from './coupEidtType.vue';
+import { unref } from 'vue';
+
+const colPropsCommon = {
+  lg: 24,
+  xl: 24
+};
+
 export function getBasicColumns(): BasicColumn[] {
   return [
     {
@@ -45,7 +52,6 @@ export function getBasicColumns(): BasicColumn[] {
   ];
 }
 export function getTimeColumns(show): BasicColumn[] {
-  console.log('show', show);
   const showItem = show
     ? {
         label: '商品数量',
@@ -285,6 +291,116 @@ export function getResourceColumns(): BasicColumn[] {
     }
   ];
 }
+
+export function getHomeBrandColumns(): BasicColumn[] {
+  return [
+    {
+      label: '编号',
+      prop: 'id',
+      fixed: 'left',
+      width: 200
+    },
+    {
+      label: '品牌名称',
+      prop: 'brandName',
+      width: 150
+    },
+
+    {
+      label: '是否推荐',
+      prop: 'recommendStatus',
+      slot: true
+    },
+
+    {
+      label: '排序',
+      prop: 'sort'
+    },
+    {
+      label: '状态',
+      prop: 'status',
+      formatter: (row) => {
+        return unref(row)?.recommendStatus === 1 ? '已推荐' : '未推荐';
+      },
+      width: 200
+    },
+    {
+      label: '操作',
+      prop: 'oprate',
+      width: '160px',
+      slot: true
+    }
+  ];
+}
+export function getHomeProductColumns(): BasicColumn[] {
+  return [
+    {
+      label: '编号',
+      prop: 'id',
+      fixed: 'left',
+      width: 200
+    },
+    {
+      label: '品牌名称',
+      prop: 'productName',
+      width: 150
+    },
+
+    {
+      label: '是否推荐',
+      prop: 'recommendStatus',
+      slot: true
+    },
+
+    {
+      label: '排序',
+      prop: 'sort'
+    },
+    {
+      label: '状态',
+      prop: 'status',
+      formatter: (row) => {
+        return unref(row)?.recommendStatus === 1 ? '已推荐' : '未推荐';
+      },
+      width: 200
+    },
+    {
+      label: '操作',
+      prop: 'oprate',
+      width: '160px',
+      slot: true
+    }
+  ];
+}
+export const getBrandColumns: BasicColumn[] = [
+  {
+    label: '品牌名称',
+    prop: 'name',
+    width: 150
+  },
+
+  {
+    label: '相关',
+    prop: 'productCommentCount'
+  }
+];
+
+export const getProductColumns: BasicColumn[] = [
+  {
+    label: '品牌名称',
+    prop: 'name',
+    width: 150
+  },
+
+  {
+    label: '货号',
+    prop: 'productSn'
+  },
+  {
+    label: '价格',
+    prop: 'price'
+  }
+];
 export const getAdvanceSchema = (): FormSchema[] => {
   return [
     {
@@ -408,6 +524,36 @@ export const getcategoryCateSchema = (list): FormSchema[] => {
     }
   ];
 };
+
+export const getBrandSchema: FormSchema[] = [
+  {
+    field: `brandName`,
+    label: `资源名称`,
+    component: 'ElInput',
+    colProps: {
+      xl: 24,
+      lg: 24
+    }
+  },
+
+  {
+    field: `recommendStatus`,
+    label: `资源分类`,
+    component: 'ElSelect',
+    colProps: colPropsCommon,
+    searchList: [
+      {
+        field: 1,
+        title: '已推荐'
+      },
+      {
+        field: 0,
+        title: '未推荐'
+      }
+    ]
+    // itemProps: itemPropsCommon
+  }
+];
 export function getFormConfig(): Partial<FormProps> {
   return {
     labelWidth: 100,
@@ -640,11 +786,6 @@ export const productAttributeFormSchemas: FormSchema[] = [
   }
 ];
 
-const colPropsCommon = {
-  lg: 24,
-  xl: 24
-};
-
 const itemPropsCommon = {
   labelWidth: '100px'
 };
@@ -804,6 +945,14 @@ export const getEditUserSchema: FormSchema[] = [
         </ElRadioGroup>
       );
     }
+  }
+];
+export const getEditHomeBrandSchema: FormSchema[] = [
+  {
+    field: `sort`,
+    label: `排序`,
+    component: 'ElInput',
+    colProps: colPropsCommon
   }
 ];
 const plates = [

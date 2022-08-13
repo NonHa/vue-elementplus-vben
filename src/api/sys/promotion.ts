@@ -14,7 +14,17 @@ enum Api {
   couponList = '/coupon/list',
   addCoupon = '/coupon/add',
   updateCoupon = '/coupon/update',
-  deletecCoupon = '/coupon/delete'
+  deletecCoupon = '/coupon/delete',
+
+  getHomeBrandList = '/home/brand/list',
+  deleteHomeBrand = '/home/brand/delete',
+  updateHomeBrand = '/home/brand/update',
+  addHomeBrand = '/home/brand/add',
+
+  getNewproductList = '/home/newproduct/list',
+  deleteNewproduct = '/home/newproduct/delete',
+  updateNewproduct = '/home/newproduct/update',
+  addNewproduct = '/home/newproduct/add'
 }
 
 export type FlashProductRelation = {
@@ -80,4 +90,31 @@ export function addCoupon(params) {
 }
 export function deletecCoupon(params) {
   return defHttp.get({ url: Api.deletecCoupon, params }, { errorMessageMode: 'none' });
+}
+
+export function getHomeBrandList(params) {
+  return defHttp.post({ url: Api.getHomeBrandList, params }, { errorMessageMode: 'none' });
+}
+export function updateHomeBrand(params) {
+  return defHttp.post({ url: Api.updateHomeBrand, params }, { errorMessageMode: 'none' });
+}
+export function addHomeBrand(params) {
+  return defHttp.post({ url: Api.addHomeBrand, params }, { errorMessageMode: 'none' });
+}
+export function deleteHomeBrand(params) {
+  return defHttp.get({ url: Api.deleteHomeBrand, params }, { errorMessageMode: 'none' });
+}
+
+// 推荐新品
+export function getNewproductList(params) {
+  return defHttp.post({ url: Api.getNewproductList, params }, { errorMessageMode: 'none' });
+}
+export function updateNewproduct(params) {
+  return defHttp.post({ url: Api.updateNewproduct, params }, { errorMessageMode: 'none' });
+}
+export function addNewproduct(params) {
+  return defHttp.post({ url: Api.addNewproduct, params }, { errorMessageMode: 'none' });
+}
+export function deleteNewproduct(params) {
+  return defHttp.get({ url: Api.deleteNewproduct, params }, { errorMessageMode: 'none' });
 }

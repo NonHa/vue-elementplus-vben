@@ -30,6 +30,24 @@ const sms: AppRouteModule = {
         // affix: true,
         title: '优惠券列表'
       }
+    },
+    {
+      path: 'brand',
+      name: 'Brand',
+      component: () => import('/@/views/demo/sms/brand.vue'),
+      meta: {
+        // affix: true,
+        title: '品牌推荐'
+      }
+    },
+    {
+      path: 'newProduct',
+      name: 'NewProduct',
+      component: () => import('/@/views/demo/sms/newProduct.vue'),
+      meta: {
+        // affix: true,
+        title: '新品推荐'
+      }
     }
   ]
 };

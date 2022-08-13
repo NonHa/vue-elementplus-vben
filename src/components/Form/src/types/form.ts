@@ -131,7 +131,7 @@ export interface FormProps {
   transformDateFunc?: (date: any) => string;
   colon?: boolean;
 }
-type searchItem = {
+export type searchItem = {
   title: Number | String;
   field: Number | String;
   children?: searchItem[];

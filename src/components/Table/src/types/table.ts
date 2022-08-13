@@ -480,7 +480,7 @@ export interface BasicColumn extends ColumnProps {
   // 业务控制是否显示
   ifShow?: boolean | ((column: BasicColumn) => boolean);
   editEvnets?: Object;
-  formatter?: Function;
+  formatter?: (row?: object, field?: String, column?: Object) => any;
   mapList?: { title: String; field: String | Number }[];
 }
 
