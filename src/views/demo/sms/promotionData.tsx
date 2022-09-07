@@ -372,6 +372,46 @@ export function getHomeProductColumns(): BasicColumn[] {
     }
   ];
 }
+export function getHomeSubjectColumns(): BasicColumn[] {
+  return [
+    {
+      label: '编号',
+      prop: 'id',
+      fixed: 'left',
+      width: 200
+    },
+    {
+      label: '品牌名称',
+      prop: 'subjectName',
+      width: 150
+    },
+
+    {
+      label: '是否推荐',
+      prop: 'recommendStatus',
+      slot: true
+    },
+
+    {
+      label: '排序',
+      prop: 'sort'
+    },
+    {
+      label: '状态',
+      prop: 'status',
+      formatter: (row) => {
+        return unref(row)?.recommendStatus === 1 ? '已推荐' : '未推荐';
+      },
+      width: 200
+    },
+    {
+      label: '操作',
+      prop: 'oprate',
+      width: '160px',
+      slot: true
+    }
+  ];
+}
 export const getBrandColumns: BasicColumn[] = [
   {
     label: '品牌名称',
@@ -399,6 +439,23 @@ export const getProductColumns: BasicColumn[] = [
   {
     label: '价格',
     prop: 'price'
+  }
+];
+
+export const getSubjectColumns: BasicColumn[] = [
+  {
+    label: '专题名称',
+    prop: 'title',
+    width: 150
+  },
+
+  {
+    label: '所属分类',
+    prop: 'categoryName'
+  },
+  {
+    label: '添加事件',
+    prop: 'createTime'
   }
 ];
 export const getAdvanceSchema = (): FormSchema[] => {
@@ -528,6 +585,36 @@ export const getcategoryCateSchema = (list): FormSchema[] => {
 export const getBrandSchema: FormSchema[] = [
   {
     field: `brandName`,
+    label: `资源名称`,
+    component: 'ElInput',
+    colProps: {
+      xl: 24,
+      lg: 24
+    }
+  },
+
+  {
+    field: `recommendStatus`,
+    label: `资源分类`,
+    component: 'ElSelect',
+    colProps: colPropsCommon,
+    searchList: [
+      {
+        field: 1,
+        title: '已推荐'
+      },
+      {
+        field: 0,
+        title: '未推荐'
+      }
+    ]
+    // itemProps: itemPropsCommon
+  }
+];
+
+export const getProductSchema: FormSchema[] = [
+  {
+    field: `productName`,
     label: `资源名称`,
     component: 'ElInput',
     colProps: {

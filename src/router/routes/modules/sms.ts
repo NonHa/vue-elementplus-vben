@@ -33,7 +33,7 @@ const sms: AppRouteModule = {
     },
     {
       path: 'brand',
-      name: 'Brand',
+      name: 'RecommendBrand',
       component: () => import('/@/views/demo/sms/brand.vue'),
       meta: {
         // affix: true,
@@ -47,6 +47,24 @@ const sms: AppRouteModule = {
       meta: {
         // affix: true,
         title: '新品推荐'
+      }
+    },
+    {
+      path: 'hot',
+      name: 'Tot',
+      component: () => import('/@/views/demo/sms/hot.vue'),
+      meta: {
+        // affix: true,
+        title: '人气推荐'
+      }
+    },
+    {
+      path: 'subject',
+      name: 'Subject',
+      component: () => import('/@/views/demo/sms/subject.vue'),
+      meta: {
+        // affix: true,
+        title: '专题推荐'
       }
     }
   ]

@@ -24,7 +24,17 @@ enum Api {
   getNewproductList = '/home/newproduct/list',
   deleteNewproduct = '/home/newproduct/delete',
   updateNewproduct = '/home/newproduct/update',
-  addNewproduct = '/home/newproduct/add'
+  addNewproduct = '/home/newproduct/add',
+
+  getRecommendProductList = '/home/recommendProduct/list',
+  deleteRecommendProduct = '/home/recommendProduct/delete',
+  updateRecommendProduct = '/home/recommendProduct/update',
+  addRecommendProduct = '/home/recommendProduct/add',
+
+  getRecommendSubjectList = '/home/recommendSubject/list',
+  deleteRecommendSubject = '/home/recommendSubject/delete',
+  updateRecommendSubject = '/home/recommendSubject/update',
+  addRecommendSubject = '/home/recommendSubject/add'
 }
 
 export type FlashProductRelation = {
@@ -117,4 +127,32 @@ export function addNewproduct(params) {
 }
 export function deleteNewproduct(params) {
   return defHttp.get({ url: Api.deleteNewproduct, params }, { errorMessageMode: 'none' });
+}
+
+// 人气推荐
+export function getRecommendProductList(params) {
+  return defHttp.post({ url: Api.getRecommendProductList, params }, { errorMessageMode: 'none' });
+}
+export function updateRecommendProduct(params) {
+  return defHttp.post({ url: Api.updateRecommendProduct, params }, { errorMessageMode: 'none' });
+}
+export function addRecommendProduct(params) {
+  return defHttp.post({ url: Api.addRecommendProduct, params }, { errorMessageMode: 'none' });
+}
+export function deleteRecommendProduct(params) {
+  return defHttp.get({ url: Api.deleteRecommendProduct, params }, { errorMessageMode: 'none' });
+}
+
+// 专题推荐
+export function getRecommendSubjectList(params) {
+  return defHttp.post({ url: Api.getRecommendSubjectList, params }, { errorMessageMode: 'none' });
+}
+export function updateRecommendSubject(params) {
+  return defHttp.post({ url: Api.updateRecommendSubject, params }, { errorMessageMode: 'none' });
+}
+export function addRecommendSubject(params) {
+  return defHttp.post({ url: Api.addRecommendSubject, params }, { errorMessageMode: 'none' });
+}
+export function deleteRecommendSubject(params) {
+  return defHttp.get({ url: Api.deleteRecommendSubject, params }, { errorMessageMode: 'none' });
 }

@@ -27,7 +27,13 @@ enum Api {
 
   getProductAttList = '/productAttribute/list',
   productAttributeDelete = '/productAttribute/delete',
-  productAttributeAdd = '/productAttribute/create'
+  productAttributeAdd = '/productAttribute/create',
+
+  subjectList = '/subject/list'
+}
+
+export function subjectList(params) {
+  return defHttp.get({ url: Api.subjectList, params }, { errorMessageMode: 'none' });
 }
 export function getMenuList(params) {
   return defHttp.get({ url: Api.menuList, params }, { errorMessageMode: 'none' });

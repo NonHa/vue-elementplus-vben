@@ -1,10 +1,10 @@
 <template>
   <Recommend
     :baseApi="{
-      list: getNewproductList,
-      add: addNewproduct,
-      update: updateNewproduct,
-      delete: deleteNewproduct
+      list: getRecommendProductList,
+      add: addRecommendProduct,
+      update: updateRecommendProduct,
+      delete: deleteRecommendProduct
     }"
     :baseColumn="getHomeProductColumns"
     :addColumn="getProductColumns"
@@ -24,10 +24,10 @@ import {
   getProductSchema
 } from './promotionData';
 import {
-  getNewproductList,
-  addNewproduct,
-  updateNewproduct,
-  deleteNewproduct
+  getRecommendProductList,
+  addRecommendProduct,
+  updateRecommendProduct,
+  deleteRecommendProduct
 } from '/@/api/sys/promotion';
 import { getTreeList } from '/@/api/sys/table';
 

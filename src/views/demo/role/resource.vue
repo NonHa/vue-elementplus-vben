@@ -23,7 +23,7 @@
 <script lang="ts" setup>
 import { resourceCategoryTree } from '/@/api/sys/user';
 import { ref, unref, computed, watch, nextTick, onMounted, reactive } from 'vue';
-import { fa } from 'element-plus/es/locale';
+// import { fa } from 'element-plus/es/locale';
 const { data } = await resourceCategoryTree();
 
 const checkMainKeys = ref({});

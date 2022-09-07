@@ -65,6 +65,8 @@ function getConfFiles() {
  * @param confFiles ext
  */
 export function getEnvConfig(match = 'VITE_GLOB_', confFiles = getConfFiles()) {
+  console.log('confFiles', confFiles);
+
   let envConfig = {};
   confFiles.forEach((item) => {
     try {

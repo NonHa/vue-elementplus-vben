@@ -12,7 +12,7 @@
     @register="registerTable"
   >
     <template #form-advanceBefore>
-      <el-button type="danger" @click="toggleCanResize({}, 3)">选择商品</el-button>
+      <el-button type="danger" @click="toggleCanResize({}, 3)">{{ props.addTableText }}</el-button>
     </template>
     <template #col-oprate="{ row }">
       <el-button size="small" type="primary" @click="toggleCanResize(row, 1)">设置排序</el-button>
@@ -36,10 +36,10 @@
   <BasicModal ref="modalRef" @ok="sureEditForm('edit')">
     <template v-if="clickType === 3">
       <BasicTable
-        :columns="getProductColumns"
+        :columns="props.addColumn"
         showTableSetting
         :pagination="pagination2"
-        :api="getTreeList"
+        :api="props.addTableApi"
         :columnSelectInit="{
           selectable: () => true,
           initSelectRows: []
@@ -62,51 +62,62 @@
   </BasicModal>
 </template>
 <script lang="ts" setup>
-import { ref, reactive, watch, onMounted, unref, PropType } from 'vue';
+import { ref, reactive, unref, PropType } from 'vue';
 import { ElPopconfirm, ElSwitch } from 'element-plus';
 import { BasicTable, useTable } from '/@/components/Table';
-import {
-  getHomeProductColumns,
-  getBrandSchema,
-  getEditHomeBrandSchema,
-  getProductColumns
-} from './promotionData';
-import {
-  getNewproductList,
-  addNewproduct,
-  updateNewproduct,
-  deleteNewproduct
-} from '/@/api/sys/promotion';
-import { getTreeList } from '/@/api/sys/table';
 import { BasicModal } from '/@/components/Modal';
 import { BasicForm, useForm } from '/@/components/Form/index';
 
 const props = defineProps({
   addTableText: {
-    type: String
+    type: String,
+    required: true
   },
   addColumn: {
-    type: Array
+    type: Array,
+    required: true
   },
   addTableApi: {
-    type: Function
-  },
-  baseColumn: {
-    type: Array
+    type: Function as PropType<(...arg: any) => Promise<any>>,
+    required: true
   },
 
+  baseSchema: {
+    type: Array,
+    required: true
+  },
+  baseColumn: {
+    type: Function,
+    required: true
+  },
   baseApi: {
-    type: Object as PropType<{ list: Function; add: Function; update: Function; delete: Function }>
+    type: Object as PropType<{
+      list: (...arg: any) => Promise<any>;
+      add: (...arg: any) => Promise<any>;
+      update: (...arg: any) => Promise<any>;
+      delete: (...arg: any) => Promise<any>;
+    }>,
+    required: true
+  },
+  searchSchema: {
+    type: Array,
+    required: true
+  },
+  addRecommendListBeafore: {
+    type: Function,
+    required: true
   }
 });
+// eslint-disable-next-line vue/no-setup-props-destructure
+const { baseApi } = props;
 const canResize = ref(false);
 const modalRef = ref(false);
-const timeRef = ref();
+
 const editRow = ref({});
 const loading = ref(false);
 const clickType = ref(0);
 const formSchema = ref([]);
-formSchema.value = getEditHomeBrandSchema;
+formSchema.value = props.baseSchema;
 const pagination = reactive({
   pageSize: 10,
   pageNum: 1
@@ -115,7 +126,7 @@ const pagination2 = reactive({
   pageSize: 10,
   pageNum: 1
 });
-let api = getNewproductList;
+let api = baseApi?.list;
 function toggleCanResize(row, type) {
   clickType.value = type;
 
@@ -125,14 +136,14 @@ function toggleCanResize(row, type) {
 
 const [registerForm, formActions] = useForm();
 
-let columns = getHomeProductColumns();
+let columns = props.baseColumn();
 
 const [registerTable, { getForm, reload }] = useTable({
   api: api,
   columns,
   useSearchForm: true,
   formConfig: {
-    schemas: getBrandSchema
+    schemas: props.searchSchema
   },
   showTableSetting: true,
   tableSetting: { fullScreen: true },
@@ -156,16 +167,8 @@ async function switchChange(row) {
 
 let sureEditForm = async (type) => {
   if (unref(clickType) === 3) {
-    let list = getSelectRows().map((v) => {
-      return {
-        productId: v.id,
-        productName: v.name,
-        recommendStatus: 0,
-        sort: 0
-      };
-    });
-
-    addNewproduct(list).then((res) => {
+    let list = props.addRecommendListBeafore(getSelectRows());
+    baseApi?.add(list).then((res) => {
       if (res.code === 200) {
         unref(modalRef).visibleRef = false;
 
@@ -177,7 +180,7 @@ let sureEditForm = async (type) => {
   if (unref(editRow).id) {
     let item = type ? { ...formActions.getFieldsValue(), id: unref(editRow).id } : unref(editRow);
 
-    await updateNewproduct(item).then((res) => {
+    await baseApi?.update(item).then((res) => {
       if (res) {
         unref(modalRef).visibleRef = false;
         reload();
@@ -187,7 +190,7 @@ let sureEditForm = async (type) => {
   } else {
     let item = formActions.getFieldsValue();
 
-    addNewproduct(item).then((res) => {
+    baseApi?.add(item).then((res) => {
       if (res) {
         unref(modalRef).visibleRef = false;
         reload();
@@ -198,15 +201,12 @@ let sureEditForm = async (type) => {
   return false;
 };
 function handelDelete(row) {
-  deleteNewproduct({ id: row.id }).then((res) => {
+  baseApi?.delete({ id: row.id }).then((res) => {
     if (res.code === 200) {
       reload();
     }
   });
 }
 
-const sureClick = () => {
-  unref(timeRef).toggleCanResize({}, null);
-};
 let data = [];
 </script>

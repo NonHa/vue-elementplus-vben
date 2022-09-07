@@ -1,41 +1,41 @@
 <template>
   <Recommend
     :baseApi="{
-      list: getNewproductList,
-      add: addNewproduct,
-      update: updateNewproduct,
-      delete: deleteNewproduct
+      list: getRecommendSubjectList,
+      add: addRecommendSubject,
+      update: updateRecommendSubject,
+      delete: deleteRecommendSubject
     }"
-    :baseColumn="getHomeProductColumns"
-    :addColumn="getProductColumns"
-    :addTableApi="getTreeList"
+    :baseColumn="getHomeSubjectColumns"
+    :addColumn="getSubjectColumns"
+    :addTableApi="subjectList"
     :baseSchema="getEditHomeBrandSchema"
     :searchSchema="getProductSchema"
     :addRecommendListBeafore="addRecommendListBeafore"
-    addTableText="选择商品"
+    addTableText="选择专题"
   />
 </template>
 <script lang="ts" setup>
 import Recommend from './recommend.vue';
 import {
-  getHomeProductColumns,
+  getHomeSubjectColumns,
   getEditHomeBrandSchema,
-  getProductColumns,
+  getSubjectColumns,
   getProductSchema
 } from './promotionData';
 import {
-  getNewproductList,
-  addNewproduct,
-  updateNewproduct,
-  deleteNewproduct
+  getRecommendSubjectList,
+  addRecommendSubject,
+  updateRecommendSubject,
+  deleteRecommendSubject
 } from '/@/api/sys/promotion';
-import { getTreeList } from '/@/api/sys/table';
+import { subjectList } from '/@/api/sys/table';
 
 const addRecommendListBeafore = (list) => {
   return list.map((v) => {
     return {
-      productId: v.id,
-      productName: v.name,
+      subjectId: v.id,
+      subjectName: v.title,
       recommendStatus: 0,
       sort: 0
     };

@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
     "build:test": "cross-env vite build --mode test && esno ./build/script/postBuild.ts",
-    "preview": "vite preview"
+    "build": "cross-env  vite build  && esno ./build/script/postBuild.ts",
+    "preview": "npm run build && vite preview",
+    "preview:dist": "vite preview"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^0.2.6",

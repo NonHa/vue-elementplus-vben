@@ -74,8 +74,8 @@ export default ({ mode, command }: ConfigEnv): UserConfig => {
       chunkSizeWarningLimit: 2000
     },
     server: {
-      https: true,
       // Listening on all local IPs
+      https: false,
       host: true,
       port: VITE_PORT,
       // Load proxy configuration from .env
