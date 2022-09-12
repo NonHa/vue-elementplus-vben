@@ -12,6 +12,13 @@
     <ElContainer>
       <LayoutMultipleHeader></LayoutMultipleHeader>
       <!-- <el-main>Main</el-main> -->
+      <el-select-v2
+        style="margin-top: 150px"
+        v-model="value"
+        :options="options"
+        placeholder="Please select"
+        size="large"
+      />
     </ElContainer>
   </ElContainer>
 </template>
@@ -20,7 +27,15 @@
   import Aside from './aside/index.vue';
   // import Header from './header/index.vue';
   import LayoutMultipleHeader from './header/MultipleHeader.vue';
-  import { ElContainer } from 'element-plus';
+  import { ElContainer, ElSelectV2 } from 'element-plus';
+  import { ref } from 'vue';
+  const initials = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+
+  const value = ref('');
+  const options = Array.from({ length: 1000 }).map((_, idx) => ({
+    value: `Option ${idx + 1}`,
+    label: `${initials[idx % 10]}${idx}`,
+  }));
 </script>
 
 <style lang="less" scoped>
