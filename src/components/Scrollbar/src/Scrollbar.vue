@@ -103,6 +103,7 @@
         if (props.native) return;
         nextTick(update);
         if (!props.noresize) {
+          // 监听dom resize变化  动态计算滚动条数值
           addResizeListener(unref(resize), update);
           addResizeListener(unref(wrap), update);
           addEventListener('resize', update);

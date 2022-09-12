@@ -8,18 +8,18 @@
 -->
 <template>
   <span :class="`${prefixCls}__extra-redo`" @click="handleRedo">
-    <Paperclip :spin="loading" />
+    <RefreshRight :spin="loading" />
   </span>
 </template>
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
-  import { Paperclip } from '@element-plus/icons-vue';
+  import { RefreshRight } from '@element-plus/icons-vue';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useTabs } from '/@/hooks/web/useTabs';
 
   export default defineComponent({
     name: 'TabRedo',
-    components: { Paperclip },
+    components: { RefreshRight },
 
     setup() {
       const loading = ref(false);

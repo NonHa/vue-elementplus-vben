@@ -13,7 +13,7 @@ export function useTableScroll(
   tableElRef: Ref<ComponentRef>,
   columnsRef: ComputedRef<BasicColumn[]>,
   rowSelectionRef: ComputedRef<TableRowSelection | null>,
-  getDataSourceRef: ComputedRef<Recordable[]>,
+  getDataSourceRef: ComputedRef<Recordable[]>
 ) {
   const modalFn = useModalContext();
 
@@ -32,7 +32,7 @@ export function useTableScroll(
     },
     {
       flush: 'post',
-    },
+    }
   );
 
   function redoHeight() {
@@ -62,7 +62,7 @@ export function useTableScroll(
     if (!tableEl) return;
 
     if (!bodyEl) {
-      bodyEl = tableEl.querySelector('.ant-table-body');
+      bodyEl = tableEl.querySelector('.el-table__body-wrapper');
       if (!bodyEl) return;
     }
 
@@ -90,7 +90,7 @@ export function useTableScroll(
     await nextTick();
     // Add a delay to get the correct bottomIncludeBody paginationHeight footerHeight headerHeight
 
-    const headEl = tableEl.querySelector('.ant-table-thead ');
+    const headEl = tableEl.querySelector('.el-table__header ');
 
     if (!headEl) return;
 

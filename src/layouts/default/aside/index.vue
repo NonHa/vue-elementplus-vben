@@ -9,7 +9,7 @@
 <template>
   <ElDrawer
     v-if="getIsMobile"
-    :model-value="getIsMobile"
+    :model-value="!getCollapsed"
     direction="ltr"
     :modal-class="prefixCls"
     :show-close="false"
@@ -22,43 +22,43 @@
   <Sider v-else />
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 
-  import Sider from './LayoutSider.vue';
-  import MixSider from './MixSider.vue';
-  import { ElDrawer } from 'element-plus';
-  import { useAppInject } from '/@/hooks/web/useAppInject';
-  import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
-  import { useDesign } from '/@/hooks/web/useDesign';
-  export default defineComponent({
-    name: 'SiderWrapper',
-    components: { Sider, MixSider, ElDrawer },
-    setup() {
-      const { prefixCls } = useDesign('layout-sider-wrapper');
-      const { getIsMobile } = useAppInject();
-      const { setMenuSetting, getCollapsed, getMenuWidth, getIsMixSidebar } = useMenuSetting();
+import Sider from './LayoutSider.vue';
+import MixSider from './MixSider.vue';
+import { ElDrawer } from 'element-plus';
+import { useAppInject } from '/@/hooks/web/useAppInject';
+import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
+import { useDesign } from '/@/hooks/web/useDesign';
+export default defineComponent({
+  name: 'SiderWrapper',
+  components: { Sider, MixSider, ElDrawer },
+  setup() {
+    const { prefixCls } = useDesign('layout-sider-wrapper');
+    const { getIsMobile } = useAppInject();
+    const { setMenuSetting, getCollapsed, getMenuWidth, getIsMixSidebar } = useMenuSetting();
 
-      function handleClose() {
-        setMenuSetting({
-          collapsed: true,
-        });
-      }
+    function handleClose() {
+      setMenuSetting({
+        collapsed: true
+      });
+    }
 
-      return { prefixCls, getIsMobile, getCollapsed, handleClose, getMenuWidth, getIsMixSidebar };
-    },
-  });
+    return { prefixCls, getIsMobile, getCollapsed, handleClose, getMenuWidth, getIsMixSidebar };
+  }
+});
 </script>
 <style lang="less">
-  @prefix-cls: ~'@{namespace}-layout-sider-wrapper';
+@prefix-cls: ~'@{namespace}-layout-sider-wrapper';
 
-  .@{prefix-cls} {
-    // .ant-drawer-body {
-    //   height: 100vh;
-    //   padding: 0;
-    // }
+.@{prefix-cls} {
+  // .ant-drawer-body {
+  //   height: 100vh;
+  //   padding: 0;
+  // }
 
-    // .ant-drawer-header-no-title {
-    //   display: none;
-    // }
-  }
+  // .ant-drawer-header-no-title {
+  //   display: none;
+  // }
+}
 </style>

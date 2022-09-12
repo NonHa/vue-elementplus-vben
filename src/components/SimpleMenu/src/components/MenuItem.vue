@@ -1,5 +1,5 @@
 <template>
-  <li :class="getClass" @click.stop="handleClickItem" :style="getCollapse ? {} : getItemStyle">
+  <li :class="getClass" @click="handleClickItem" :style="getCollapse ? {} : getItemStyle">
     <ElTooltip placement="right" v-if="showTooptip">
       <template #title>
         <slot name="title"></slot>
@@ -69,7 +69,6 @@
         if (disabled) {
           return;
         }
-        console.log('props.name', props.name);
 
         rootMenuEmitter.emit('on-menu-item-select', props.name);
         if (unref(getCollapse)) {

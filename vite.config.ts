@@ -15,16 +15,16 @@ import { createVitePlugin } from './build/vite/plugin';
 import { wrapperEnv } from './build/utils';
 import { OUTPUT_DIR } from './build/constant';
 import { generateModifyVars } from './build/generate/generateModifyVars';
+import { createProxy } from './build/vite/proxy';
 
 function pathResolve(dir: string) {
   return resolve(process.cwd(), '.', dir);
 }
-console.log(pathResolve('src') + '/');
 const { dependencies, devDependencies, name, version } = pkg;
 
 const __APP_INFO__ = {
   pkg: { dependencies, devDependencies, name, version },
-  lastBuildTime: '2022/01/26',
+  lastBuildTime: '2022/01/26'
 };
 // https://vitejs.dev/config/
 export default ({ mode, command }: ConfigEnv): UserConfig => {
@@ -48,20 +48,20 @@ export default ({ mode, command }: ConfigEnv): UserConfig => {
       alias: [
         {
           find: /\/@\//,
-          replacement: pathResolve('src') + '/',
+          replacement: pathResolve('src') + '/'
         },
         // /#/xxxx => types/xxxx
         {
           find: /\/#\//,
-          replacement: pathResolve('types') + '/',
-        },
-      ],
+          replacement: pathResolve('types') + '/'
+        }
+      ]
     },
     build: {
       target: 'es2015',
       cssTarget: 'chrome86',
       outDir: OUTPUT_DIR,
-     
+
       // terserOptions: {
       //   compress: {
       //     keep_infinity: true,
@@ -71,36 +71,36 @@ export default ({ mode, command }: ConfigEnv): UserConfig => {
       // },
       // Turning off brotliSize display can slightly reduce packaging time
       brotliSize: false,
-      chunkSizeWarningLimit: 2000,
+      chunkSizeWarningLimit: 2000
     },
     server: {
-      https: true,
       // Listening on all local IPs
+      https: false,
       host: true,
       port: VITE_PORT,
       // Load proxy configuration from .env
-      // proxy: createProxy(VITE_PROXY),
+      proxy: createProxy(VITE_PROXY)
     },
     define: {
       // setting vue-i18-next
       // Suppress warning
       __INTLIFY_PROD_DEVTOOLS__: false,
-      __APP_INFO__: JSON.stringify(__APP_INFO__),
+      __APP_INFO__: JSON.stringify(__APP_INFO__)
     },
     css: {
       preprocessorOptions: {
         less: {
           modifyVars: generateModifyVars(),
-          javascriptEnabled: true,
-        },
-      },
+          javascriptEnabled: true
+        }
+      }
     },
     plugins: createVitePlugin(viteEnv, isBuild),
 
     optimizeDeps: {
       // @iconify/iconify: The dependency is dynamically and virtually loaded by @purge-icons/generated, so it needs to be specified explicitly
-      include: ['@vue/runtime-core', '@vue/shared', '@iconify/iconify'],
+      include: ['@vue/runtime-core', '@vue/shared', '@iconify/iconify']
       // entries: ['crypto-js','vue.js','pinia.js','vue-router.js']
-    },
+    }
   };
 };

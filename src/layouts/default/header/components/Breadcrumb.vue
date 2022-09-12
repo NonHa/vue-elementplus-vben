@@ -1,34 +1,34 @@
 <template>
   <div :class="[prefixCls, `${prefixCls}--${theme}`]">
     <ElBreadcrumb>
-      <template #default>
-        <ElBreadcrumbItem>
-          <template #default>
-            <ElDropdown>
-              <span class="ElDropdown-link">
-                Dropdown List<ElIcon class="el-icon--right"><ArrowDown /></ElIcon>
-              </span>
-              <template #dropdown>
-                <ElDropdownMenu>
-                  <ElDropdownItem>Action 1</ElDropdownItem>
-                  <ElDropdownItem> Action2 </ElDropdownItem>
-                </ElDropdownMenu>
-              </template>
-            </ElDropdown>
+      <ElBreadcrumbItem v-if="routes && routes[0] && routes[0].children">
+        <ElDropdown>
+          <span class="ElDropdown-link">
+            {{ routes[0].name }}<ElIcon class="el-icon--right"><ArrowDown /></ElIcon>
+          </span>
+          <template #dropdown>
+            <ElDropdownMenu>
+              <ElDropdownItem v-for="v in routes[0].children">
+                <RouterLink
+                  to=""
+                  @click="
+                    handleClick(
+                      v as any,
+                     v.path,
+                      $event
+                    )
+                  "
+                  >{{ v.name }}</RouterLink
+                >
+              </ElDropdownItem>
+            </ElDropdownMenu>
           </template>
-        </ElBreadcrumbItem>
-        <ElBreadcrumbItem>343</ElBreadcrumbItem>
-      </template>
-
-      <!-- <template #itemRender="{ route, routes: routesMatched, paths }">
-        <Icon :icon="getIcon(route)" v-if="getShowBreadCrumbIcon && getIcon(route)" />
-        <span v-if="!hasRedirect(routesMatched, route)">
-          {{ route.name || route.meta.title }}
-        </span>
-        <router-link v-else to="" @click="handleClick(route, paths, $event)">
-          {{ route.name || route.meta.title }}
-        </router-link>
-      </template> -->
+        </ElDropdown>
+      </ElBreadcrumbItem>
+      <ElBreadcrumbItem v-if="routes && routes.length === 1">
+        {{ routes[0].name }}
+      </ElBreadcrumbItem>
+      <ElBreadcrumbItem v-if="routes && routes.length > 1">{{ routes[1].name }}</ElBreadcrumbItem>
     </ElBreadcrumb>
   </div>
 </template>
@@ -52,6 +52,8 @@
 
   import { REDIRECT_NAME } from '/@/router/constant';
   import { getAllParentPath } from '/@/router/helper/menuHelper';
+  import { RouterLink } from 'vue-router';
+
   import {
     ElBreadcrumb,
     ElBreadcrumbItem,
@@ -72,6 +74,7 @@
       ElDropdownMenu,
       ElDropdownItem,
       ElIcon,
+      RouterLink,
     },
     props: {
       theme: propTypes.oneOf(['dark', 'light']),
@@ -84,7 +87,7 @@
       const go = useGo();
 
       watchEffect(async () => {
-        console.log('currentRoute', currentRoute.value);
+        // console.log('currentRoute', currentRoute.value);
 
         if (currentRoute.value.name === REDIRECT_NAME) return;
         const menus = await getMenus();
@@ -112,7 +115,7 @@
           } as unknown as RouteLocationMatched);
         }
         routes.value = breadcrumbList;
-        console.log('routes', routes.value);
+        // console.log('routes', routes.value);
       });
 
       function getMatched(menus: Menu[], parent: string[]) {
@@ -145,8 +148,9 @@
         }).filter((item) => !item.meta?.hideBreadcrumb);
       }
 
-      function handleClick(route: RouteLocationMatched, paths: string[], e: Event) {
+      function handleClick(route: RouteLocationMatched, path: string, e: Event) {
         e?.preventDefault();
+
         const { children, redirect, meta } = route;
 
         if (children?.length && !redirect) {
@@ -161,14 +165,15 @@
           go(redirect);
         } else {
           let goPath = '';
-          if (paths.length === 1) {
-            goPath = paths[0];
-          } else {
-            const ps = paths.slice(1);
-            const lastPath = ps.pop() || '';
-            goPath = `${lastPath}`;
-          }
-          goPath = /^\//.test(goPath) ? goPath : `/${goPath}`;
+          // if (paths.length === 1) {
+          //   goPath = paths[0];
+          // } else {
+          //   const ps = paths.slice(1);
+          //   const lastPath = ps.pop() || '';
+          //   goPath = `${lastPath}`;
+          // }
+          goPath = /^\//.test(path) ? path : `/${path}`;
+
           go(goPath);
         }
       }

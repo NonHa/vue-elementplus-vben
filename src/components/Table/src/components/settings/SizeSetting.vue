@@ -1,55 +1,55 @@
 <template>
-  <Tooltip placement="top">
+  <ElTooltip placement="top">
     <template #title>
-      <span>{{ t('component.table.settingDens') }}</span>
+      <span>{{ 'component.table.settingDens' }}</span>
     </template>
 
-    <Dropdown placement="bottomCenter" :trigger="['click']" :getPopupContainer="getPopupContainer">
-      <ColumnHeightOutlined />
+    <ElDropdown placement="bottom" :trigger="['click']" :getPopupContainer="getPopupContainer">
+      <Collection />
       <template #overlay>
-        <Menu @click="handleTitleClick" selectable v-model:selectedKeys="selectedKeysRef">
-          <MenuItem key="default">
-            <span>{{ t('component.table.settingDensDefault') }}</span>
-          </MenuItem>
-          <MenuItem key="middle">
-            <span>{{ t('component.table.settingDensMiddle') }}</span>
-          </MenuItem>
-          <MenuItem key="small">
-            <span>{{ t('component.table.settingDensSmall') }}</span>
-          </MenuItem>
-        </Menu>
+        <ElMenu @open="handleTitleClick" selectable v-model:selectedKeys="selectedKeysRef">
+          <ElMenuItem key="default">
+            <span>{{ 'component.table.settingDensDefault' }}</span>
+          </ElMenuItem>
+          <ElMenuItem key="middle">
+            <span>{{ 'component.table.settingDensMiddle' }}</span>
+          </ElMenuItem>
+          <ElMenuItem key="small">
+            <span>{{ 'component.table.settingDensSmall' }}</span>
+          </ElMenuItem>
+        </ElMenu>
       </template>
-    </Dropdown>
-  </Tooltip>
+    </ElDropdown>
+  </ElTooltip>
 </template>
 <script lang="ts">
   import type { SizeType } from '../../types/table';
   import { defineComponent, ref } from 'vue';
-  import { Tooltip, Dropdown, Menu } from 'ant-design-vue';
-  import { ColumnHeightOutlined } from '@ant-design/icons-vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  import { ElTooltip, ElDropdown, ElMenu, ElMenuItem } from 'element-plus';
+  import { Collection } from '@element-plus/icons-vue';
+  // import { useI18n } from '/@/hooks/web/useI18n';
   import { useTableContext } from '../../hooks/useTableContext';
   import { getPopupContainer } from '/@/utils';
 
   export default defineComponent({
     name: 'SizeSetting',
     components: {
-      ColumnHeightOutlined,
-      Tooltip,
-      Dropdown,
-      Menu,
-      MenuItem: Menu.Item,
+      Collection,
+      ElTooltip,
+      ElDropdown,
+      ElMenu,
+      ElMenuItem,
     },
     setup() {
       const table = useTableContext();
-      const { t } = useI18n();
+      // const { t } = useI18n();
 
       const selectedKeysRef = ref<SizeType[]>([table.getSize()]);
 
-      function handleTitleClick({ key }: { key: SizeType }) {
-        selectedKeysRef.value = [key];
+      function handleTitleClick(index: SizeType) {
+        selectedKeysRef.value = [index];
         table.setProps({
-          size: key,
+          size: index,
         });
       }
 
@@ -57,7 +57,7 @@
         handleTitleClick,
         selectedKeysRef,
         getPopupContainer,
-        t,
+        // t,
       };
     },
   });

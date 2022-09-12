@@ -7,10 +7,15 @@
  * @FilePath: \ym-Vue3\src\layouts\default\index.vue
 -->
 <template>
-  <ElContainer>
-    <Aside></Aside>
+  <ElContainer :class="prefixCls">
+    <LayoutHeader v-if="getShowFullHeaderRef" />
     <ElContainer>
-      <LayoutMultipleHeader></LayoutMultipleHeader>
+      <Aside v-if="getShowSidebar" />
+      <ElContainer :class="`${prefixCls}-main`">
+        <LayoutMultipleHeader />
+        <LayoutContent />
+      </ElContainer>
+
       <!-- <el-main>Main</el-main> -->
       <el-select-v2
         style="margin-top: 150px"
@@ -24,40 +29,53 @@
 </template>
 
 <script lang="ts" setup>
-  import Aside from './aside/index.vue';
-  // import Header from './header/index.vue';
-  import LayoutMultipleHeader from './header/MultipleHeader.vue';
-  import { ElContainer, ElSelectV2 } from 'element-plus';
-  import { ref } from 'vue';
-  const initials = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+import { unref, computed } from 'vue';
+import Aside from './aside/index.vue';
+// import Header from './header/index.vue';
+import LayoutMultipleHeader from './header/MultipleHeader.vue';
+import LayoutContent from './content/index.vue';
 
-  const value = ref('');
-  const options = Array.from({ length: 1000 }).map((_, idx) => ({
-    value: `Option ${idx + 1}`,
-    label: `${initials[idx % 10]}${idx}`,
-  }));
+import { ElContainer, ElMain } from 'element-plus';
+import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting';
+import LayoutHeader from './header/index.vue';
+import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
+// import { useAppInject } from '/@/hooks/web/useAppInject';
+import { useDesign } from '/@/hooks/web/useDesign';
+const { prefixCls } = useDesign('default-layout');
+
+const { getShowFullHeaderRef } = useHeaderSetting();
+console.log('getShowFullHeaderRef', getShowFullHeaderRef.value);
+
+// const { getIsMobile } = useAppInject();
+
+const { getShowSidebar, getIsMixSidebar, getShowMenu } = useMenuSetting();
+
+const layoutClass = computed(() => {
+  let cls: string[] = ['ant-layout'];
+  if (unref(getIsMixSidebar) || unref(getShowMenu)) {
+    cls.push('ant-layout-has-sider');
+  }
+  return cls;
+});
 </script>
+<style lang="less">
+@prefix-cls: ~'@{namespace}-default-layout';
 
-<style lang="less" scoped>
-  .el-header,
-  .el-footer {
-    background-color: #b3c0d1;
-    color: var(--el-text-color-primary);
-    text-align: center;
-    line-height: 60px;
+.@{prefix-cls} {
+  display: flex;
+  width: 100%;
+  min-height: 100%;
+  background-color: @content-bg;
+  flex-direction: column;
+
+  > .ant-layout {
+    min-height: 100%;
   }
 
-  .el-aside {
-    background-color: #d3dce6;
-    color: var(--el-text-color-primary);
-    text-align: center;
-    line-height: 200px;
+  &-main {
+    width: 100%;
+    margin-left: 1px;
+    flex-direction: column;
   }
-
-  .el-main {
-    background-color: #e9eef3;
-    color: var(--el-text-color-primary);
-    text-align: center;
-    line-height: 160px;
-  }
+}
 </style>

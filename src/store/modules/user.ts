@@ -2,6 +2,7 @@ import type { UserInfo } from '/#/store';
 import type { ErrorMessageMode } from '/#/axios';
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
+import { useAppStore } from '/@/store/modules/app';
 import { RoleEnum } from '/@/enums/roleEnum';
 import { PageEnum } from '/@/enums/pageEnum';
 import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
@@ -16,12 +17,17 @@ import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { isArray } from '/@/utils/is';
 import { h } from 'vue';
 
+export type menuItem = {
+  id?: String;
+  title: String;
+};
 interface UserState {
   userInfo: Nullable<UserInfo>;
   token?: string;
   roleList: RoleEnum[];
   sessionTimeout?: boolean;
   lastUpdateTime: number;
+  menus: menuItem[];
 }
 
 export const useUserStore = defineStore({
@@ -37,7 +43,11 @@ export const useUserStore = defineStore({
     sessionTimeout: false,
     // Last fetch time
     lastUpdateTime: 0,
+    menus: []
   }),
+  persist: {
+    enabled: true
+  },
   getters: {
     getUserInfo(): UserInfo {
       return this.userInfo || getAuthCache<UserInfo>(USER_INFO_KEY) || {};
@@ -54,6 +64,9 @@ export const useUserStore = defineStore({
     getLastUpdateTime(): number {
       return this.lastUpdateTime;
     },
+    getMenu(): menuItem[] {
+      return this.menus;
+    }
   },
   actions: {
     setToken(info: string | undefined) {
@@ -72,6 +85,9 @@ export const useUserStore = defineStore({
     setSessionTimeout(flag: boolean) {
       this.sessionTimeout = flag;
     },
+    setMenu(menus: menuItem[]) {
+      this.menus = menus;
+    },
     resetState() {
       this.userInfo = null;
       this.token = '';
@@ -89,11 +105,13 @@ export const useUserStore = defineStore({
     ): Promise<GetUserInfoModel | null> {
       try {
         const { goHome = true, mode, ...loginParams } = params;
-        const data = await loginApi(loginParams, mode);
-        const { token } = data;
+        const { data } = await loginApi(loginParams, mode);
+
+        const { token, tokenHead } = data;
 
         // save token
-        this.setToken(token);
+        this.setToken(`${tokenHead} ${token}`);
+
         return this.afterLoginAction(goHome);
       } catch (error) {
         return Promise.reject(error);
@@ -105,10 +123,12 @@ export const useUserStore = defineStore({
       const userInfo = await this.getUserInfoAction();
 
       const sessionTimeout = this.sessionTimeout;
+
       if (sessionTimeout) {
         this.setSessionTimeout(false);
       } else {
         const permissionStore = usePermissionStore();
+
         if (!permissionStore.isDynamicAddedRoute) {
           const routes = await permissionStore.buildRoutesAction();
           routes.forEach((route) => {
@@ -123,16 +143,17 @@ export const useUserStore = defineStore({
     },
     async getUserInfoAction(): Promise<UserInfo | null> {
       if (!this.getToken) return null;
-      const userInfo = await getUserInfo();
-      const { roles = [] } = userInfo;
-      if (isArray(roles)) {
-        const roleList = roles.map((item) => item.value) as RoleEnum[];
-        this.setRoleList(roleList);
-      } else {
-        userInfo.roles = [];
-        this.setRoleList([]);
-      }
-      this.setUserInfo(userInfo);
+      const { data: userInfo } = await getUserInfo();
+      const { roles = [], menus } = userInfo;
+      // if (isArray(roles)) {
+      //   const roleList = roles.map((item) => item.value) as RoleEnum[];
+      //   this.setRoleList(roleList);
+      // } else {
+      //   userInfo.roles = [];
+      //   this.setRoleList([]);
+      // }
+      // this.setUserInfo(userInfo);
+      this.setMenu(menus);
       return userInfo;
     },
     /**
@@ -159,14 +180,16 @@ export const useUserStore = defineStore({
       const { createWarningModal } = useMessage();
 
       createWarningModal({
-        callback: async () => {
-          await this.logout(true);
+        callback: async (action, instance) => {
+          if (action === 'confirm') {
+            await this.logout(true);
+          }
         },
-        title: '23',
-        message: '2323',
+        title: '提示',
+        message: '确定退出登录？'
       });
-    },
-  },
+    }
+  }
 });
 
 // Need to be used outside the setup

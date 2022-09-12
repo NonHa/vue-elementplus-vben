@@ -15,9 +15,12 @@ export interface RoleInfo {
  * @description: Login interface return value
  */
 export interface LoginResultModel {
-  userId: string | number;
-  token: string;
-  role: RoleInfo;
+  data: {
+    userId: string | number;
+    token: string;
+    role: RoleInfo;
+    tokenHead: string;
+  };
 }
 
 /**
@@ -35,4 +38,9 @@ export interface GetUserInfoModel {
   avatar: string;
   // 介绍
   desc?: string;
+  data: {
+    username: String;
+    role?: String[];
+    menus: any[];
+  };
 }

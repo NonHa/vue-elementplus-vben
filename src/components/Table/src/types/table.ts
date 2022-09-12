@@ -1,20 +1,46 @@
-import type { VNodeChild } from 'vue';
+import type { VNodeChild, VNode } from 'vue';
 import type { PaginationProps } from './pagination';
 import type { FormProps } from '/@/components/Form';
-import type { TableRowSelection as ITableRowSelection } from 'ant-design-vue/lib/table/interface';
-import type { ColumnProps } from 'ant-design-vue/lib/table';
-
-import { ComponentType } from './componentType';
+// import type { TableRowSelection as ITableRowSelection } from 'element-plus/lib/components/table';
+import type { TableColumnCtx } from 'element-plus/lib/components/table/src/table-column/defaults';
+// ColumnProps
+// import { ComponentType } from './componentType';
 import { VueNode } from '/@/utils/propTypes';
 import { RoleEnum } from '/@/enums/roleEnum';
+import type { ComponentType } from '/@/components/Form/src/types/index';
 
+export interface RenderCallbackParams {
+  row: Recordable;
+  // model: Recordable;
+  // field: string;
+}
+type ColumnProps = Partial<TableColumnCtx<any>>;
 export declare type SortOrder = 'ascend' | 'descend';
+export type ColumnSelectInit = {
+  selectable: (row: any, index: any) => Boolean;
+  // initSelectRows: (key: string | number) => void;
+  initSelectRows: any;
+};
+export declare type RowSelectionType = 'checkbox' | 'radio';
 
 export interface TableCurrentDataSource<T = Recordable> {
   currentDataSource: T[];
 }
+export declare type DefaultRecordType = any;
 
-export interface TableRowSelection<T = any> extends ITableRowSelection {
+export interface TableRowSelection<T = DefaultRecordType> {
+  /** Keep the selection keys in list even the key not exist in `dataSource` anymore */
+  preserveSelectedRowKeys?: boolean;
+  type?: RowSelectionType;
+  onSelectMultiple?: (selected: boolean, selectedRows: T[], changeRows: T[]) => void;
+
+  onSelectNone?: () => void;
+
+  hideSelectAll?: boolean;
+  fixed?: boolean;
+  columnWidth?: string | number;
+  columnTitle?: string | VueNode;
+  checkStrictly?: boolean;
   /**
    * Callback executed when selected rows change
    * @type Function
@@ -25,13 +51,13 @@ export interface TableRowSelection<T = any> extends ITableRowSelection {
    * Callback executed when select/deselect one row
    * @type Function
    */
-  onSelect?: (record: T, selected: boolean, selectedRows: Object[], nativeEvent: Event) => any;
+  onSelect?: (selection: T[], row) => any;
 
   /**
    * Callback executed when select/deselect all rows
    * @type Function
    */
-  onSelectAll?: (selected: boolean, selectedRows: T[], changeRows: T[]) => any;
+  onSelectAll?: (selection: T[]) => any;
 
   /**
    * Callback executed when row selection is inverted
@@ -41,8 +67,8 @@ export interface TableRowSelection<T = any> extends ITableRowSelection {
 }
 
 export interface TableCustomRecord<T> {
-  record?: T;
-  index?: number;
+  row?: T;
+  rowIndex?: number;
 }
 
 export interface ExpandedRowRenderRecord<T> extends TableCustomRecord<T> {
@@ -182,6 +208,8 @@ export interface BasicTableProps<T = any> {
   formConfig?: Partial<FormProps>;
   // 列配置
   columns: BasicColumn[];
+  columnSelectInit: ColumnSelectInit;
+
   // 是否显示序号列
   showIndexColumn?: boolean;
   // 序号列配置
@@ -207,10 +235,10 @@ export interface BasicTableProps<T = any> {
   // 是否显示边框
   bordered?: boolean;
   // 分页配置
-  pagination?: PaginationProps | boolean;
+  pagination?: PaginationProps;
   // loading加载
   loading?: boolean;
-
+  slots: any;
   /**
    * The column contains children to display
    * @default 'children'
@@ -410,6 +438,7 @@ export type CellFormat =
 // @ts-ignore
 export interface BasicColumn extends ColumnProps {
   children?: BasicColumn[];
+
   filters?: {
     text: string;
     value: string;
@@ -420,10 +449,15 @@ export interface BasicColumn extends ColumnProps {
 
   //
   flag?: 'INDEX' | 'DEFAULT' | 'CHECKBOX' | 'RADIO' | 'ACTION';
-  customTitle?: VueNode;
+  customTitle?: string;
 
   slots?: Recordable;
-
+  renderColumnComponent?:
+    | ((renderCallbackParams: RenderCallbackParams) => any)
+    | VNode
+    | VNode[]
+    | string;
+  slot?: Boolean;
   // Whether to hide the column by default, it can be displayed in the column configuration
   defaultHidden?: boolean;
 
@@ -445,6 +479,9 @@ export interface BasicColumn extends ColumnProps {
   auth?: RoleEnum | RoleEnum[] | string | string[];
   // 业务控制是否显示
   ifShow?: boolean | ((column: BasicColumn) => boolean);
+  editEvnets?: Object;
+  formatter?: (row?: object, field?: String, column?: Object) => any;
+  mapList?: { title: String; field: String | Number }[];
 }
 
 export type ColumnChangeParam = {

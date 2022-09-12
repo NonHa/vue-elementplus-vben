@@ -1,29 +1,28 @@
 <template>
   <div :class="getWrapClass">
     <ElTabs
-      type="card"
+      type="border-card"
       size="small"
-      :animated="false"
-      :hideAdd="true"
-      :tabBarGutter="3"
-      :activeKey="activeKeyRef"
-      @change="handleChange"
+      v-model="activeKeyRef"
+      @tab-click="handleChange"
       @edit="handleEdit"
     >
       <template v-for="item in getTabsState" :key="item.query ? item.fullPath : item.path">
-        <ElTabPane :closable="!(item && item.meta && item.meta.affix)">
-          <template #tab>
+        <ElTabPane
+          :name="item.query ? item.fullPath : item.path"
+          :closable="!(item && item.meta && item.meta.affix)"
+        >
+          <template #label>
             <TabContent :tabItem="item" />
           </template>
         </ElTabPane>
       </template>
-
-      <template #rightExtra v-if="getShowRedo || getShowQuick">
-        <TabRedo v-if="getShowRedo" />
-        <TabContent isExtra :tabItem="$route" v-if="getShowQuick" />
-        <FoldButton v-if="getShowFold" />
-      </template>
     </ElTabs>
+    <div class="right_tabs" v-if="getShowRedo || getShowQuick">
+      <TabRedo v-if="getShowRedo" />
+      <TabContent isExtra :tabItem="$route" v-if="getShowQuick" />
+      <FoldButton v-if="getShowFold" />
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -90,14 +89,18 @@
 
       listenerRouteChange((route) => {
         const { name } = route;
-        if (name === REDIRECT_NAME || !route || !userStore.getToken) {
+
+        // if (name === REDIRECT_NAME || !route || !userStore.getToken) {
+        //   return;
+        // }
+        if (name === REDIRECT_NAME || !route) {
           return;
         }
-
         const { path, fullPath, meta = {} } = route;
         const { currentActiveMenu, hideTab } = meta as RouteMeta;
         const isHide = !hideTab ? null : currentActiveMenu;
         const p = isHide || fullPath || path;
+
         if (activeKeyRef.value !== p) {
           activeKeyRef.value = p as string;
         }
@@ -114,8 +117,9 @@
       });
 
       function handleChange(activeKey: any) {
-        activeKeyRef.value = activeKey;
-        go(activeKey, false);
+        activeKeyRef.value = activeKey.props.name;
+
+        go(unref(activeKeyRef), false);
       }
 
       // Close the current tab
@@ -141,5 +145,5 @@
   });
 </script>
 <style lang="less">
-  // @import './index.less';
+  @import './index.less';
 </style>

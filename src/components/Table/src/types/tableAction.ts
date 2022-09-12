@@ -1,7 +1,7 @@
-import { ButtonProps } from 'ant-design-vue/es/button/buttonTypes';
-import { TooltipProps } from 'ant-design-vue/es/tooltip/Tooltip';
+import { ButtonProps } from 'element-plus/lib/components/button/src/button';
+import { ElTooltipProps } from 'element-plus/lib/components/tooltip/src/tooltip';
 import { RoleEnum } from '/@/enums/roleEnum';
-export interface ActionItem extends ButtonProps {
+export interface ActionItem extends Partial<ButtonProps> {
   onClick?: Fn;
   label?: string;
   color?: 'success' | 'error' | 'warning';
@@ -13,7 +13,7 @@ export interface ActionItem extends ButtonProps {
   auth?: RoleEnum | RoleEnum[] | string | string[];
   // 业务控制是否显示
   ifShow?: boolean | ((action: ActionItem) => boolean);
-  tooltip?: string | TooltipProps;
+  tooltip?: string | ElTooltipProps;
 }
 
 export interface PopConfirm {

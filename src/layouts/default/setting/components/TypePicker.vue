@@ -1,7 +1,7 @@
 <template>
   <div :class="prefixCls">
     <template v-for="item in menuTypeList || []" :key="item.title">
-      <Tooltip :title="item.title" placement="bottom">
+      <ElTooltip :content="item.title" placement="bottom">
         <div
           @click="handler(item)"
           :class="[
@@ -14,20 +14,20 @@
         >
           <div class="mix-sidebar"></div>
         </div>
-      </Tooltip>
+      </ElTooltip>
     </template>
   </div>
 </template>
 <script lang="ts">
   import { defineComponent, PropType } from 'vue';
 
-  import { Tooltip } from 'ant-design-vue';
+  import { ElTooltip } from 'element-plus';
   import { useDesign } from '/@/hooks/web/useDesign';
 
   import { menuTypeList } from '../enum';
   export default defineComponent({
     name: 'MenuTypePicker',
-    components: { Tooltip },
+    components: { ElTooltip },
     props: {
       menuTypeList: {
         type: Array as PropType<typeof menuTypeList>,
@@ -159,6 +159,7 @@
 
       &:hover,
       &--active {
+        box-sizing: border-box;
         padding: 12px;
         border: 2px solid @primary-color;
 

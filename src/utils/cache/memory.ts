@@ -13,7 +13,6 @@ export class Memory<T = any, V = any> {
 
   constructor(alive = NOT_ALIVE) {
     // Unit second
-    console.log('alive', alive);
 
     this.alive = alive * 1000;
   }
@@ -36,6 +35,8 @@ export class Memory<T = any, V = any> {
   // }
 
   get<K extends keyof T>(key: K) {
+    // console.log('key', key);
+
     return this.cache[key];
   }
 

@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2022-02-22 17:16:51
+ * @LastEditTime: 2022-03-01 15:15:09
+ * @LastEditors: your name
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath: \ym-Vue3\src\layouts\default\setting\components\ThemeColorPicker.vue
+-->
 <template>
   <div :class="prefixCls">
     <template v-for="color in colorList || []" :key="color">
@@ -11,14 +19,14 @@
         ]"
         :style="{ background: color }"
       >
-        <CheckOutlined />
+        <Check />
       </span>
     </template>
   </div>
 </template>
 <script lang="ts">
   import { defineComponent, PropType } from 'vue';
-  import { CheckOutlined } from '@ant-design/icons-vue';
+  import { Check } from '@element-plus/icons-vue';
 
   import { useDesign } from '/@/hooks/web/useDesign';
 
@@ -27,7 +35,7 @@
 
   export default defineComponent({
     name: 'ThemeColorPicker',
-    components: { CheckOutlined },
+    components: { Check },
     props: {
       colorList: {
         type: Array as PropType<string[]>,
@@ -71,6 +79,8 @@
 
       svg {
         display: none;
+        padding: 0;
+        color: #fff;
       }
 
       &--active {
@@ -78,9 +88,10 @@
 
         svg {
           display: inline-block;
-          margin: 0 0 3px 3px;
+          margin: 0 0 12px 2px;
           font-size: 12px;
           fill: @white !important;
+          padding: 0;
         }
       }
     }

@@ -1,13 +1,13 @@
 /*
  * @Author: your name
  * @Date: 2022-01-21 17:15:56
- * @LastEditTime: 2022-02-25 16:49:42
+ * @LastEditTime: 2022-02-27 15:35:34
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: \ym-Vue3\src\store\modules\permission.ts
  */
 import type { AppRouteRecordRaw, Menu } from '/@/router/types';
-
+import { toRaw } from 'vue';
 import { defineStore } from 'pinia';
 import { store } from '/@/store/index';
 import { asyncRoutes } from '/@/router/routes';
@@ -15,10 +15,13 @@ import { filter } from '/@/utils/helper/treeHelper';
 import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { flatMultiLevelRoutes } from '/@/router/helper/routeHelper';
 import { transformRouteToMenu } from '/@/router/helper/menuHelper';
+import { getMenuListResultModel, RouteItem } from '/@/api/sys/model/menuModel';
 
 import { useUserStore } from './user';
 import { PageEnum } from '/@/enums/pageEnum';
+import type { menuItem } from './user';
 
+import { useAppStore } from '/@/store/modules/app';
 interface PermissionState {
   // Permission code list
   permCodeList: string[] | number[];
@@ -41,9 +44,13 @@ export const usePermissionStore = defineStore({
     // Backstage menu list
     backMenuList: [],
     // menu List
-    frontMenuList: [],
+    frontMenuList: []
   }),
+
   getters: {
+    getPermCodeList(): string[] | number[] {
+      return this.permCodeList;
+    },
     getBackMenuList(): Menu[] {
       return this.backMenuList;
     },
@@ -55,9 +62,12 @@ export const usePermissionStore = defineStore({
     },
     getIsDynamicAddedRoute(): boolean {
       return this.isDynamicAddedRoute;
-    },
+    }
   },
   actions: {
+    setPermCodeList(codeList: string[]) {
+      this.permCodeList = codeList;
+    },
     setBackMenuList(list: Menu[]) {
       this.backMenuList = list;
       list?.length > 0 && this.setLastBuildMenuTime();
@@ -88,9 +98,7 @@ export const usePermissionStore = defineStore({
       //   const { ignoreRoute } = meta || {};
       //   return !ignoreRoute;
       // };
-      const routeFilter = (route: AppRouteRecordRaw) => {
-        return route !== null;
-      };
+
       /**
        * @description 根据设置的首页path，修正routes中的affix标记（固定首页）
        * */
@@ -121,21 +129,49 @@ export const usePermissionStore = defineStore({
         return;
       };
 
-      routes = filter(asyncRoutes, routeFilter);
-      routes = routes.filter(routeFilter);
+      routes = asyncRoutes;
+
       // Convert multi-level routing to level 2 routing
+
+      const menu = toRaw(userStore.getMenu) || [];
+
+      const menuNames: string[] = [];
+
+      const getMenuNames = function (menuItem: menuItem[]) {
+        menuItem.forEach((v) => {
+          menuNames.push(v.title as string);
+        });
+      };
+      getMenuNames(menu);
+
+      const filterRouteBymenu = function (routes: AppRouteRecordRaw[]) {
+        const routeItem: AppRouteRecordRaw[] = [];
+
+        routes.forEach((v) => {
+          if (v.children) {
+            v.children = filterRouteBymenu(v.children);
+          }
+          const { title } = v.meta;
+          if (menuNames.includes(title)) routeItem.push(v);
+        });
+        return routeItem;
+      };
+
+      routes = filterRouteBymenu(routes);
+      // console.log('mapRoutes', routes);
 
       routes.push(ERROR_LOG_ROUTE);
       routes.push(PAGE_NOT_FOUND_ROUTE);
       const menuList = transformRouteToMenu(routes, true);
-      routes = flatMultiLevelRoutes(menuList);
+      // routes = flatMultiLevelRoutes(menuList);
       this.setFrontMenuList(menuList);
       patchHomeAffix(routes);
-      console.log('asyncRoutes', routes);
+      // console.log('routes---', routes);
+      // console.log('routes',routes);
 
       return routes;
-    },
-  },
+    }
+  }
 });
 
 // Need to be used outside the setup

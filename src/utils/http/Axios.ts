@@ -7,7 +7,7 @@
  * @FilePath: \ym-Vue3\src\utils\http\Axios.ts
  */
 import axios from 'axios';
-import type { Result, RequestOptions } from '/#/axios';
+import type { Result, RequestOptions, UploadFileParams } from '/#/axios';
 import type { CreateAxiosOptions } from './axiosTransform';
 import type { AxiosRequestConfig, AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { isFunction } from '/@/utils/is';
@@ -49,6 +49,44 @@ export class VAxios {
     this.createAxios(config);
   }
   /**
+   * @description:  File Upload
+   */
+  uploadFile<T = any>(config: AxiosRequestConfig, params: UploadFileParams) {
+    const formData = new window.FormData();
+    const customFilename = params.name || 'file';
+
+    if (params.filename) {
+      formData.append(customFilename, params.file, params.filename);
+    } else {
+      formData.append(customFilename, params.file);
+    }
+
+    if (params.data) {
+      Object.keys(params.data).forEach((key) => {
+        const value = params.data![key];
+        if (Array.isArray(value)) {
+          value.forEach((item) => {
+            formData.append(`${key}[]`, item);
+          });
+          return;
+        }
+
+        formData.append(key, params.data![key]);
+      });
+    }
+
+    return this.axiosInstance.request<T>({
+      ...config,
+      method: 'POST',
+      data: formData,
+      headers: {
+        'Content-type': ContentTypeEnum.FORM_DATA,
+        // @ts-ignore
+        ignoreCancelToken: true
+      }
+    });
+  }
+  /**
    * @description: Set genetal header
  
    */
@@ -71,13 +109,13 @@ export class VAxios {
       requestInterceptors,
       requestInterceptosCatch,
       responseInterceptors,
-      responseInterceptosCatch,
+      responseInterceptosCatch
     } = transform;
     const axiosCanceler = new AxiosCanceler();
     this.axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
       const {
         // @ts-ignore
-        headers: { ignoreCancelToken },
+        headers: { ignoreCancelToken }
       } = config;
       const ignoreCancel =
         ignoreCancelToken !== undefined
@@ -119,7 +157,7 @@ export class VAxios {
     }
     return {
       ...config,
-      data: qs.stringify(config.data, { arrayFormat: 'brackets' }),
+      data: qs.stringify(config.data, { arrayFormat: 'brackets' })
     };
   }
   get<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {

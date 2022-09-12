@@ -1,27 +1,36 @@
+<!--
+ * @Author: your name
+ * @Date: 2022-02-22 17:16:51
+ * @LastEditTime: 2022-03-01 15:39:42
+ * @LastEditors: your name
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath: \ym-Vue3\src\layouts\default\setting\components\SelectItem.vue
+-->
 <template>
   <div :class="prefixCls">
     <span> {{ title }}</span>
-    <Select
+    <ElSelect
       v-bind="getBindValue"
       :class="`${prefixCls}-select`"
       @change="handleChange"
       :disabled="disabled"
       size="small"
-      :options="options"
-    />
+    >
+      <ElOption v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+    </ElSelect>
   </div>
 </template>
 <script lang="ts">
   import { defineComponent, PropType, computed } from 'vue';
 
-  import { Select } from 'ant-design-vue';
+  import { ElSelect, ElOption } from 'element-plus';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { baseHandler } from '../handler';
   import { HandlerEnum } from '../enum';
 
   export default defineComponent({
     name: 'SelectItem',
-    components: { Select },
+    components: { ElSelect, ElOption },
     props: {
       event: {
         type: Number as PropType<HandlerEnum>,
@@ -67,7 +76,9 @@
     display: flex;
     justify-content: space-between;
     margin: 16px 0;
-
+    box-sizing: border-box;
+    line-height: 0;
+    align-items: center;
     &-select {
       width: 126px;
     }

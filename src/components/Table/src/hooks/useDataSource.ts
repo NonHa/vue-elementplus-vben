@@ -9,7 +9,7 @@ import {
   watch,
   reactive,
   Ref,
-  watchEffect,
+  watchEffect
 } from 'vue';
 import { useTimeoutFn } from '/@/hooks/core/useTimeout';
 import { buildUUID } from '/@/utils/uuid';
@@ -24,6 +24,8 @@ interface ActionType {
   getFieldsValue: () => Recordable;
   clearSelectedRowKeys: () => void;
   tableData: Ref<Recordable[]>;
+  getPagination: () => Partial<PaginationProps>;
+  toggleTableSelect: (keys: any[]) => void;
 }
 
 interface SearchState {
@@ -39,12 +41,14 @@ export function useDataSource(
     getFieldsValue,
     clearSelectedRowKeys,
     tableData,
+    getPagination,
+    toggleTableSelect
   }: ActionType,
-  emit: EmitType,
+  emit: EmitType
 ) {
   const searchState = reactive<SearchState>({
     sortInfo: {},
-    filterInfo: {},
+    filterInfo: {}
   });
   const dataSourceRef = ref<Recordable[]>([]);
   const rawDataSourceRef = ref<Recordable>({});
@@ -60,33 +64,35 @@ export function useDataSource(
       !api && dataSource && (dataSourceRef.value = dataSource);
     },
     {
-      immediate: true,
-    },
+      immediate: true
+    }
   );
 
   function handleTableChange(
-    pagination: PaginationProps,
-    filters: Partial<Recordable<string[]>>,
-    sorter: SorterResult,
+    pagination: PaginationProps
+    // filters: Partial<Recordable<string[]>>,
+    // sorter: SorterResult
   ) {
     const { clearSelectOnPageChange, sortFn, filterFn } = unref(propsRef);
     if (clearSelectOnPageChange) {
       clearSelectedRowKeys();
     }
+
     setPagination(pagination);
 
     const params: Recordable = {};
-    if (sorter && isFunction(sortFn)) {
-      const sortInfo = sortFn(sorter);
-      searchState.sortInfo = sortInfo;
-      params.sortInfo = sortInfo;
-    }
+    // if (sorter && isFunction(sortFn)) {
+    //   const sortInfo = sortFn(sorter);
+    //   searchState.sortInfo = sortInfo;
+    //   params.sortInfo = sortInfo;
+    // }
 
-    if (filters && isFunction(filterFn)) {
-      const filterInfo = filterFn(filters);
-      searchState.filterInfo = filterInfo;
-      params.filterInfo = filterInfo;
-    }
+    // if (filters && isFunction(filterFn)) {
+    //   const filterInfo = filterFn(filters);
+    //   searchState.filterInfo = filterInfo;
+    //   params.filterInfo = filterInfo;
+    // }
+
     fetch(params);
   }
 
@@ -113,6 +119,7 @@ export function useDataSource(
 
   const getDataSourceRef = computed(() => {
     const dataSource = unref(dataSourceRef);
+
     if (!dataSource || dataSource.length === 0) {
       return unref(dataSourceRef);
     }
@@ -135,6 +142,7 @@ export function useDataSource(
         }
       }
     }
+
     return unref(dataSourceRef);
   });
 
@@ -148,7 +156,7 @@ export function useDataSource(
 
   function updateTableDataRecord(
     rowKey: string | number,
-    record: Recordable,
+    record: Recordable
   ): Recordable | undefined {
     const row = findTableDataRecord(rowKey);
 
@@ -191,7 +199,7 @@ export function useDataSource(
         unref(propsRef).dataSource?.splice(index, 1);
     }
     setPagination({
-      total: unref(propsRef).dataSource?.length,
+      total: unref(propsRef).dataSource?.length
     });
   }
 
@@ -249,19 +257,20 @@ export function useDataSource(
       beforeFetch,
       afterFetch,
       useSearchForm,
-      pagination,
+      pagination
     } = unref(propsRef);
+
     if (!api || !isFunction(api)) return;
     try {
       setLoading(true);
       const { pageField, sizeField, listField, totalField } = Object.assign(
         {},
         FETCH_SETTING,
-        fetchSetting,
+        fetchSetting
       );
       let pageParams: Recordable = {};
 
-      const { current = 1, pageSize = PAGE_SIZE } = unref(getPaginationInfo) as PaginationProps;
+      const { current = 1, pageSize = PAGE_SIZE } = getPagination();
 
       if ((isBoolean(pagination) && !pagination) || isBoolean(getPaginationInfo)) {
         pageParams = {};
@@ -281,53 +290,59 @@ export function useDataSource(
         sortInfo,
         filterInfo,
         opt?.sortInfo ?? {},
-        opt?.filterInfo ?? {},
+        opt?.filterInfo ?? {}
       );
       if (beforeFetch && isFunction(beforeFetch)) {
         params = (await beforeFetch(params)) || params;
       }
 
       const res = await api(params);
-      rawDataSourceRef.value = res;
+      const data = res.data;
+      console.log('data', data);
 
-      const isArrayResult = Array.isArray(res);
+      rawDataSourceRef.value = data;
 
-      let resultItems: Recordable[] = isArrayResult ? res : get(res, listField);
-      const resultTotal: number = isArrayResult ? 0 : get(res, totalField);
+      const isArrayResult = Array.isArray(data);
+
+      let resultItems: Recordable[] = isArrayResult ? data : get(data, listField);
+      const resultTotal: number = isArrayResult ? 0 : get(data, totalField);
 
       // 假如数据变少，导致总页数变少并小于当前选中页码，通过getPaginationRef获取到的页码是不正确的，需获取正确的页码再次执行
-      if (resultTotal) {
-        const currentTotalPage = Math.ceil(resultTotal / pageSize);
-        if (current > currentTotalPage) {
-          setPagination({
-            current: currentTotalPage,
-          });
-          return await fetch(opt);
-        }
-      }
+      // if (resultTotal) {
+      //   const currentTotalPage = Math.ceil(resultTotal / pageSize);
+      //   if (current > currentTotalPage) {
+      //     setPagination({
+      //       current: currentTotalPage
+      //     });
+      //     return await fetch(opt);
+      //   }
+      // }
 
       if (afterFetch && isFunction(afterFetch)) {
         resultItems = (await afterFetch(resultItems)) || resultItems;
       }
+
       dataSourceRef.value = resultItems;
+      // console.log('dataSourceRef-----', dataSourceRef);
+
       setPagination({
-        total: resultTotal || 0,
+        total: resultTotal || 0
       });
       if (opt && opt.page) {
         setPagination({
-          current: opt.page || 1,
+          current: opt.page || 1
         });
       }
       emit('fetch-success', {
         items: unref(resultItems),
-        total: resultTotal,
+        total: resultTotal
       });
       return resultItems;
     } catch (error) {
       emit('fetch-error', error);
       dataSourceRef.value = [];
       setPagination({
-        total: 0,
+        total: 0
       });
     } finally {
       setLoading(false);
@@ -347,6 +362,8 @@ export function useDataSource(
   }
 
   async function reload(opt?: FetchParams) {
+    console.log(234324);
+
     return await fetch(opt);
   }
 
@@ -370,6 +387,6 @@ export function useDataSource(
     deleteTableDataRecord,
     insertTableDataRecord,
     findTableDataRecord,
-    handleTableChange,
+    handleTableChange
   };
 }

@@ -1,10 +1,10 @@
 export type ComponentType =
-  | 'Input'
-  | 'InputNumber'
-  | 'Select'
-  | 'ApiSelect'
-  | 'ApiTreeSelect'
-  | 'Checkbox'
-  | 'Switch'
-  | 'DatePicker'
-  | 'TimePicker';
+  | 'ElInput'
+  | 'ElInputNumber'
+  | 'ElSelect'
+  | 'ElApiSelect'
+  | 'ElApiTreeSelect'
+  | 'ElCheckbox'
+  | 'ElSwitch'
+  | 'ElDatePicker'
+  | 'ElTimePicker';

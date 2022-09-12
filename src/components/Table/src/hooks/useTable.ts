@@ -18,7 +18,7 @@ export function useTable(tableProps?: Props): [
   (instance: TableActionType, formInstance: UseTableMethod) => void,
   TableActionType & {
     getForm: () => FormActionType;
-  },
+  }
 ] {
   const tableRef = ref<Nullable<TableActionType>>(null);
   const loadedRef = ref<Nullable<boolean>>(false);
@@ -37,6 +37,7 @@ export function useTable(tableProps?: Props): [
 
     tableRef.value = instance;
     formRef.value = formInstance;
+
     tableProps && instance.setProps(getDynamicProps(tableProps));
     loadedRef.value = true;
 
@@ -49,8 +50,8 @@ export function useTable(tableProps?: Props): [
       },
       {
         immediate: true,
-        deep: true,
-      },
+        deep: true
+      }
     );
   }
 
@@ -58,7 +59,7 @@ export function useTable(tableProps?: Props): [
     const table = unref(tableRef);
     if (!table) {
       error(
-        'The table instance has not been obtained yet, please make sure the table is presented when performing the table operation!',
+        'The table instance has not been obtained yet, please make sure the table is presented when performing the table operation!'
       );
     }
     return table as TableActionType;
@@ -154,7 +155,7 @@ export function useTable(tableProps?: Props): [
     },
     collapseAll: () => {
       getTableInstance().collapseAll();
-    },
+    }
   };
 
   return [register, methods];

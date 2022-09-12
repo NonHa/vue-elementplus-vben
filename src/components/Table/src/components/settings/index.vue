@@ -18,7 +18,7 @@
   import SizeSetting from './SizeSetting.vue';
   import RedoSetting from './RedoSetting.vue';
   import FullScreenSetting from './FullScreenSetting.vue';
-  import { useI18n } from '/@/hooks/web/useI18n';
+  // import { useI18n } from '/@/hooks/web/useI18n';
   import { useTableContext } from '../../hooks/useTableContext';
 
   export default defineComponent({
@@ -37,7 +37,7 @@
     },
     emits: ['columns-change'],
     setup(props, { emit }) {
-      const { t } = useI18n();
+      // const { t } = useI18n();
       const table = useTableContext();
 
       const getSetting = computed((): TableSetting => {
@@ -58,7 +58,7 @@
         return table ? unref(table.wrapRef) : document.body;
       }
 
-      return { getSetting, t, handleColumnChange, getTableContainer };
+      return { getSetting, handleColumnChange, getTableContainer };
     },
   });
 </script>

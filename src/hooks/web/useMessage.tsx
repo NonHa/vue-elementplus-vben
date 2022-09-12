@@ -38,9 +38,12 @@ function renderContent({ message }: Pick<ModalOptionsEx, 'message'>) {
   }
 }
 
+enum btnSize {
+  small = 'small',
+}
 const getBaseOptions = () => {
   return {
-    buttonSize: 'mini',
+    buttonSize: btnSize.small,
     center: true,
   };
 };

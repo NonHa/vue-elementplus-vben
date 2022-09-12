@@ -1,27 +1,28 @@
 import type { BasicColumn, BasicTableProps, CellFormat, GetColumnsParams } from '../types/table';
 import type { PaginationProps } from '../types/pagination';
-import type { ComputedRef } from 'vue';
+import type { ComputedRef, Slots } from 'vue';
 import { computed, Ref, ref, toRaw, unref, watch } from 'vue';
 import { renderEditCell } from '../components/editable';
 import { usePermission } from '/@/hooks/web/usePermission';
-import { useI18n } from '/@/hooks/web/useI18n';
+// import { useI18n } from '/@/hooks/web/useI18n';
 import { isArray, isBoolean, isFunction, isMap, isString } from '/@/utils/is';
 import { cloneDeep, isEqual } from 'lodash-es';
 import { formatToDate } from '/@/utils/dateUtil';
 import { ACTION_COLUMN_FLAG, DEFAULT_ALIGN, INDEX_COLUMN_FLAG, PAGE_SIZE } from '../const';
+import dayjs from 'dayjs';
 
 function handleItem(item: BasicColumn, ellipsis: boolean) {
-  const { key, dataIndex, children } = item;
+  const { columnKey, index, children } = item;
   item.align = item.align || DEFAULT_ALIGN;
   if (ellipsis) {
-    if (!key) {
-      item.key = dataIndex;
+    if (!columnKey) {
+      item.columnKey = `${index}`;
     }
-    if (!isBoolean(item.ellipsis)) {
-      Object.assign(item, {
-        ellipsis,
-      });
-    }
+    // if (!isBoolean(item.ellipsis)) {
+    //   Object.assign(item, {
+    //     ellipsis,
+    //   });
+    // }
   }
   if (children && children.length) {
     handleChildren(children, !!ellipsis);
@@ -40,9 +41,9 @@ function handleChildren(children: BasicColumn[] | undefined, ellipsis: boolean) 
 function handleIndexColumn(
   propsRef: ComputedRef<BasicTableProps>,
   getPaginationRef: ComputedRef<boolean | PaginationProps>,
-  columns: BasicColumn[],
+  columns: BasicColumn[]
 ) {
-  const { t } = useI18n();
+  // const { t } = useI18n();
 
   const { showIndexColumn, indexColumnProps, isTreeTable } = unref(propsRef);
 
@@ -66,9 +67,9 @@ function handleIndexColumn(
   columns.unshift({
     flag: INDEX_COLUMN_FLAG,
     width: 50,
-    title: t('component.table.index'),
+    label: 'index',
     align: 'center',
-    customRender: ({ index }) => {
+    formatter: ({ index }) => {
       const getPagination = unref(getPaginationRef);
       if (isBoolean(getPagination)) {
         return `${index + 1}`;
@@ -78,10 +79,10 @@ function handleIndexColumn(
     },
     ...(isFixedLeft
       ? {
-          fixed: 'left',
+          fixed: 'left'
         }
       : {}),
-    ...indexColumnProps,
+    ...indexColumnProps
   });
 }
 
@@ -95,7 +96,7 @@ function handleActionColumn(propsRef: ComputedRef<BasicTableProps>, columns: Bas
       ...columns[hasIndex],
       fixed: 'right',
       ...actionColumn,
-      flag: ACTION_COLUMN_FLAG,
+      flag: ACTION_COLUMN_FLAG
     });
   }
 }
@@ -103,6 +104,7 @@ function handleActionColumn(propsRef: ComputedRef<BasicTableProps>, columns: Bas
 export function useColumns(
   propsRef: ComputedRef<BasicTableProps>,
   getPaginationRef: ComputedRef<boolean | PaginationProps>,
+  slots: Slots
 ) {
   const columnsRef = ref(unref(propsRef).columns) as unknown as Ref<BasicColumn[]>;
   let cacheColumns = unref(propsRef).columns;
@@ -118,12 +120,9 @@ export function useColumns(
     const { ellipsis } = unref(propsRef);
 
     columns.forEach((item) => {
-      const { customRender, slots } = item;
+      const { formatter, slots } = item;
 
-      handleItem(
-        item,
-        Reflect.has(item, 'ellipsis') ? !!item.ellipsis : !!ellipsis && !customRender && !slots,
-      );
+      handleItem(item, Reflect.has(item, 'ellipsis') ? true : !!ellipsis && !formatter && !slots);
     });
     return columns;
   });
@@ -152,23 +151,24 @@ export function useColumns(
         return hasPermission(column.auth) && isIfShow(column);
       })
       .map((column) => {
-        const { slots, dataIndex, customRender, format, edit, editRow, flag } = column;
+        const { slots, index, formatter, format, edit, editRow, flag } = column;
 
         if (!slots || !slots?.title) {
-          column.slots = { title: `header-${dataIndex}`, ...(slots || {}) };
-          column.customTitle = column.title;
-          Reflect.deleteProperty(column, 'title');
+          // column.slots = { title: `header-${index}`, ...(slots || {}) };
+          column.customTitle = column.label;
+          Reflect.deleteProperty(column, 'label');
         }
         const isDefaultAction = [INDEX_COLUMN_FLAG, ACTION_COLUMN_FLAG].includes(flag!);
-        if (!customRender && format && !edit && !isDefaultAction) {
-          column.customRender = ({ text, record, index }) => {
-            return formatCell(text, format, record, index);
+        // 时间类型格式化 format = trure
+        if (!formatter && format && !edit && !isDefaultAction) {
+          column.formatter = (row, column, cellValue, index) => {
+            return formatCell(cellValue, format, column, index);
           };
         }
 
         // edit table
         if ((edit || editRow) && !isDefaultAction) {
-          column.customRender = renderEditCell(column);
+          column.formatter = renderEditCell(column);
         }
         return column;
       });
@@ -179,15 +179,15 @@ export function useColumns(
     (columns) => {
       columnsRef.value = columns;
       cacheColumns = columns?.filter((item) => !item.flag) ?? [];
-    },
+    }
   );
 
-  function setCacheColumnsByField(dataIndex: string | undefined, value: Partial<BasicColumn>) {
-    if (!dataIndex || !value) {
+  function setCacheColumnsByField(index: string | undefined, value: Partial<BasicColumn>) {
+    if (!index || !value) {
       return;
     }
     cacheColumns.forEach((item) => {
-      if (item.dataIndex === dataIndex) {
+      if (item.columnKey === index) {
         Object.assign(item, value);
         return;
       }
@@ -208,7 +208,7 @@ export function useColumns(
 
     const firstColumn = columns[0];
 
-    const cacheKeys = cacheColumns.map((item) => item.dataIndex);
+    const cacheKeys = cacheColumns.map((item) => item.index);
 
     if (!isString(firstColumn)) {
       columnsRef.value = columns as BasicColumn[];
@@ -218,15 +218,15 @@ export function useColumns(
       cacheColumns.forEach((item) => {
         newColumns.push({
           ...item,
-          defaultHidden: !columnKeys.includes(item.dataIndex! || (item.key as string)),
+          defaultHidden: !columnKeys.includes(`${item.index!}` || (item.columnKey as string))
         });
       });
       // Sort according to another array
       if (!isEqual(cacheKeys, columns)) {
         newColumns.sort((prev, next) => {
           return (
-            columnKeys.indexOf(prev.dataIndex as string) -
-            columnKeys.indexOf(next.dataIndex as string)
+            columnKeys.indexOf(`${prev.index}` as string) -
+            columnKeys.indexOf(`${next.index}` as string)
           );
         });
       }
@@ -253,7 +253,18 @@ export function useColumns(
   function getCacheColumns() {
     return cacheColumns;
   }
+  const getColumnsSlots: ComputedRef<string[]> = computed(() => {
+    const keys = Object.keys(slots);
 
+    return keys
+      .map((item) => (item.startsWith('col-') ? item : null))
+      .filter((item) => !!item) as string[];
+  });
+
+  function replaceColSlotKey(key: string) {
+    if (!key) return '';
+    return key?.replace?.(/col\-/, '') ?? '';
+  }
   return {
     getColumnsRef,
     getCacheColumns,
@@ -261,6 +272,8 @@ export function useColumns(
     setColumns,
     getViewColumns,
     setCacheColumnsByField,
+    getColumnsSlots,
+    replaceColSlotKey
   };
 }
 
@@ -280,19 +293,24 @@ function sortFixedColumn(columns: BasicColumn[]) {
     defColumns.push(column);
   }
   return [...fixedLeftColumns, ...defColumns, ...fixedRightColumns].filter(
-    (item) => !item.defaultHidden,
+    (item) => !item.defaultHidden
   );
 }
 
 // format cell
-export function formatCell(text: string, format: CellFormat, record: Recordable, index: number) {
+export function formatCell(
+  text: string | dayjs.Dayjs,
+  format: CellFormat,
+  record: Recordable,
+  index: number
+) {
   if (!format) {
     return text;
   }
 
   // custom function
   if (isFunction(format)) {
-    return format(text, record, index);
+    return format(text as string, record, index);
   }
 
   try {
@@ -304,12 +322,12 @@ export function formatCell(text: string, format: CellFormat, record: Recordable,
       if (!dateFormat) {
         return text;
       }
-      return formatToDate(text, dateFormat);
+      return formatToDate(text as dayjs.Dayjs, dateFormat);
     }
 
     // Map
     if (isMap(format)) {
-      return format.get(text);
+      return format.get(text as string | number);
     }
   } catch (error) {
     return text;

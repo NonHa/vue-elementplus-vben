@@ -11,7 +11,7 @@ import type {
   HeaderSetting,
   MenuSetting,
   TransitionSetting,
-  MultiTabsSetting,
+  MultiTabsSetting
 } from '/#/config';
 import type { BeforeMiniState } from '/#/store';
 
@@ -25,6 +25,8 @@ import { darkMode } from '/@/settings/designSetting';
 import { resetRouter } from '/@/router';
 import { deepMerge } from '/@/utils';
 
+import { getMenuList } from '/@/api/sys/menu';
+import { getMenuListResultModel } from '/@/api/sys/model/menuModel';
 interface AppState {
   darkMode?: ThemeEnum;
   // Page loading status
@@ -33,6 +35,7 @@ interface AppState {
   projectConfig: ProjectConfig | null;
   // When the window shrinks, remember some states, and restore these states when the window is restored
   beforeMiniInfo: BeforeMiniState;
+  sidebarMenuList: getMenuListResultModel;
 }
 let timeId: TimeoutHandle;
 export const useAppStore = defineStore({
@@ -42,6 +45,7 @@ export const useAppStore = defineStore({
     pageLoading: false,
     projectConfig: Persistent.getLocal(PROJ_CFG_KEY),
     beforeMiniInfo: {},
+    sidebarMenuList: []
   }),
   getters: {
     getPageLoading(): boolean {
@@ -71,6 +75,9 @@ export const useAppStore = defineStore({
     getMultiTabsSetting(): MultiTabsSetting {
       return this.getProjectConfig.multiTabsSetting;
     },
+    getSideBarMenuList(): getMenuListResultModel {
+      return this.sidebarMenuList;
+    }
   },
   actions: {
     setPageLoading(loading: boolean): void {
@@ -108,7 +115,12 @@ export const useAppStore = defineStore({
         clearTimeout(timeId);
       }
     },
-  },
+    async getMenuList(): Promise<getMenuListResultModel> {
+      // const { data } = await getMenuList();
+      // this.sidebarMenuList = data;
+      // return data;
+    }
+  }
 });
 
 // Need to be used outside the setup

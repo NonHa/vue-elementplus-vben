@@ -32,6 +32,8 @@ export default defineComponent({
     const barStore = ref<Recordable>({});
     const cursorDown = ref();
     const clickThumbHandler = (e: any) => {
+      console.log('e========', e);
+
       // prevent click event of right button
       if (e.ctrlKey || e.button === 2) {
         return;

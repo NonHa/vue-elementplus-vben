@@ -3,7 +3,8 @@
 @import 'public.less';
 @import 'ant/index.less';
 @import './theme.less';
-
+@import './ele/baseComp.less';
+// @import './color.less';
 input:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset !important;
 }
@@ -23,7 +24,7 @@ body {
   height: 100%;
   overflow: visible !important;
   overflow-x: hidden !important;
-
+  margin: 0;
   &.color-weak {
     filter: invert(80%);
   }
@@ -42,13 +43,54 @@ svg,
 span {
   outline: none !important;
 }
-
+a {
+  text-decoration: none; /* 去除默认的下划线 */
+  outline: none; /* 去除旧版浏览器的点击后的外虚线框 */
+  color: #000; /* 去除默认的颜色和点击后变化的颜色 */
+}
 .ml-2 {
   margin-left: 20px;
+}
+.mr-2 {
+  margin-right: 20px;
 }
 .truncate {
   overflow: hidden;
   -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+.mx-auto {
+  margin-right: auto;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+.py-5 {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.p-2 {
+  padding: 0.5rem;
+}
+.el-dialog {
+  .scroll-container {
+    padding: 14px;
+  }
 }

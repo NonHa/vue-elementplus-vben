@@ -1,19 +1,9 @@
-/*
- * @Author: your name
- * @Date: 2021-12-30 15:55:02
- * @LastEditTime: 2022-01-07 11:53:44
- * @LastEditors: your name
- * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- * @FilePath: \ym-Vue3\.eslintrc.js
- */
-// @ts-check
-const { defineConfig } = require('eslint-define-config');
-module.exports = defineConfig({
+module.exports = {
   root: true,
   env: {
     browser: true,
     node: true,
-    es6: true,
+    es6: true
   },
   parser: 'vue-eslint-parser',
   parserOptions: {
@@ -22,15 +12,13 @@ module.exports = defineConfig({
     sourceType: 'module',
     jsxPragma: 'React',
     ecmaFeatures: {
-      jsx: true,
-    },
+      jsx: true
+    }
   },
   extends: [
     'plugin:vue/vue3-recommended',
     'plugin:@typescript-eslint/recommended',
-    'prettier',
-    'plugin:prettier/recommended',
-    'plugin:jest/recommended',
+    'plugin:prettier/recommended'
   ],
   rules: {
     'vue/script-setup-uses-vars': 'error',
@@ -50,15 +38,15 @@ module.exports = defineConfig({
       'error',
       {
         argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_',
-      },
+        varsIgnorePattern: '^_'
+      }
     ],
     'no-unused-vars': [
       'error',
       {
         argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_',
-      },
+        varsIgnorePattern: '^_'
+      }
     ],
     'space-before-function-paren': 'off',
 
@@ -77,12 +65,12 @@ module.exports = defineConfig({
         html: {
           void: 'always',
           normal: 'never',
-          component: 'always',
+          component: 'always'
         },
         svg: 'always',
-        math: 'always',
-      },
+        math: 'always'
+      }
     ],
-    'vue/multi-word-component-names': 'off',
-  },
-});
+    'vue/multi-word-component-names': 'off'
+  }
+};
