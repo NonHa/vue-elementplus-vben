@@ -1,4 +1,5 @@
 import { defHttp } from '/@/utils/http';
+import {OrderListParam,OrderListModel} from '/@/api/sys/model/orderModel';
 enum Api {
   orderList = '/order/list',
   orderDelete = '/order/delete',
@@ -12,8 +13,8 @@ enum Api {
   deleteOrderReturnReason = '/order/returnReason/delete'
 }
 
-export function getOrderList(params) {
-  return defHttp.post({ url: Api.orderList, params }, { errorMessageMode: 'none' });
+export function getOrderList(params:OrderListParam) {
+  return defHttp.post<OrderListModel>({ url: Api.orderList, params }, { errorMessageMode: 'none' });
 }
 
 export function deleteOrderById(params) {
