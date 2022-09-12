@@ -22,6 +22,8 @@
     @row-click="handleClick"
   >
     <template #form-advanceAfter>
+      <!-- <input type="file" id="file-uploader" @change="onChange" multiple /> -->
+
       <el-button type="danger" @click="editBrand">新增</el-button>
     </template>
 

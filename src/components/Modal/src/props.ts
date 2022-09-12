@@ -82,7 +82,7 @@ export const basicProps = Object.assign({}, modalProps, {
 
   okType: String as PropType<ButtonType>,
 
-  okButtonProps: Object as PropType<ButtonProps>,
+  okButtonProps: Object as Partial<PropType<ButtonProps>>,
 
   cancelButtonProps: Object as PropType<ButtonProps>,
 

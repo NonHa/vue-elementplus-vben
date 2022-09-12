@@ -4,6 +4,8 @@ import { BasicColumn } from '/@/components/Table/src/types/table';
 
 import { ElRadioGroup, ElRadio } from 'element-plus';
 import { BasicUpload } from '/@/components/Upload';
+import { uploadApi } from '/@/api/sys/upload';
+
 export function getBasicColumns(): BasicColumn[] {
   return [
     {
@@ -411,7 +413,7 @@ export const brandModalBrandSchemas: FormSchema[] = [
       xl: 12
     },
     render: (getValues, formModel) => {
-      return <BasicUpload></BasicUpload>;
+      return <BasicUpload api={uploadApi}></BasicUpload>;
     }
   },
   {

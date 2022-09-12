@@ -34,12 +34,13 @@
       />
 
       <ElUpload
-        action="2323"
         :accept="getStringAccept"
         :multiple="multiple"
         :before-upload="beforeUpload"
         :show-upload-list="false"
         class="upload-modal-toolbar__btn"
+        :on-change="handleChange"
+        :http-request="httpRequest"
       >
         <el-button type="primary">选择文件</el-button>
       </ElUpload>
@@ -125,10 +126,16 @@ export default defineComponent({
         ? 'component.upload.reUploadFailed'
         : 'component.upload.startUpload';
     });
-
+    function handleChange(file) {
+      console.log(document.getElementsByClassName('el-upload__input')[0].value);
+    }
+    function httpRequest(file) {
+      // console.log('file', file);
+    }
     // 上传前校验
     function beforeUpload(file: File) {
       const { size, name } = file;
+      console.log('“file”', document.getElementsByName('el-upload__input'));
       const { maxSize } = props;
       // 设置最大值，则判断
       if (maxSize && file.size / 1024 / 1024 >= maxSize) {
@@ -180,6 +187,8 @@ export default defineComponent({
     // }
 
     async function uploadApiByItem(item: FileItem) {
+      console.log('item', item);
+      // return;
       const { api } = props;
       if (!api || !isFunction(api)) {
         return warn('upload api must exist and be a function');
@@ -283,6 +292,7 @@ export default defineComponent({
     }
 
     return {
+      httpRequest,
       columns: createTableColumns() as any[],
       actionColumn: createActionColumn(handleRemove) as any,
       register,
@@ -299,7 +309,8 @@ export default defineComponent({
       handleOk,
       handleCloseFunc,
       getIsSelectFile,
-      getUploadBtnText
+      getUploadBtnText,
+      handleChange
       // t,
     };
   }

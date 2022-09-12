@@ -116,10 +116,9 @@ export const useAppStore = defineStore({
       }
     },
     async getMenuList(): Promise<getMenuListResultModel> {
-      const { data } = await getMenuList();
-
-      this.sidebarMenuList = data;
-      return data;
+      // const { data } = await getMenuList();
+      // this.sidebarMenuList = data;
+      // return data;
     }
   }
 });

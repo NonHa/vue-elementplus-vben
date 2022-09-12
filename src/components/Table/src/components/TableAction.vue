@@ -24,7 +24,7 @@
       v-if="dropDownActions && getDropdownList.length > 0"
     >
       <slot name="more"></slot>
-      <el-button type="link" size="small" v-if="!$slots.more">
+      <el-button type="success" size="small" v-if="!$slots.more">
         <More class="icon-more" />
       </el-button>
     </Dropdown>
@@ -92,7 +92,7 @@ export default defineComponent({
           const { popConfirm } = action;
           return {
             getPopupContainer: () => unref((table as any)?.wrapRef.value) ?? document.body,
-            type: 'link',
+            type: 'success',
             size: 'small',
             ...action,
             ...(popConfirm || {}),
