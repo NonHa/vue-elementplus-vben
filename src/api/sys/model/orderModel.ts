@@ -1,22 +1,61 @@
 
 import {Pagination,ReturnData} from  './baseModel'
-import { col } from '/@/views/demo/order/orderData';
-const statusType = [0,1,2,3,4,5] as const;
-const sourceType = [0,1] as const;
-type Col = {
-  [P in keyof typeof col]: typeof col[number]['prop']
-}[0]
+
+type NumberArrayPickOne<T extends any[]> =  T[number];
+type StatusType = NumberArrayPickOne<[0,1,2,3,4,5]>;
+type SourceType = NumberArrayPickOne<[0,1]>;
+type PayType = NumberArrayPickOne<[0,1,2]>;
+type submitType = NumberArrayPickOne<[0,1,2,3]>
+
+
 export interface OrderListParam extends Pagination {
   receiverKeyWord?:string,
-  status?:typeof statusType[number],
-  orderType?:typeof sourceType[number],
-  sourceType?:typeof sourceType[number],
+  status?:StatusType,
+  orderType?:SourceType,
+  sourceType?:SourceType,
   createTime?:Date,
 }
 
 export type OrderListModel ={
   data: {
-    Col: number
+    id: number,
+    orderSn: number,
+    createTime: Date,
+    memberUsername: string,
+    totalAmount: number,
+    payType: PayType,
+    sourceType: SourceType,
+    status: StatusType
   }[]
 } & ReturnData
+
+export type OrderSettingModel = {
+  data: {
+    flashOrderOvertime?: string|number,
+    normalOrderOvertime?: string|number,
+    confirmOvertime?: string|number,
+    finishOvertime?: string|number,
+    commentOvertime?: string|number,
+  }
+}& ReturnData
+
+export interface ReturnApplyParam {
+  id?: number,
+  status?:submitType,
+  createTime?: Date,
+  handleMan?: string,
+  handleTime?: Date,
+}
+
+export type ReturnApplyModel = {
+  data: {
+   id: number,
+   createTime: Date,
+   memberUsername: number,
+   productRealPrice: number,
+   status: submitType,
+   handleTime?: Date,
+
+  }
+}& ReturnData
 

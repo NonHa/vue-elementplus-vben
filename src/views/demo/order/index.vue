@@ -45,7 +45,7 @@ const pagination = reactive({
   pageSize: 10,
   pageNum: 1
 });
-getOrderList({sourceType: 1}).then(res => {})
+
 let api = getOrderList;
 function toggleCanResize() {
   canResize.value = !canResize.value;

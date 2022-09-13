@@ -3,105 +3,106 @@ import { BasicColumn } from '/@/components/Table/src/types/table';
 import { ElRadioGroup, ElRadio } from 'element-plus';
 import { BasicUpload } from '/@/components/Upload';
 import { setBaseTableFormatter } from '/@/hooks/event/useTableFomatter';
-export const col =  [
+
+export const payTypeList =  [
   {
-    label: '编号',
-    prop: 'id',
-    fixed: 'left'
+    title: '未支付',
+    field: 0
   },
   {
-    label: '订单编号',
-    prop: 'orderSn',
-    width: 150
+    title: '支付宝',
+    field: 1
   },
   {
-    label: '提交时间',
-    prop: 'createTime',
-    width: 150
-  },
-  {
-    label: '用户账号',
-    prop: 'memberUsername'
-  },
-  {
-    label: '订单金额',
-    prop: 'totalAmount',
-    width: '160px'
-  },
-  {
-    label: '支付方式',
-    prop: 'payType',
-    mapList: [
-      {
-        title: '未支付',
-        field: 0
-      },
-      {
-        title: '支付宝',
-        field: 1
-      },
-      {
-        title: '微信',
-        field: 2
-      }
-    ],
-    formatter: setBaseTableFormatter
-  },
-  {
-    label: '订单来源',
-    prop: 'sourceType',
-    mapList: [
-      {
-        title: 'PC订单',
-        field: 0
-      },
-      {
-        title: 'app订单',
-        field: 1
-      }
-    ],
-    formatter: setBaseTableFormatter
-  },
-  {
-    label: '订单状态',
-    prop: 'status',
-    mapList: [
-      {
-        title: '待付款',
-        field: 0
-      },
-      {
-        title: '待发货',
-        field: 1
-      },
-      {
-        title: '已发货',
-        field: 2
-      },
-      {
-        title: '已完成',
-        field: 3
-      },
-      {
-        title: '已关闭',
-        field: 4
-      },
-      {
-        title: '无效订单',
-        field: 5
-      }
-    ],
-    formatter: setBaseTableFormatter
-  },
-  {
-    label: '操作',
-    prop: 'operate',
-    slot: true,
-    width: 200
+    title: '微信',
+    field: 2
   }
-] as const;
+]
 export function getBasicColumns(): BasicColumn[] {
-  return col
+  return  [
+    {
+      label: '编号',
+      prop: 'id',
+      fixed: 'left'
+    },
+    {
+      label: '订单编号',
+      prop: 'orderSn',
+      width: 150
+    },
+    {
+      label: '提交时间',
+      prop: 'createTime',
+      width: 150
+    },
+    {
+      label: '用户账号',
+      prop: 'memberUsername'
+    },
+    {
+      label: '订单金额',
+      prop: 'totalAmount',
+      width: '160px'
+    },
+    {
+      label: '支付方式',
+      prop: 'payType',
+      mapList:payTypeList,
+      formatter: setBaseTableFormatter
+    },
+    {
+      label: '订单来源',
+      prop: 'sourceType',
+      mapList: [
+        {
+          title: 'PC订单',
+          field: 0
+        },
+        {
+          title: 'app订单',
+          field: 1
+        }
+      ],
+      formatter: setBaseTableFormatter
+    },
+    {
+      label: '订单状态',
+      prop: 'status',
+      mapList: [
+        {
+          title: '待付款',
+          field: 0
+        },
+        {
+          title: '待发货',
+          field: 1
+        },
+        {
+          title: '已发货',
+          field: 2
+        },
+        {
+          title: '已完成',
+          field: 3
+        },
+        {
+          title: '已关闭',
+          field: 4
+        },
+        {
+          title: '无效订单',
+          field: 5
+        }
+      ],
+      formatter: setBaseTableFormatter
+    },
+    {
+      label: '操作',
+      prop: 'operate',
+      slot: true,
+      width: 200
+    }
+  ] 
 }
 export function getReturnApplyColumns(): BasicColumn[] {
   return [

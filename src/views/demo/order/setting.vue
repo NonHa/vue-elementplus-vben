@@ -16,10 +16,12 @@ import { ElCard } from 'element-plus';
 import { useDesign } from '/@/hooks/web/useDesign';
 import { getOrderSettingSchema } from './orderData';
 import { getOrderSetting, updateOrderSetting } from '/@/api/sys/order';
+import {OrderSettingModel} from '/@/api/sys/model/orderModel';
+
 const [registerForm, formActions] = useForm();
 
 const { prefixCls } = useDesign('order-setting-card');
-const model = ref({});
+const model = ref<OrderSettingModel['data']>({});
 const getFormProps = computed(() => {
   return {
     labelWidth: 120,

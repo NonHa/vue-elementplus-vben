@@ -1,5 +1,5 @@
 import { defHttp } from '/@/utils/http';
-import {OrderListParam,OrderListModel} from '/@/api/sys/model/orderModel';
+import {OrderListParam,OrderListModel,OrderSettingModel,ReturnApplyParam,ReturnApplyModel} from '/@/api/sys/model/orderModel';
 enum Api {
   orderList = '/order/list',
   orderDelete = '/order/delete',
@@ -17,7 +17,7 @@ export function getOrderList(params:OrderListParam) {
   return defHttp.post<OrderListModel>({ url: Api.orderList, params }, { errorMessageMode: 'none' });
 }
 
-export function deleteOrderById(params) {
+export function deleteOrderById(params: {id: number}) {
   return defHttp.get(
     { url: Api.orderDelete, params },
     { errorMessageMode: 'none', joinParamsToUrl: true }
@@ -25,15 +25,15 @@ export function deleteOrderById(params) {
 }
 
 export function getOrderSetting() {
-  return defHttp.get({ url: Api.orderSetting }, { errorMessageMode: 'none' });
+  return defHttp.get<OrderSettingModel>({ url: Api.orderSetting }, { errorMessageMode: 'none' });
 }
 
-export function updateOrderSetting(params) {
+export function updateOrderSetting(params:OrderSettingModel['data'] & {id: number}) {
   return defHttp.post({ url: Api.updateOrderSetting, params }, { errorMessageMode: 'none' });
 }
 
-export function orderReturnAplyList(params) {
-  return defHttp.post({ url: Api.orderReturnAplyList, params }, { errorMessageMode: 'none' });
+export function orderReturnAplyList(params:ReturnApplyParam) {
+  return defHttp.post<ReturnApplyModel>({ url: Api.orderReturnAplyList, params }, { errorMessageMode: 'none' });
 }
 
 export function updateOrderReturnApply(params) {
