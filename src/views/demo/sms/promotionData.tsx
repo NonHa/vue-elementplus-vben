@@ -1,10 +1,11 @@
 import { FormProps, FormSchema } from '/@/components/Form/src/types/form';
 import { BasicColumn } from '/@/components/Table/src/types/table';
-import { ElRadioGroup, ElRadio, ElDatePicker } from 'element-plus';
+import { ElRadioGroup, ElRadio, ElDatePicker, ElImage } from 'element-plus';
 import { BasicUpload } from '/@/components/Upload';
 import { setBaseTableFormatter } from '/@/hooks/event/useTableFomatter';
 import CoupEidtType from './coupEidtType.vue';
 import { unref } from 'vue';
+import { uploadApi } from '/@/api/sys/upload';
 
 const colPropsCommon = {
   lg: 24,
@@ -178,6 +179,17 @@ export const coupTypeList = [
   {
     title: '注册赠券',
     field: 3
+  }
+];
+
+export const advertiseTypeList = [
+  {
+    title: 'PC首页轮播',
+    field: 0
+  },
+  {
+    title: 'app首页轮播',
+    field: 1
   }
 ];
 export function getCoupColumns(): BasicColumn[] {
@@ -412,6 +424,62 @@ export function getHomeSubjectColumns(): BasicColumn[] {
     }
   ];
 }
+
+export function getAderviseColumns(): BasicColumn[] {
+  return [
+    {
+      label: '编号',
+      prop: 'id',
+      width: 150
+    },
+    {
+      label: '广告名称',
+      prop: 'name',
+      width: 150
+    },
+    {
+      label: '广告位置',
+      prop: 'type',
+      // 优惠券类型；0->全场赠券；1->会员赠券；2->购物赠券；3->注册赠券
+      mapList: advertiseTypeList,
+      formatter: setBaseTableFormatter
+    },
+    {
+      label: '广告图片',
+      prop: 'pic',
+      formatter: (row, field) => {
+        return <ElImage src={row.value.pic}></ElImage>;
+      }
+    },
+    {
+      label: '时间',
+      prop: 'startTime',
+      formatter: (row, field) => {
+        return `开始时间${row.value.startTime}`;
+      }
+    },
+    {
+      label: '线上/线下',
+      prop: 'status',
+      slot: true
+    },
+    {
+      label: '点击次数',
+      prop: 'clickCount'
+    },
+    {
+      label: '生成订单',
+      prop: 'orderCount'
+    },
+
+    {
+      label: '操作',
+      prop: 'operate',
+      slot: true,
+      width: 240
+    }
+  ];
+}
 export const getBrandColumns: BasicColumn[] = [
   {
     label: '品牌名称',
@@ -581,7 +649,48 @@ export const getcategoryCateSchema = (list): FormSchema[] => {
     }
   ];
 };
-
+export const getAdvertiseSchema = (): FormSchema[] => {
+  return [
+    {
+      field: `name`,
+      label: `广告名称`,
+      component: 'ElInput',
+      colProps: {
+        xl: 24,
+        lg: 24
+      }
+    },
+    {
+      field: `type`,
+      label: `广告位置`,
+      component: 'ElSelect',
+      colProps: {
+        xl: 24,
+        lg: 24
+      },
+      searchList: advertiseTypeList
+    },
+    {
+      field: `status`,
+      label: `线上/线下`,
+      component: 'ElSelect',
+      colProps: {
+        xl: 24,
+        lg: 24
+      },
+      searchList: [
+        {
+          title: '线上',
+          field: 1
+        },
+        {
+          title: '线下',
+          field: 0
+        }
+      ]
+    }
+  ];
+};
 export const getBrandSchema: FormSchema[] = [
   {
     field: `brandName`,
@@ -1268,5 +1377,90 @@ export const getTimeEditUserSchema: FormSchema[] = [
         </ElRadioGroup>
       );
     }
+  }
+];
+
+export const getEditAdvertiseSchema: FormSchema[] = [
+  {
+    field: `type`,
+    label: `广告位置`,
+    component: 'ElSelect',
+    searchList: advertiseTypeList,
+    colProps: colPropsCommon
+  },
+  {
+    field: `name`,
+    label: `广告名称`,
+    component: 'ElInput',
+    colProps: colPropsCommon
+  },
+  {
+    field: `startTime`,
+    label: `开始时间：`,
+    component: 'ElDatePicker',
+    colProps: colPropsCommon,
+    componentProps: {
+      valueFormat: 'YYYY-MM-DD HH:mm:ss'
+    }
+  },
+  {
+    field: `endTime`,
+    label: `到期时间：`,
+    component: 'ElDatePicker',
+    colProps: colPropsCommon,
+    componentProps: {
+      valueFormat: 'YYYY-MM-DD HH:mm:ss'
+    }
+  },
+  {
+    field: `status`,
+    label: `线上/线下`,
+    component: 'ElSelect',
+    colProps: colPropsCommon,
+    render: (getValues, formModel) => {
+      return (
+        <ElRadioGroup v-model={formModel.status}>
+          <ElRadio label={1} size="large">
+            是
+          </ElRadio>
+          <ElRadio label={0} size="large">
+            否
+          </ElRadio>
+        </ElRadioGroup>
+      );
+    }
+  },
+  {
+    field: `pic`,
+    label: `广告图片`,
+
+    colProps: colPropsCommon,
+
+    render: (getValues, formModel) => {
+      const getUrl = (val) => {
+        formModel.pic = val[0];
+      };
+      return <BasicUpload api={uploadApi} onChange={getUrl}></BasicUpload>;
+    }
+  },
+  {
+    field: `sort`,
+    label: `排序`,
+    component: 'ElInput',
+    colProps: colPropsCommon
+  },
+
+  {
+    field: `url`,
+    label: `广告链接`,
+    component: 'ElInput',
+    colProps: colPropsCommon
+  },
+
+  {
+    field: `note`,
+    label: `广告备注`,
+    component: 'ElInputTextArea',
+    colProps: colPropsCommon
   }
 ];

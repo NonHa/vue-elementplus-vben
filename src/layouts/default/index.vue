@@ -15,15 +15,6 @@
         <LayoutMultipleHeader />
         <LayoutContent />
       </ElContainer>
-
-      <!-- <el-main>Main</el-main> -->
-      <el-select-v2
-        style="margin-top: 150px"
-        v-model="value"
-        :options="options"
-        placeholder="Please select"
-        size="large"
-      />
     </ElContainer>
   </ElContainer>
 </template>

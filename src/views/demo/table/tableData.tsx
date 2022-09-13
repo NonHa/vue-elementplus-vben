@@ -413,7 +413,24 @@ export const brandModalBrandSchemas: FormSchema[] = [
       xl: 12
     },
     render: (getValues, formModel) => {
-      return <BasicUpload api={uploadApi}></BasicUpload>;
+      const getUrl = (val) => {
+        formModel.logo = val[0];
+      };
+      return <BasicUpload api={uploadApi} onChange={getUrl}></BasicUpload>;
+    }
+  },
+  {
+    field: `bigPic`,
+    label: `分类图标`,
+    colProps: {
+      lg: 12,
+      xl: 12
+    },
+    render: (getValues, formModel) => {
+      const getUrl = (val) => {
+        formModel.bigPic = val[0];
+      };
+      return <BasicUpload api={uploadApi} onChange={getUrl}></BasicUpload>;
     }
   },
   {
@@ -568,6 +585,20 @@ export const productCateFormSchemas = (
             </ElRadio>
           </ElRadioGroup>
         );
+      }
+    },
+    {
+      field: `icon`,
+      label: `分类图标`,
+      colProps: {
+        lg: 12,
+        xl: 12
+      },
+      render: (getValues, formModel) => {
+        const getUrl = (val) => {
+          formModel.icon = val[0];
+        };
+        return <BasicUpload api={uploadApi} onChange={getUrl}></BasicUpload>;
       }
     },
     {

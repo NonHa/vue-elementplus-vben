@@ -66,6 +66,15 @@ const sms: AppRouteModule = {
         // affix: true,
         title: '专题推荐'
       }
+    },
+    {
+      path: 'advertise',
+      name: 'Advertise',
+      component: () => import('/@/views/demo/sms/advertise.vue'),
+      meta: {
+        // affix: true,
+        title: '广告列表'
+      }
     }
   ]
 };

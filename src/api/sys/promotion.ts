@@ -34,7 +34,12 @@ enum Api {
   getRecommendSubjectList = '/home/recommendSubject/list',
   deleteRecommendSubject = '/home/recommendSubject/delete',
   updateRecommendSubject = '/home/recommendSubject/update',
-  addRecommendSubject = '/home/recommendSubject/add'
+  addRecommendSubject = '/home/recommendSubject/add',
+
+  getAdvertiseList = '/home/advertise/list',
+  deleteAdvertise = '/home/advertise/delete',
+  updateAdvertise = '/home/advertise/update',
+  addAdvertise = '/home/advertise/add'
 }
 
 export type FlashProductRelation = {
@@ -155,4 +160,18 @@ export function addRecommendSubject(params) {
 }
 export function deleteRecommendSubject(params) {
   return defHttp.get({ url: Api.deleteRecommendSubject, params }, { errorMessageMode: 'none' });
+}
+
+// 广告列表
+export function getAdvertiseList(params) {
+  return defHttp.post({ url: Api.getAdvertiseList, params }, { errorMessageMode: 'none' });
+}
+export function updateAdvertise(params) {
+  return defHttp.post({ url: Api.updateAdvertise, params }, { errorMessageMode: 'none' });
+}
+export function addAdvertise(params) {
+  return defHttp.post({ url: Api.addAdvertise, params }, { errorMessageMode: 'none' });
+}
+export function deleteAdvertise(params) {
+  return defHttp.get({ url: Api.deleteAdvertise, params }, { errorMessageMode: 'none' });
 }
