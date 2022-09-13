@@ -39,7 +39,9 @@ enum Api {
   getAdvertiseList = '/home/advertise/list',
   deleteAdvertise = '/home/advertise/delete',
   updateAdvertise = '/home/advertise/update',
-  addAdvertise = '/home/advertise/add'
+  addAdvertise = '/home/advertise/add',
+
+  addSubjectCategory = '/home/subject/category/add'
 }
 
 export type FlashProductRelation = {
@@ -174,4 +176,9 @@ export function addAdvertise(params) {
 }
 export function deleteAdvertise(params) {
   return defHttp.get({ url: Api.deleteAdvertise, params }, { errorMessageMode: 'none' });
+}
+
+// 专题
+export function addSubjectCategory(params) {
+  return defHttp.post({ url: Api.addSubjectCategory, params }, { errorMessageMode: 'none' });
 }

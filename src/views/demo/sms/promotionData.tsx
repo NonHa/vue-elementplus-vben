@@ -750,6 +750,18 @@ export const getProductSchema: FormSchema[] = [
     // itemProps: itemPropsCommon
   }
 ];
+
+export const getSubjectCategorySchema: FormSchema[] = [
+  {
+    field: `name`,
+    label: `专题分类名称`,
+    component: 'ElInput',
+    colProps: {
+      xl: 24,
+      lg: 24
+    }
+  }
+];
 export function getFormConfig(): Partial<FormProps> {
   return {
     labelWidth: 100,

@@ -12,6 +12,7 @@
     @register="registerTable"
   >
     <template #form-advanceBefore>
+      <slot name="header-btn"></slot>
       <el-button type="danger" @click="toggleCanResize({}, 3)">{{ props.addTableText }}</el-button>
     </template>
     <template #col-oprate="{ row }">
