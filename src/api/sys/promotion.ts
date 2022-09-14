@@ -41,6 +41,7 @@ enum Api {
   updateAdvertise = '/home/advertise/update',
   addAdvertise = '/home/advertise/add',
 
+  subjectCategoryList = '/home/subject/category/list',
   addSubjectCategory = '/home/subject/category/add'
 }
 
@@ -179,6 +180,9 @@ export function deleteAdvertise(params) {
 }
 
 // 专题
+export function subjectCategoryList() {
+  return defHttp.get({ url: Api.subjectCategoryList }, { errorMessageMode: 'none' });
+}
 export function addSubjectCategory(params) {
   return defHttp.post({ url: Api.addSubjectCategory, params }, { errorMessageMode: 'none' });
 }

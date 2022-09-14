@@ -37,8 +37,9 @@
   <BasicModal ref="modalRef" @ok="sureEditForm('edit')">
     <template v-if="clickType === 3">
       <BasicTable
-        :columns="props.addColumn"
         showTableSetting
+        useSearchForm
+        :columns="props.addColumn"
         :pagination="pagination2"
         :api="props.addTableApi"
         :columnSelectInit="{
@@ -48,9 +49,12 @@
         :rowSelection="{
           type: 'checkbox'
         }"
-        useSearchForm
         @register="registerBrandTable"
-      />
+      >
+        <template #form-advanceBefore>
+          <slot name="edit-header-btn"></slot>
+        </template>
+      </BasicTable>
     </template>
 
     <BasicForm
@@ -68,6 +72,7 @@ import { ElPopconfirm, ElSwitch } from 'element-plus';
 import { BasicTable, useTable } from '/@/components/Table';
 import { BasicModal } from '/@/components/Modal';
 import { BasicForm, useForm } from '/@/components/Form/index';
+import { BasicColumn } from '/@/components/Table/src/types/table';
 
 const props = defineProps({
   addTableText: {
@@ -75,7 +80,7 @@ const props = defineProps({
     required: true
   },
   addColumn: {
-    type: Array,
+    type: Array as PropType<BasicColumn[]>,
     required: true
   },
   addTableApi: {
@@ -88,7 +93,7 @@ const props = defineProps({
     required: true
   },
   baseColumn: {
-    type: Function,
+    type: Function as PropType<() => BasicColumn[]>,
     required: true
   },
   baseApi: {
@@ -130,7 +135,6 @@ const pagination2 = reactive({
 let api = baseApi?.list;
 function toggleCanResize(row, type) {
   clickType.value = type;
-
   editRow.value = row && row.id ? row : { status: 1 };
   unref(modalRef).visibleRef = true;
 }
@@ -153,7 +157,7 @@ const [registerTable, { getForm, reload }] = useTable({
   isTreeTable: true
 });
 
-const [registerBrandTable, { getSelectRows }] = useTable({
+const [registerBrandTable, { getSelectRows, reload: reload2 }] = useTable({
   useSearchForm: true,
   showIndexColumn: false,
   rowKey: 'id',
@@ -172,7 +176,6 @@ let sureEditForm = async (type) => {
     baseApi?.add(list).then((res) => {
       if (res.code === 200) {
         unref(modalRef).visibleRef = false;
-
         reload();
       }
     });
@@ -210,4 +213,6 @@ function handelDelete(row) {
 }
 
 let data = [];
+
+defineExpose({ reload2 });
 </script>
