@@ -1,4 +1,4 @@
-import { FormProps, FormSchema } from '/@/components/Form/src/types/form';
+import { FormProps, FormSchema, searchItem } from '/@/components/Form/src/types/form';
 import { BasicColumn } from '/@/components/Table/src/types/table';
 import { ElRadioGroup, ElRadio, ElDatePicker, ElImage } from 'element-plus';
 import { BasicUpload } from '/@/components/Upload';
@@ -762,6 +762,43 @@ export const getSubjectCategorySchema: FormSchema[] = [
     }
   }
 ];
+
+export const getSubjectSchema = (categoryList: searchItem[]): FormSchema[] => {
+  return [
+    {
+      field: `title`,
+      label: `专题名称`,
+      component: 'ElInput',
+      colProps: {
+        xl: 24,
+        lg: 24
+      }
+    },
+    {
+      field: `categoryId`,
+      label: `专题分类`,
+      component: 'ElSelect',
+      colProps: {
+        xl: 24,
+        lg: 24
+      },
+      searchList: categoryList
+    },
+    {
+      field: `pic`,
+      label: `专题图片`,
+      component: 'ElInput',
+      colProps: colPropsCommon,
+
+      render: (getValues, formModel) => {
+        const getUrl = (val) => {
+          formModel.pic = val[0];
+        };
+        return <BasicUpload api={uploadApi} onChange={getUrl}></BasicUpload>;
+      }
+    }
+  ];
+};
 export function getFormConfig(): Partial<FormProps> {
   return {
     labelWidth: 100,

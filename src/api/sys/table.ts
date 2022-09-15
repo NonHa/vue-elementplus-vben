@@ -29,12 +29,17 @@ enum Api {
   productAttributeDelete = '/productAttribute/delete',
   productAttributeAdd = '/productAttribute/create',
 
-  subjectList = '/subject/list'
+  subjectList = '/subject/list',
+  addSubject = '/subject/add'
 }
 
 export function subjectList(params) {
   return defHttp.get({ url: Api.subjectList, params }, { errorMessageMode: 'none' });
 }
+export function addSubject(params) {
+  return defHttp.post({ url: Api.addSubject, params }, { errorMessageMode: 'none' });
+}
+
 export function getMenuList(params) {
   return defHttp.get({ url: Api.menuList, params }, { errorMessageMode: 'none' });
 }

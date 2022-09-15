@@ -362,8 +362,6 @@ export function useDataSource(
   }
 
   async function reload(opt?: FetchParams) {
-    console.log(234324);
-
     return await fetch(opt);
   }
 

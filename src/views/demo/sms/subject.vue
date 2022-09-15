@@ -1,5 +1,6 @@
 <template>
   <Recommend
+    ref="recommend"
     :baseApi="{
       list: getRecommendSubjectList,
       add: addRecommendSubject,
@@ -15,17 +16,15 @@
     addTableText="选择专题"
   >
     <template #header-btn>
-      <el-button type="success" @click="onClick">专题分类</el-button>
+      <el-button type="success" @click="onClick(1)">专题分类</el-button>
+    </template>
+    <template #edit-header-btn>
+      <el-button type="success" @click="onClick(2)">新增</el-button>
     </template>
   </Recommend>
 
   <BasicModal ref="modalRef" @ok="sureEditForm('edit')">
-    <BasicForm
-      @register="registerForm"
-      :model="editRow"
-      :schemas="getSubjectCategorySchema"
-      :showActionBtn="false"
-    />
+    <BasicForm @register="registerForm" :model="editRow" :schemas="schema" :showActionBtn="false" />
   </BasicModal>
 </template>
 <script lang="ts" setup>
@@ -37,22 +36,42 @@ import {
   getEditHomeBrandSchema,
   getSubjectColumns,
   getProductSchema,
-  getSubjectCategorySchema
+  getSubjectCategorySchema,
+  getSubjectSchema
 } from './promotionData';
 import {
   getRecommendSubjectList,
   addRecommendSubject,
   updateRecommendSubject,
   deleteRecommendSubject,
-  addSubjectCategory
+  addSubjectCategory,
+  subjectCategoryList
 } from '/@/api/sys/promotion';
-import { subjectList } from '/@/api/sys/table';
+import { subjectList, addSubject } from '/@/api/sys/table';
 import { BasicModal } from '/@/components/Modal';
 import { BasicForm, useForm } from '/@/components/Form/index';
 const [registerForm, formActions] = useForm();
+const recommend = ref();
 const editRow = ref({});
 const modalRef = ref({});
-const onClick = () => {
+const schema = ref(getSubjectCategorySchema);
+let cliclType = 1;
+let categoryList = [];
+const onClick = async (type) => {
+  cliclType = type;
+  if (type === 1) {
+    schema.value = getSubjectCategorySchema;
+  } else {
+    await subjectCategoryList().then((res) => {
+      categoryList = res.data.list.map((v) => {
+        return {
+          title: v.name,
+          field: v.id
+        };
+      });
+      schema.value = getSubjectSchema(categoryList);
+    });
+  }
   unref(modalRef).visibleRef = true;
 };
 const addRecommendListBeafore = (list) => {
@@ -69,10 +88,25 @@ const addRecommendListBeafore = (list) => {
 const sureEditForm = () => {
   console.log('editRow', formActions.getFieldsValue());
 
-  addSubjectCategory(formActions.getFieldsValue()).then((res) => {
-    if (res.code === 200) {
-      unref(modalRef).visibleRef = false;
-    }
-  });
+  if (cliclType === 1) {
+    addSubjectCategory(formActions.getFieldsValue()).then((res) => {
+      if (res.code === 200) {
+        unref(modalRef).visibleRef = false;
+      }
+    });
+  } else {
+    // return;
+    addSubject({
+      ...formActions.getFieldsValue(),
+      categoryName: categoryList.filter(
+        (v) => v.field === formActions.getFieldsValue().categoryId
+      )[0].title
+    }).then((res) => {
+      if (res.code === 200) {
+        unref(modalRef).visibleRef = false;
+        unref(recommend).reload2();
+      }
+    });
+  }
 };
 </script>

@@ -1,3 +1,4 @@
+import { Pagination, ReturnData } from './baseModel';
 
 import {Pagination,ReturnData} from  './baseModel'
 import type { ReturnApplyItem,submitType ,ReturnReasonItem} from '/@/views/demo/order/type';
@@ -13,35 +14,35 @@ type BaseReturnList<T> = {
   }
 } &ReturnData
 export interface OrderListParam extends Pagination {
-  receiverKeyWord?:string,
-  status?:StatusType,
-  orderType?:SourceType,
-  sourceType?:SourceType,
-  createTime?:Date,
+  receiverKeyWord?: string;
+  status?: StatusType;
+  orderType?: SourceType;
+  sourceType?: SourceType;
+  createTime?: Date;
 }
 
-export type OrderListModel ={
+export type OrderListModel = {
   data: {
-    id: number,
-    orderSn: number,
-    createTime: Date,
-    memberUsername: string,
-    totalAmount: number,
-    payType: PayType,
-    sourceType: SourceType,
-    status: StatusType
-  }[]
-} & ReturnData
+    id: number;
+    orderSn: number;
+    createTime: Date;
+    memberUsername: string;
+    totalAmount: number;
+    payType: PayType;
+    sourceType: SourceType;
+    status: StatusType;
+  }[];
+} & ReturnData;
 
 export type OrderSettingModel = {
   data: {
-    flashOrderOvertime?: string|number,
-    normalOrderOvertime?: string|number,
-    confirmOvertime?: string|number,
-    finishOvertime?: string|number,
-    commentOvertime?: string|number,
-  }
-}& ReturnData
+    flashOrderOvertime?: string | number;
+    normalOrderOvertime?: string | number;
+    confirmOvertime?: string | number;
+    finishOvertime?: string | number;
+    commentOvertime?: string | number;
+  };
+} & ReturnData;
 
 export interface ReturnApplyParam {
   id: number,
