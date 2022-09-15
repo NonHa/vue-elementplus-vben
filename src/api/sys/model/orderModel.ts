@@ -1,6 +1,5 @@
 import { Pagination, ReturnData } from './baseModel';
 
-import {Pagination,ReturnData} from  './baseModel'
 import type { ReturnApplyItem,submitType ,ReturnReasonItem} from '/@/views/demo/order/type';
 type NumberArrayPickOne<T extends any[]> =  T[number];
 type StatusType = NumberArrayPickOne<[0,1,2,3,4,5]>;
