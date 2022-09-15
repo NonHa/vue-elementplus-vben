@@ -66,7 +66,7 @@ import {
 } from '/@/api/sys/order';
 import { BasicModal } from '/@/components/Modal';
 import { BasicForm, useForm } from '/@/components/Form/index';
-
+import { ReturnReasonItem } from './type'; 
 const canResize = ref(false);
 const loading = ref(false);
 const pagination = reactive({
@@ -74,11 +74,7 @@ const pagination = reactive({
   pageNum: 1
 });
 let modalRef = ref();
-const editRow = ref<{
-  id?: Number;
-  showStatus?: Number;
-  factoryStatus?: Number;
-}>({});
+const editRow = ref<Partial<ReturnReasonItem>>({});
 let api = orderReturnReasonList;
 function toggleCanResize(row) {
   editRow.value = row && row.id ? row : { sort: 0, status: 1 };

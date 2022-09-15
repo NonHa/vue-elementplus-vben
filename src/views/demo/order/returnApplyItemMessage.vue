@@ -91,21 +91,25 @@
 </template>
 
 <script lang="ts" setup>
-import { unref, toRefs, ref, watch } from 'vue';
+import { unref, toRefs, ref, watch, PropType } from 'vue';
 import { ElCard, ElDescriptions, ElDescriptionsItem } from 'element-plus';
 import { useProductStore } from '/@/store/modules/product';
 import BaseSelect from '/@/components/Form/src/components/BaseSelect.vue';
+import type {ReturnApplyItem} from './type'
 let prop = defineProps({
-  applyItem: Object
+  applyItem: {
+    type: Object as PropType<Partial<ReturnApplyItem>>,
+    required: true
+  }
 });
 let { applyItem } = toRefs(prop);
-let model = ref<{ companyAddressId: string }>({ companyAddressId: '' });
-let options = ref<{ value: number | string; label: string }[]>([]);
+let model = ref<{ companyAddressId?: string }>({ companyAddressId: '' });
+let options = ref<{ field: number | string; title: string }[]>([]);
 let { getCompanyAddressList } = useProductStore();
 options.value = getCompanyAddressList.map((v) => {
   return {
-    label: v.addressName,
-    value: v.id
+    title: v.addressName,
+    filed: v.id
   };
 });
 
@@ -118,9 +122,11 @@ let selectAddressData = {
   receiveMan: '',
   handleNote: '',
   companyAddressId: null,
+  returnAmount: '',
   receiveNote: ''
 };
-let selectAddress = ref<typeof selectAddressData>(selectAddressData);
+type SelectAddressData = Partial<typeof selectAddressData>
+let selectAddress = ref<SelectAddressData>(selectAddressData);
 
 const handleChange = (e) => {
   let data = JSON.parse(JSON.stringify(unref(getCompanyAddressList).filter((v) => v.id === e)));

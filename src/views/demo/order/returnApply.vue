@@ -19,7 +19,7 @@
     @columns-change="handleColumnChange"
     @register="registerTable"
   >
-    <template #col-operate="{ row, column }">
+    <template #col-operate="{ row,  }">
       <el-button size="small" type="primary" @click="toggleCanResize(row)">查看详情</el-button>
     </template>
   </BasicTable>
@@ -44,6 +44,7 @@ import { useUserStore } from '/@/store/modules/user';
 
 import { BasicModal } from '/@/components/Modal';
 import ReturnApplyItemMessage from './returnApplyItemMessage.vue';
+import type { ReturnApplyItem } from './type';
 const canResize = ref(false);
 const loading = ref(false);
 const pagination = reactive({
@@ -52,7 +53,7 @@ const pagination = reactive({
 });
 let modalRef = ref();
 let messageRef = ref();
-let applyItem = ref({});
+let applyItem = ref<Partial<ReturnApplyItem>>({});
 let showCancelBtn = ref(true);
 let showOkBtn = ref(true);
 
@@ -120,9 +121,8 @@ function handleOk() {
   let param = unref(messageRef).selectAddress;
   updateOrderReturnApply({
     ...param,
-    status: unref(applyItem).status + 1,
+    status: unref(applyItem).status! + 1,
     id: unref(applyItem).id,
-
     receiveMan: getUserInfo.username,
     handleMan: getUserInfo.username
   }).then((res) => {

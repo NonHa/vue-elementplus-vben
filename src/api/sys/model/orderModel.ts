@@ -1,13 +1,17 @@
 
 import {Pagination,ReturnData} from  './baseModel'
-
+import type { ReturnApplyItem,submitType ,ReturnReasonItem} from '/@/views/demo/order/type';
 type NumberArrayPickOne<T extends any[]> =  T[number];
 type StatusType = NumberArrayPickOne<[0,1,2,3,4,5]>;
-type SourceType = NumberArrayPickOne<[0,1]>;
+export type SourceType = NumberArrayPickOne<[0,1]>;
 type PayType = NumberArrayPickOne<[0,1,2]>;
-type submitType = NumberArrayPickOne<[0,1,2,3]>
 
 
+type BaseReturnList<T> = {
+  data: {
+    list: T[]
+  }
+} &ReturnData
 export interface OrderListParam extends Pagination {
   receiverKeyWord?:string,
   status?:StatusType,
@@ -40,22 +44,20 @@ export type OrderSettingModel = {
 }& ReturnData
 
 export interface ReturnApplyParam {
-  id?: number,
+  id: number,
   status?:submitType,
   createTime?: Date,
   handleMan?: string,
   handleTime?: Date,
 }
 
-export type ReturnApplyModel = {
-  data: {
-   id: number,
-   createTime: Date,
-   memberUsername: number,
-   productRealPrice: number,
-   status: submitType,
-   handleTime?: Date,
+export type ReturnApplyModel = BaseReturnList<ReturnApplyItem> 
 
-  }
-}& ReturnData
+
+export interface ReturnReasonParam {
+  status?:SourceType,
+}
+
+export type ReturnReasonModel = BaseReturnList<ReturnReasonItem> 
+
 
