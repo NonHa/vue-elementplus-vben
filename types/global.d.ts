@@ -6,6 +6,7 @@ import type {
   FunctionalComponent,
   PropType as VuePropType,
 } from 'vue';
+import { Pagination, ReturnData } from '/@/api/sys/model/baseModel';
 
 declare global {
   const __APP_INFO__: {
@@ -21,7 +22,11 @@ declare global {
   //   // Global vue app instance
   //   __APP__: App<Element>;
   // }
-
+  declare type BaseReturnList<T> = {
+    data: {
+      list: T[]
+    }
+  } &ReturnData
   // vue
   declare type PropType<T> = VuePropType<T>;
   declare type VueNode = VNodeChild | JSX.Element;

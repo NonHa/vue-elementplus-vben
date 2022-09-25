@@ -1,4 +1,6 @@
 import { defHttp } from '/@/utils/http';
+import {FlashListParam,FlashListModel,FlashSessionListModel} from './model/promotion'
+import {FlashListItem} from '/@/views/demo/sms/type'
 enum Api {
   flashList = '/flash/list',
   updateFlash = '/flash/update',
@@ -50,19 +52,19 @@ export type FlashProductRelation = {
   flashPromotionSessionId: Number | String;
   productId: Number | String;
 }[];
-export function getFlashList(params) {
-  return defHttp.post({ url: Api.flashList, params }, { errorMessageMode: 'none' });
+export function getFlashList(params:FlashListParam) {
+  return defHttp.post<FlashListModel>({ url: Api.flashList, params }, { errorMessageMode: 'none' });
 }
-export function updateFlashById(params) {
+export function updateFlashById(params:FlashListItem) {
   return defHttp.post({ url: Api.updateFlash, params }, { errorMessageMode: 'none' });
 }
 
-export function addFlash(params) {
+export function addFlash(params: Omit<FlashListItem, 'id'>) {
   return defHttp.post({ url: Api.addFlash, params }, { errorMessageMode: 'none' });
 }
 
 export function flashSessionList() {
-  return defHttp.post({ url: Api.flashSessionList }, { errorMessageMode: 'none' });
+  return defHttp.post<FlashSessionListModel>({ url: Api.flashSessionList }, { errorMessageMode: 'none' });
 }
 export function updateFlashSession(params) {
   return defHttp.post({ url: Api.updateFlashSession, params }, { errorMessageMode: 'none' });

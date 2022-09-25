@@ -64,12 +64,13 @@ import { BasicForm, useForm } from '/@/components/Form/index';
 import { useProductStore } from '/@/store/modules/product';
 import { formatToDateTime } from '/@/utils/dateUtil';
 import TimeQuantum from './timeQuantum.vue';
+import {FlashListItem} from './type'
 const { getRoleList } = useProductStore();
 
 const canResize = ref(false);
 const modalRef = ref(false);
 const timeRef = ref();
-const editRow = ref({});
+const editRow = ref<Partial<FlashListItem>>({});
 const loading = ref(false);
 const clickType = ref(0);
 const formSchema = ref([]);

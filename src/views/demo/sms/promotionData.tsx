@@ -56,7 +56,7 @@ export function getTimeColumns(show): BasicColumn[] {
   const showItem = show
     ? {
         label: '商品数量',
-        prop: 'status',
+        prop: 'productCount',
         slot: true,
         ifShow: show
       }

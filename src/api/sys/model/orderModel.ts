@@ -6,12 +6,6 @@ type StatusType = NumberArrayPickOne<[0,1,2,3,4,5]>;
 export type SourceType = NumberArrayPickOne<[0,1]>;
 type PayType = NumberArrayPickOne<[0,1,2]>;
 
-
-type BaseReturnList<T> = {
-  data: {
-    list: T[]
-  }
-} &ReturnData
 export interface OrderListParam extends Pagination {
   receiverKeyWord?: string;
   status?: StatusType;
