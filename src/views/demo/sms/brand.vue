@@ -30,9 +30,9 @@ import {
   deleteHomeBrand
 } from '/@/api/sys/promotion';
 import { brandList } from '/@/api/sys/table';
-
+import {BrandListItem} from './type'
 const addRecommendListBeafore = (list) => {
-  return list.map((v) => {
+  return list.map((v):BrandListItem => {
     return {
       brandId: v.id,
       brandName: v.name,

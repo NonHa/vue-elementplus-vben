@@ -68,11 +68,11 @@ import type { FlashProductRelation } from '/@/api/sys/promotion';
 import { BasicModal } from '/@/components/Modal';
 import { BasicForm, useForm } from '/@/components/Form/index';
 import { getTreeList } from '/@/api/sys/table';
-
+import {FlashProductListItem} from './type'
 const canResize = ref(false);
 const modalRef = ref(false);
 const timeRef = ref();
-const editRow = ref({});
+const editRow = ref<Partial<FlashProductListItem>>({});
 const loading = ref(false);
 const clickType = ref(0);
 const formSchema = ref([]);

@@ -1,6 +1,7 @@
 import { defHttp } from '/@/utils/http';
-import {FlashListParam,FlashListModel,FlashSessionListModel} from './model/promotion'
-import {FlashListItem} from '/@/views/demo/sms/type'
+import {FlashListParam,FlashListModel,FlashSessionListModel,
+  FlashProductListModel,CoupListItemModel,CoupType,BrandListModel} from './model/promotion'
+import {FlashListItem,FlashProductListItem} from '/@/views/demo/sms/type'
 enum Api {
   flashList = '/flash/list',
   updateFlash = '/flash/update',
@@ -78,7 +79,7 @@ export function flashSessionSelectList(params) {
 }
 
 export function flashProductRelationList(params) {
-  return defHttp.get({ url: Api.flashProductRelation, params }, { errorMessageMode: 'none' });
+  return defHttp.get<FlashProductListModel>({ url: Api.flashProductRelation, params }, { errorMessageMode: 'none' });
 }
 
 export function createFlashProductRelation(params: FlashProductRelation) {
@@ -91,7 +92,7 @@ export function createFlashProductRelation(params: FlashProductRelation) {
 export function deleteFlashProductRelation(params: { id: Number | String }) {
   return defHttp.get({ url: Api.deleteFlashProductRelation, params }, { errorMessageMode: 'none' });
 }
-export function updateFlashProductRelation(params) {
+export function updateFlashProductRelation(params:FlashProductListItem) {
   return defHttp.post(
     { url: Api.updateFlashProductRelation, params },
     { errorMessageMode: 'none' }
@@ -100,28 +101,28 @@ export function updateFlashProductRelation(params) {
 updateCoupon;
 // 优惠券
 export function couponList(params) {
-  return defHttp.post({ url: Api.couponList, params }, { errorMessageMode: 'none' });
+  return defHttp.post<CoupListItemModel>({ url: Api.couponList, params }, { errorMessageMode: 'none' });
 }
-export function updateCoupon(params) {
+export function updateCoupon(params: {name: string,type:CoupType,id:number}) {
   return defHttp.post({ url: Api.updateCoupon, params }, { errorMessageMode: 'none' });
 }
-export function addCoupon(params) {
+export function addCoupon(params: {name: string,type:CoupType}) {
   return defHttp.post({ url: Api.addCoupon, params }, { errorMessageMode: 'none' });
 }
-export function deletecCoupon(params) {
+export function deletecCoupon(params:{id:number}) {
   return defHttp.get({ url: Api.deletecCoupon, params }, { errorMessageMode: 'none' });
 }
 
 export function getHomeBrandList(params) {
-  return defHttp.post({ url: Api.getHomeBrandList, params }, { errorMessageMode: 'none' });
+  return defHttp.post<BrandListModel>({ url: Api.getHomeBrandList, params }, { errorMessageMode: 'none' });
 }
-export function updateHomeBrand(params) {
+export function updateHomeBrand(params: {sort: number, id:number}) {
   return defHttp.post({ url: Api.updateHomeBrand, params }, { errorMessageMode: 'none' });
 }
-export function addHomeBrand(params) {
+export function addHomeBrand(params:{sort: number}) {
   return defHttp.post({ url: Api.addHomeBrand, params }, { errorMessageMode: 'none' });
 }
-export function deleteHomeBrand(params) {
+export function deleteHomeBrand(params: {id: number}) {
   return defHttp.get({ url: Api.deleteHomeBrand, params }, { errorMessageMode: 'none' });
 }
 
