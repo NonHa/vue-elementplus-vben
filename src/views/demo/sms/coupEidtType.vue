@@ -63,25 +63,72 @@ import { BasicTable, ColumnChangeParam, useTable } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
 import { simpleList } from '/@/api/sys/table';
 
+type CateColumnItem = {
+  index?: number;
+  id: number;
+  name: string;
+  productCategoryId: number;
+  parentCategoryName: string;
+  productCategoryName: string;
+}
+
+type ProductColumnItem = {
+  index?: number;
+  productName: string;
+  productSn?: number;
+  productId: number;
+  id: number;
+}
+
+type CateListItem = {
+  value: string | number;
+  label: string ;
+  children: {
+    value: string | number;
+    label: string ;
+  }
+}
 const props = defineProps({
   model: {
-    type: Object as PropType<{ useType: Number }>
+    type: Object as PropType<{ 
+      useType: Number,
+      productCategoryRelationList: {
+        productCategoryId?: number;
+        parentCategoryName?: string;
+        productCategoryName?: string;
+      }[],
+      productRelationList: {
+        productId?: number;
+        productName?: string;
+        productSn?: number;
+      }[]
+     }>,
+    required: true
   }
 });
-const selectType = ref([]);
-const dataCate = ref([]);
-const dataProduct = ref([]);
+const selectType = ref<CateListItem[]>([]);
+const dataCate = ref<CateColumnItem []>([]);
+const dataProduct = ref<ProductColumnItem[]>([]);
 const productValue = ref();
-const productOptions = ref([]);
-const productSelectItem = ref({});
+const productOptions = ref<{
+  value: number;
+  label:string;
+  sn?: number
+}[]>([]);
+const productSelectItem = ref<{
+  value?: number;
+  label?:string;
+  sn?: number
+}>({});
 const { model } = toRefs(props);
+
 
 const columnsCate: BasicColumn[] = [
   {
     label: '分类名称',
     prop: 'name',
     width: 150,
-    formatter: (row) => {
+    formatter: (row:CateColumnItem) => {
       return `${unref(row).parentCategoryName}/${unref(row).productCategoryName}`;
     }
   },
@@ -111,7 +158,7 @@ const columnsProduct: BasicColumn[] = [
   }
 ];
 const { getProductCategoryList } = useProductStore();
-const cateList = getProductCategoryList.map((v) => {
+const cateList: CateListItem[] = getProductCategoryList.map((v) => {
   return {
     value: v.id,
     label: v.name,
@@ -123,7 +170,7 @@ const cateList = getProductCategoryList.map((v) => {
     })
   };
 });
-const options = ref(cateList);
+const options = ref<CateListItem[]>(cateList);
 const dataAdd = (type) => {
   if (type === 'cate') {
     dataCate.value.push({
@@ -139,8 +186,8 @@ const dataAdd = (type) => {
     dataProduct.value.push({
       id: dataCate.value.length + 1,
       index: dataCate.value.length + 1,
-      productId: productSelectItem.value.value,
-      productName: productSelectItem.value.label,
+      productId: productSelectItem.value.value as number,
+      productName: productSelectItem.value.label as string,
       productSn: productSelectItem.value.sn
     });
   }

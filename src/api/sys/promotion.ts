@@ -1,7 +1,9 @@
 import { defHttp } from '/@/utils/http';
 import {FlashListParam,FlashListModel,FlashSessionListModel,
-  FlashProductListModel,CoupListItemModel,CoupType,BrandListModel} from './model/promotion'
-import {FlashListItem,FlashProductListItem} from '/@/views/demo/sms/type'
+  FlashProductListModel,CoupListItemModel,CoupType,BrandListModel,
+  AdvertiseListModel
+} from './model/promotion'
+import {FlashListItem,FlashProductListItem,AdvertiseItem} from '/@/views/demo/sms/type'
 enum Api {
   flashList = '/flash/list',
   updateFlash = '/flash/update',
@@ -98,7 +100,7 @@ export function updateFlashProductRelation(params:FlashProductListItem) {
     { errorMessageMode: 'none' }
   );
 }
-updateCoupon;
+// updateCoupon;
 // 优惠券
 export function couponList(params) {
   return defHttp.post<CoupListItemModel>({ url: Api.couponList, params }, { errorMessageMode: 'none' });
@@ -170,15 +172,15 @@ export function deleteRecommendSubject(params) {
 
 // 广告列表
 export function getAdvertiseList(params) {
-  return defHttp.post({ url: Api.getAdvertiseList, params }, { errorMessageMode: 'none' });
+  return defHttp.post<AdvertiseListModel>({ url: Api.getAdvertiseList, params }, { errorMessageMode: 'none' });
 }
-export function updateAdvertise(params) {
+export function updateAdvertise(params:AdvertiseItem) {
   return defHttp.post({ url: Api.updateAdvertise, params }, { errorMessageMode: 'none' });
 }
-export function addAdvertise(params) {
+export function addAdvertise(params:Omit<AdvertiseItem, 'id'>) {
   return defHttp.post({ url: Api.addAdvertise, params }, { errorMessageMode: 'none' });
 }
-export function deleteAdvertise(params) {
+export function deleteAdvertise(params: {id: number}) {
   return defHttp.get({ url: Api.deleteAdvertise, params }, { errorMessageMode: 'none' });
 }
 

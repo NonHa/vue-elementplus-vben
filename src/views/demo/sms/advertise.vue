@@ -60,15 +60,17 @@ import {
 } from '/@/api/sys/promotion';
 import { BasicModal } from '/@/components/Modal';
 import { BasicForm, useForm } from '/@/components/Form/index';
-import TimeQuantum from './timeQuantum.vue';
+
+import {AdvertiseItem} from './type'
+import {  FormSchema } from '/@/components/Form/src/types/form';
 
 const canResize = ref(false);
 const modalRef = ref(false);
 const timeRef = ref();
-const editRow = ref({});
+const editRow = ref<Partial<AdvertiseItem>>({});
 const loading = ref(false);
 const clickType = ref(0);
-const formSchema = ref([]);
+const formSchema = ref<FormSchema[]>([]);
 formSchema.value = getEditAdvertiseSchema;
 const pagination = reactive({
   pageSize: 10,
@@ -76,7 +78,7 @@ const pagination = reactive({
 });
 
 let api = getAdvertiseList;
-function toggleCanResize(row, type) {
+function toggleCanResize(row:AdvertiseItem, type) {
   clickType.value = type;
 
   editRow.value = row && row.id ? row : {};
@@ -101,7 +103,6 @@ const [registerTable, { getForm, reload }] = useTable({
   useSearchForm: true,
   formConfig: {
     labelWidth: 100,
-
     schemas: getAdvertiseSchema()
   },
   showTableSetting: true,
@@ -113,7 +114,7 @@ const [registerTable, { getForm, reload }] = useTable({
 
 let sureEditForm = async (type) => {
   if (unref(editRow).id) {
-    let item = type ? { ...formActions.getFieldsValue(), id: unref(editRow).id } : unref(editRow);
+    let item =( type ? { ...formActions.getFieldsValue(), id: unref(editRow).id } : unref(editRow)) as AdvertiseItem ;
 
     await updateAdvertise(item).then((res) => {
       if (res) {

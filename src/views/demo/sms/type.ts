@@ -48,3 +48,16 @@ export type BrandListItem = {
   sort: number,
   status?: number
 }
+
+
+export type AdvertiseItem = {
+  id?: number,
+  name: string,
+  type: number,
+  pic?: string,
+  startTime: Date,
+  status?: number,
+  clickCount?: number,
+  orderCount?: number
+}
+
