@@ -26,7 +26,7 @@
       v-if="clickType === 2"
       @register="registerForm"
       :model="editRow"
-      :schemas="formSchema"
+      :schemas="getEditFlashProductSchema"
       :showActionBtn="false"
     />
     <BasicTable
@@ -69,13 +69,13 @@ import { BasicModal } from '/@/components/Modal';
 import { BasicForm, useForm } from '/@/components/Form/index';
 import { getTreeList } from '/@/api/sys/table';
 import {FlashProductListItem} from './type'
+
 const canResize = ref(false);
-const modalRef = ref(false);
-const timeRef = ref();
+const modalRef = ref<{visibleRef:boolean}>({});
+
 const editRow = ref<Partial<FlashProductListItem>>({});
 const loading = ref(false);
 const clickType = ref(0);
-const formSchema = ref([]);
 const productData = ref([]);
 const pagination = reactive({
   pageSize: 10,
@@ -84,10 +84,11 @@ const pagination = reactive({
 const productApi = getTreeList;
 const props = defineProps({
   flashProductQuery: {
-    type: Object as PropType<{ promotionId: Number; sessionId: Number }>
+    type: Object as PropType<{ promotionId: Number; sessionId: Number }>,
+    required: true
   }
 });
-formSchema.value = getEditFlashProductSchema;
+
 
 let api = flashProductRelationList;
 const selectableFun = () => {};

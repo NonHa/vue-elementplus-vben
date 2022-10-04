@@ -65,15 +65,17 @@ import { useProductStore } from '/@/store/modules/product';
 import { formatToDateTime } from '/@/utils/dateUtil';
 import TimeQuantum from './timeQuantum.vue';
 import {FlashListItem} from './type'
+import { FormSchema} from '/@/components/Form/src/types/form';
+
 const { getRoleList } = useProductStore();
 
 const canResize = ref(false);
-const modalRef = ref(false);
+const modalRef = ref<{visibleRef: boolean}>({});
 const timeRef = ref();
 const editRow = ref<Partial<FlashListItem>>({});
 const loading = ref(false);
 const clickType = ref(0);
-const formSchema = ref([]);
+const formSchema = ref<FormSchema[]>([]);
 formSchema.value = getEditUserSchema;
 const pagination = reactive({
   pageSize: 10,
@@ -144,16 +146,10 @@ async function switchChange(row) {
   return await sureEditForm();
 }
 
-let sureEditForm = async (type) => {
-  if (unref(clickType) === 1) {
-    updateUserRole({ adminId: unref(editRow).id, ...formActions.getFieldsValue() }).then((res) => {
-      unref(modalRef).visibleRef = false;
-      reload();
-    });
-    return;
-  }
+let sureEditForm = async (type?: number) => {
+
   if (unref(editRow).id) {
-    let item = type ? { ...formActions.getFieldsValue(), id: unref(editRow).id } : unref(editRow);
+    let item:FlashListItem = type ? { ...formActions.getFieldsValue(), id: unref(editRow).id } : unref(editRow);
     item.startDate = formatToDateTime(item.startDate);
     item.endDate = formatToDateTime(item.endDate);
     await updateFlashById(item).then((res) => {

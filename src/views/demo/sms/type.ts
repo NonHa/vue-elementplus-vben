@@ -2,7 +2,7 @@ import { CoupType } from "/@/api/sys/model/promotion"
 export type FlashListItem = {
   id: number,
   title: string,
-  status: string,
+  status: number,
   startDate: Date,
   endDate: Date,
 }
@@ -10,7 +10,7 @@ export type FlashListItem = {
 export type FlashSessionListItem = {
   id: number,
   name: string,
-  status?: string,
+  status?: number,
   startDate: Date,
   endDate: Date,
   productCount?: number

@@ -61,7 +61,7 @@
       v-else
       @register="registerForm"
       :model="editRow"
-      :schemas="formSchema"
+      :schemas="props.baseSchema"
       :showActionBtn="false"
     />
   </BasicModal>
@@ -73,6 +73,7 @@ import { BasicTable, useTable } from '/@/components/Table';
 import { BasicModal } from '/@/components/Modal';
 import { BasicForm, useForm } from '/@/components/Form/index';
 import { BasicColumn } from '/@/components/Table/src/types/table';
+import { FormSchema } from '/@/components/Form/src/types/form';
 
 const props = defineProps({
   addTableText: {
@@ -89,7 +90,7 @@ const props = defineProps({
   },
 
   baseSchema: {
-    type: Array,
+    type: Array as PropType<FormSchema[]>,
     required: true
   },
   baseColumn: {
@@ -106,7 +107,7 @@ const props = defineProps({
     required: true
   },
   searchSchema: {
-    type: Array,
+    type: Array as PropType<FormSchema[]>,
     required: true
   },
   addRecommendListBeafore: {
@@ -117,13 +118,16 @@ const props = defineProps({
 // eslint-disable-next-line vue/no-setup-props-destructure
 const { baseApi } = props;
 const canResize = ref(false);
-const modalRef = ref(false);
+const modalRef = ref<{
+  visibleRef: boolean
+}>({});
 
-const editRow = ref({});
+const editRow = ref<{
+  recommendStatus: number
+}>({recommendStatus: 0});
 const loading = ref(false);
 const clickType = ref(0);
-const formSchema = ref([]);
-formSchema.value = props.baseSchema;
+
 const pagination = reactive({
   pageSize: 10,
   pageNum: 1

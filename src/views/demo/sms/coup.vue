@@ -44,21 +44,23 @@
 </template>
 <script lang="ts" setup>
 import { ref, reactive, watch, onMounted, unref } from 'vue';
-import { ElPopconfirm, ElSwitch } from 'element-plus';
+import { ElPopconfirm,  } from 'element-plus';
 import { BasicTable, ColumnChangeParam, useTable } from '/@/components/Table';
 import { getCoupColumns, getFormConfig, getEditCoupSchema } from './promotionData';
 import { couponList, updateCoupon, addCoupon, deletecCoupon } from '/@/api/sys/promotion';
 import { BasicModal } from '/@/components/Modal';
 import { BasicForm, useForm } from '/@/components/Form/index';
 import TimeQuantum from './timeQuantum.vue';
+import {CoupListItem} from './type'
+import {FormSchema } from '/@/components/Form/src/types/form';
 
 const canResize = ref(false);
-const modalRef = ref(false);
+const modalRef = ref<{visibleRef: boolean}>(false);
 const timeRef = ref();
-const editRow = ref({});
+const editRow = ref<Partial<CoupListItem>>({});
 const loading = ref(false);
 const clickType = ref(0);
-const formSchema = ref([]);
+const formSchema = ref<FormSchema[]>([]);
 formSchema.value = getEditCoupSchema;
 const pagination = reactive({
   pageSize: 10,
@@ -80,9 +82,6 @@ function handleColumnChange(data: ColumnChangeParam[]) {
 }
 const [registerForm, formActions] = useForm();
 
-function btnClick() {
-  // console.log('btnClick');
-}
 let columns = getCoupColumns();
 
 const [registerTable, { getForm, reload }] = useTable({

@@ -43,7 +43,7 @@
   </BasicModal>
 </template>
 <script lang="ts" setup>
-import { ref, reactive, watch, onMounted, unref, computed, nextTick } from 'vue';
+import { ref, reactive, watch, PropType, unref, computed, nextTick } from 'vue';
 import { ElPopconfirm, ElSwitch } from 'element-plus';
 import { BasicTable, ColumnChangeParam, useTable } from '/@/components/Table';
 import { getTimeColumns, getTimeEditUserSchema } from './promotionData';
@@ -58,12 +58,13 @@ import { BasicForm, useForm } from '/@/components/Form/index';
 import { formatToDateTime } from '/@/utils/dateUtil';
 import { BasicColumn } from '/@/components/Table/src/types/table';
 import FlashProduct from './flashProduct.vue';
+import {FlashSessionListItem} from './type'
 const canResize = ref(false);
-const modalRef = ref(false);
-const editRow = ref({});
+const modalRef = ref<{visibleRef: boolean}>({});
+const editRow = ref<Partial<FlashSessionListItem>>({});
 const loading = ref(false);
 const clickType = ref(0);
-const formSchema = ref([]);
+
 const api = ref();
 const searchInfo = ref({});
 const flashProductQuery = reactive<{
@@ -75,11 +76,10 @@ const flashProductQuery = reactive<{
 });
 let data = ref([]);
 const columns = ref<BasicColumn[]>([]);
-formSchema.value = getTimeEditUserSchema;
 
 const props = defineProps({
   promotionRow: {
-    type: Object
+    type: Object as PropType<{id: number}>
   }
 });
 
@@ -101,12 +101,12 @@ const [registerTable, { getForm, reload, setColumns }] = useTable({
   isTreeTable: true
 });
 const getRowId = computed(() => {
-  return !!props?.promotionRow.id;
+  return !!props?.promotionRow?.id;
 });
 columns.value = getTimeColumns(getRowId.value);
 const initApiGetList = async () => {
-  flashProductQuery.promotionId = props?.promotionRow.id;
-  if (props?.promotionRow.id) {
+  flashProductQuery.promotionId = props?.promotionRow?.id!;
+  if (props?.promotionRow?.id) {
     api.value = flashSessionSelectList;
     searchInfo.value = {
       flashPromotionId: props?.promotionRow.id

@@ -50,14 +50,16 @@ import {
 import { subjectList, addSubject } from '/@/api/sys/table';
 import { BasicModal } from '/@/components/Modal';
 import { BasicForm, useForm } from '/@/components/Form/index';
+import { FormSchema } from '/@/components/Form/src/types/form';
+
 const [registerForm, formActions] = useForm();
 const recommend = ref();
-const editRow = ref({});
-const modalRef = ref({});
-const schema = ref(getSubjectCategorySchema);
+const editRow = ref<>({});
+const modalRef = ref<{visibleRef: boolean}>({});
+const schema = ref<FormSchema[]>(getSubjectCategorySchema);
 let cliclType = 1;
-let categoryList = [];
-const onClick = async (type) => {
+let categoryList: {title: string;field: number}[] = [];
+const onClick = async (type: number) => {
   cliclType = type;
   if (type === 1) {
     schema.value = getSubjectCategorySchema;
