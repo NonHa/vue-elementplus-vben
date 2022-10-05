@@ -51,7 +51,8 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
       params
     },
     {
-      errorMessageMode: mode
+      errorMessageMode: mode,
+      isTransformResponse: false
     }
   );
 }

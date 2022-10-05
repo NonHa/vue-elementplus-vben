@@ -31,6 +31,8 @@ const transform: AxiosTransform = {
    */
   transformRequestHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
     // const {  } = useI18n();
+    console.log('transformRequestHook', res);
+
     const { isTransformResponse, isReturnNativeResponse } = options;
     // 是否返回原生响应头 比如：需要获取响应头时使用该属性
     if (isReturnNativeResponse) {
@@ -39,6 +41,8 @@ const transform: AxiosTransform = {
     // 不进行任何处理，直接返回
     // 用于页面代码可能需要直接获取code，data，message这些信息时开启
     if (!isTransformResponse) {
+      console.log('res.data==>', res.data);
+
       return res.data;
     }
     // 错误的时候返回
@@ -95,6 +99,8 @@ const transform: AxiosTransform = {
         ? `${options.authenticationScheme} ${token}`
         : token;
     }
+    console.log('config', config);
+
     return config;
   },
   // 请求之前处理config
@@ -151,6 +157,8 @@ const transform: AxiosTransform = {
    * @description: 响应拦截器处理
    */
   responseInterceptors: (res: AxiosResponse<any>) => {
+    console.log(res);
+
     return res;
   }
 };
