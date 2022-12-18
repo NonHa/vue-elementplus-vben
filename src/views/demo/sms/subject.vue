@@ -54,11 +54,12 @@ import { FormSchema } from '/@/components/Form/src/types/form';
 
 const [registerForm, formActions] = useForm();
 const recommend = ref();
-const editRow = ref<>({});
-const modalRef = ref<{visibleRef: boolean}>({});
+
+const editRow = ref<{}>({});
+const modalRef = ref<{ visibleRef: boolean }>({});
 const schema = ref<FormSchema[]>(getSubjectCategorySchema);
 let cliclType = 1;
-let categoryList: {title: string;field: number}[] = [];
+let categoryList: { title: string; field: number }[] = [];
 const onClick = async (type: number) => {
   cliclType = type;
   if (type === 1) {

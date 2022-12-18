@@ -95,9 +95,7 @@ const transform: AxiosTransform = {
     const token = getToken();
     if (token && (config as Recordable)?.requestOptions?.withToken !== false) {
       // jwt token
-      (config as Recordable).headers.Authorization = options.authenticationScheme
-        ? `${options.authenticationScheme} ${token}`
-        : token;
+      (config as Recordable).headers['x-token'] = token;
     }
     console.log('config', config);
 
@@ -157,7 +155,7 @@ const transform: AxiosTransform = {
    * @description: 响应拦截器处理
    */
   responseInterceptors: (res: AxiosResponse<any>) => {
-    console.log(res);
+    console.log('res ==> ', res);
 
     return res;
   }

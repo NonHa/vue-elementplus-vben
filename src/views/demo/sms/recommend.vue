@@ -119,12 +119,12 @@ const props = defineProps({
 const { baseApi } = props;
 const canResize = ref(false);
 const modalRef = ref<{
-  visibleRef: boolean
+  visibleRef: boolean;
 }>({});
 
 const editRow = ref<{
-  recommendStatus: number
-}>({recommendStatus: 0});
+  recommendStatus: number;
+}>({ recommendStatus: 0 });
 const loading = ref(false);
 const clickType = ref(0);
 
